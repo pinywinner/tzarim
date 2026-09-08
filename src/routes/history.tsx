@@ -49,7 +49,7 @@ function HistoryPage() {
             disabled={completedContractions(session).length === 0}
           >
             <Share2 className="size-4" />
-            שתפי סיכום
+            שתפי למיילדת
           </Button>
           <Button
             variant="outline"
