@@ -244,6 +244,24 @@ export function phaseProgress(
   return clamp(freqScore * 0.35 + durScore * 0.25 + countScore * 0.2 + spanScore * 0.2, 0, 1);
 }
 
+export function patternWindowCopy(
+  session: Session,
+  settings: Settings,
+  now = Date.now(),
+): string {
+  const windowMs = settings.patternMinutes * 60_000;
+  const windowMin = settings.patternMinutes;
+  const done = completedContractions(session);
+  if (done.length === 0) return "";
+  const inWindow = done.filter((contraction) => now - contraction.startedAt <= windowMs);
+  const sample = inWindow.length >= 2 ? inWindow : done;
+  const span = now - (sample[0]?.startedAt ?? now);
+  const spanMin = Math.min(windowMin, Math.max(0, Math.round(span / 60_000)));
+  if (windowMin === 60) return `${spanMin} דק׳ מהשעה בדפוס`;
+  if (windowMin === 30) return `${spanMin} דק׳ מחצי השעה בדפוס`;
+  return `${spanMin} מתוך ${windowMin} דק׳ בדפוס`;
+}
+
 export function formatClock(ms: number): string {
   const totalSec = Math.floor(Math.max(0, ms) / 1000);
   if (totalSec >= 3600) {
