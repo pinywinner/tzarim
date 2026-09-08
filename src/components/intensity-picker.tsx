@@ -3,6 +3,14 @@ import { cn } from "@/lib/utils";
 
 const LEVELS: Intensity[] = [1, 2, 3, 4, 5];
 
+const LEVEL_CLASS: Record<Intensity, string> = {
+  1: "h-11 bg-surface text-fg",
+  2: "h-12 bg-accent/15 text-fg",
+  3: "h-14 bg-accent/30 text-fg",
+  4: "h-16 bg-accent/70 text-accent-fg",
+  5: "h-16 bg-accent text-accent-fg",
+};
+
 export function IntensityPicker({
   onPick,
   onSkip,
@@ -13,14 +21,15 @@ export function IntensityPicker({
   return (
     <div className="rise-in rounded-2xl bg-elevated p-4 shadow-border">
       <p className="text-sm font-medium text-fg">כמה חזק היה?</p>
-      <div className="mt-3 flex gap-2">
+      <div className="mt-3 flex items-end gap-2">
         {LEVELS.map((level) => (
           <button
             key={level}
             type="button"
             onClick={() => onPick(level)}
             className={cn(
-              "flex h-14 flex-1 items-center justify-center rounded-lg bg-surface font-display text-xl font-semibold text-fg shadow-border transition-[scale,background-color] duration-150 ease-out active:scale-[0.96]",
+              "flex flex-1 items-center justify-center rounded-lg font-display text-xl font-semibold shadow-border transition-[scale,background-color] duration-150 ease-out active:scale-[0.96]",
+              LEVEL_CLASS[level],
             )}
             aria-label={`עוצמה ${level}`}
           >

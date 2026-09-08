@@ -62,7 +62,7 @@ export function TrendNote({ session }: { session: Session }) {
       )}
     >
       {trend === "shorter"
-        ? "המרווחים מתקצרים. הלידה מתקדמת."
+        ? "המרווחים מתקצרים."
         : trend === "longer"
           ? "המרווחים מתארכים. המשיכי למדוד."
           : "המרווחים יציבים."}
