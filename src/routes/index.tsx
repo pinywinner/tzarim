@@ -19,6 +19,7 @@ import {
   evaluatePhase,
   formatClock,
   intervalSoFar,
+  patternWindowCopy,
   phaseMeterVisible,
   phaseProgress,
   sessionStats,
@@ -50,6 +51,7 @@ function TimerPage() {
   const phase = evaluatePhase(session, settings, now);
   const progress = phaseProgress(session, settings, now);
   const stats = sessionStats(session, now);
+  const laborFocus = Boolean(active);
 
   const elapsed = active ? durationOf(active, now) : (intervalSoFar(session, now) ?? 0);
   const targetMs = active
@@ -124,42 +126,60 @@ function TimerPage() {
 
   return (
     <main className="flex min-h-0 flex-1 flex-col">
-      <TopBar title="צירים" subtitle="מעקב בלידה" />
-      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-4">
+      {laborFocus ? null : <TopBar title="צירים" subtitle="מעקב בבית, עד שיוצאים" />}
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5",
+          laborFocus ? "justify-center pb-2 pt-[max(1rem,env(safe-area-inset-top))]" : "pb-4",
+        )}
+      >
         <StatusBanner
           phase={phase}
           waterBroke={Boolean(session.waterBrokeAt)}
           waterBrokeAt={session.waterBrokeAt}
           progress={progress}
-          showMeter={phaseMeterVisible(session)}
+          showMeter={phaseMeterVisible(session) && !laborFocus}
+          meterLabel={patternWindowCopy(session, settings, now)}
           contractionRunning={Boolean(active)}
         />
 
-        <div
-          className={cn(
-            "flex flex-col items-center",
-            done.length === 0 && "min-h-0 flex-1 justify-center",
-          )}
-        >
-          <TimerRing
-            progress={ringProgress}
-            label={label}
-            ms={elapsed}
-            active={Boolean(active)}
-            tone={tone}
-          />
-        </div>
-
-        <StatsRow session={session} stats={stats} />
-
-        {stats.lastInterval != null ? (
-          <p className="text-center text-xs text-muted">
-            מרווח אחרון {formatClock(stats.lastInterval)}
-            {stats.lastDuration != null ? ` · משך אחרון ${formatClock(stats.lastDuration)}` : ""}
-          </p>
+        {laborFocus || done.length === 0 ? (
+          <div
+            className={cn(
+              "flex flex-col items-center",
+              (laborFocus || done.length === 0) && "min-h-0 flex-1 justify-center",
+            )}
+          >
+            <TimerRing
+              progress={ringProgress}
+              label={label}
+              ms={elapsed}
+              active={Boolean(active)}
+              tone={tone}
+            />
+          </div>
         ) : null}
 
-        {done.length > 0 ? <ContractionList session={session} limit={4} /> : null}
+        {laborFocus ? null : (
+          <>
+            <StatsRow session={session} stats={stats} />
+
+            {stats.lastInterval != null ? (
+              <p className="text-center text-xs text-muted">
+                מרווח אחרון {formatClock(stats.lastInterval)}
+                {stats.lastDuration != null ? ` · משך אחרון ${formatClock(stats.lastDuration)}` : ""}
+              </p>
+            ) : null}
+
+            {done.length > 0 ? (
+              <ContractionList
+                session={session}
+                limit={4}
+                intervalCapMs={settings.intervalMinutes * 2 * 60_000}
+              />
+            ) : null}
+          </>
+        )}
       </div>
 
       <div className="shrink-0 border-t border-border bg-bg px-5 pb-3 pt-3">
@@ -175,12 +195,9 @@ function TimerPage() {
             <Button variant="hugeStop" size="huge" onClick={onEnd}>
               נגמר
             </Button>
-            <div className="grid grid-cols-2 gap-2">
-              <Button variant="ghost" onClick={cancelContraction}>
-                לחצתי בטעות
-              </Button>
-              {waterButton}
-            </div>
+            <Button variant="ghost" onClick={cancelContraction}>
+              לחצתי בטעות
+            </Button>
           </div>
         ) : (
           <div className="flex flex-col gap-2">
