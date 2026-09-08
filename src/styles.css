@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Heebo", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Frank Ruhl Libre", "Times New Roman", serif;
+
+  --color-canvas: var(--app-canvas);
+  --color-bg: var(--app-bg);
+  --color-surface: var(--app-surface);
+  --color-elevated: var(--app-elevated);
+  --color-fg: var(--app-fg);
+  --color-muted: var(--app-muted);
+  --color-subtle: var(--app-subtle);
+  --color-border: var(--app-border);
+  --color-accent: var(--app-accent);
+  --color-accent-fg: var(--app-accent-fg);
+  --color-calm: var(--app-calm);
+  --color-calm-fg: var(--app-calm-fg);
+  --color-warn: var(--app-warn);
+  --color-warn-fg: var(--app-warn-fg);
+  --color-danger: var(--app-danger);
+  --color-danger-fg: var(--app-danger-fg);
+  --color-track: var(--app-track);
+
+  --text-timer: clamp(3rem, 13vw, 4.5rem);
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-2xl: 36px;
+
+  --shadow-border: var(--app-shadow);
+  --shadow-cta: var(--app-shadow-cta);
+  --shadow-cta-stop: var(--app-shadow-cta-stop);
+}
+
+:root {
+  --app-canvas: #e7dfd4;
+  --app-bg: #f3eee6;
+  --app-surface: #fbf7f1;
+  --app-elevated: #fffdfa;
+  --app-fg: #2c241e;
+  --app-muted: #5c534c;
+  --app-subtle: #7a6f66;
+  --app-border: #e4dcd2;
+  --app-accent: #b85c38;
+  --app-accent-fg: #fff8f4;
+  --app-calm: #4a6754;
+  --app-calm-fg: #f4faf5;
+  --app-warn: #b0763a;
+  --app-warn-fg: #fff8ef;
+  --app-danger: #9a3b32;
+  --app-danger-fg: #fff6f4;
+  --app-track: #e8dfd4;
+  --app-shadow:
+    0 0 0 1px rgb(44 36 30 / 0.06),
+    0 1px 2px -1px rgb(44 36 30 / 0.06),
+    0 8px 24px -12px rgb(44 36 30 / 0.12);
+  --app-shadow-cta:
+    inset 0 1px 0 rgb(255 255 255 / 0.22),
+    0 0 0 1px rgb(44 36 30 / 0.08),
+    0 14px 28px -14px rgb(184 92 56 / 0.55);
+  --app-shadow-cta-stop:
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    0 0 0 1px rgb(44 36 30 / 0.16),
+    0 14px 28px -14px rgb(44 36 30 / 0.45);
+
+  --motion-micro: 80ms;
+  --motion-quick: 150ms;
+  --motion-fast: 250ms;
+  --motion-slow: 400ms;
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html.dark {
+  --app-canvas: #0c0a09;
+  --app-bg: #14110f;
+  --app-surface: #1c1815;
+  --app-elevated: #241f1b;
+  --app-fg: #f4ebe3;
+  --app-muted: #c2b6ab;
+  --app-subtle: #8a7e74;
+  --app-border: #3a332e;
+  --app-accent: #d47852;
+  --app-accent-fg: #1a100c;
+  --app-calm: #8fbb9a;
+  --app-calm-fg: #102016;
+  --app-warn: #e0a15a;
+  --app-warn-fg: #24160a;
+  --app-danger: #e07068;
+  --app-danger-fg: #2a0f0c;
+  --app-track: #2e2925;
+  --app-shadow: 0 0 0 1px rgb(255 255 255 / 0.08);
+  --app-shadow-cta:
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    0 14px 28px -14px rgb(212 120 82 / 0.4);
+  --app-shadow-cta-stop:
+    inset 0 1px 0 rgb(255 255 255 / 0.08),
+    0 14px 28px -14px rgb(0 0 0 / 0.55);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html,
+  body,
+  #app {
+    min-height: 100%;
+  }
+
+  body {
+    background-color: var(--app-canvas);
+    color: var(--app-fg);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  button,
+  a,
+  input,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@keyframes ring-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes wave-expand {
+  0% {
+    transform: scale(0.86);
+    opacity: 0.35;
+  }
+  100% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.timer-ring {
+  width: min(232px, 62vw);
+}
+
+.ring-breathe {
+  animation: ring-breathe 2.8s var(--ease-smooth-out) infinite;
+}
+
+.wave-expand {
+  animation: wave-expand 900ms var(--ease-smooth-out) forwards;
+}
+
+.rise-in {
+  animation: rise-in var(--motion-slow) var(--ease-smooth-out) both;
+}
+
+.rise-in-1 {
+  animation-delay: 40ms;
+}
+.rise-in-2 {
+  animation-delay: 80ms;
+}
+.rise-in-3 {
+  animation-delay: 120ms;
+}
+.rise-in-4 {
+  animation-delay: 160ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring-breathe,
+  .wave-expand,
+  .rise-in,
+  .rise-in-1,
+  .rise-in-2,
+  .rise-in-3,
+  .rise-in-4 {
+    animation: none;
+  }
+}
