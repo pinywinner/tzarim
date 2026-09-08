@@ -3,7 +3,9 @@ import assert from "node:assert/strict";
 import {
   DEFAULT_SETTINGS,
   evaluatePhase,
+  patternWindowCopy,
   phaseMeterVisible,
+  PRESETS,
   type Contraction,
   type Session,
 } from "./contractions.ts";
@@ -57,5 +59,22 @@ describe("evaluatePhase", () => {
     );
     const { session, now } = sessionWith(rows, 60_000);
     assert.equal(evaluatePhase(session, DEFAULT_SETTINGS, now), "go");
+  });
+});
+
+describe("patternWindowCopy", () => {
+  it("names the first-birth hour window in home language", () => {
+    const rows = [0, 1, 2].map((i) => contraction(i * 5 * 60_000, 60_000, `c${i}`));
+    const { session, now } = sessionWith(rows, 60_000);
+    assert.equal(patternWindowCopy(session, DEFAULT_SETTINGS, now), "12 דק׳ מהשעה בדפוס");
+  });
+
+  it("names the subsequent half-hour window", () => {
+    const rows = [0, 1].map((i) => contraction(i * 7 * 60_000, 45_000, `c${i}`));
+    const { session, now } = sessionWith(rows, 60_000);
+    assert.equal(
+      patternWindowCopy(session, { ...DEFAULT_SETTINGS, ...PRESETS.subsequent }, now),
+      "9 דק׳ מחצי השעה בדפוס",
+    );
   });
 });
