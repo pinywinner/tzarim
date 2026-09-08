@@ -13,10 +13,10 @@ import {
 
 const PHASE_LABEL = {
   idle: "עוד לא התחיל",
-  early: "עוד מוקדם",
+  early: "נשארות בבית",
   establishing: "הצירים מתקרבים",
-  active: "הצירים סדירים",
-  go: "זמן לחדר לידה",
+  active: "הדפוס מתמלא",
+  go: "זמן לצאת לחדר לידה",
 } as const;
 
 export function sessionSummary(session: Session, settings: Settings): string {
@@ -24,17 +24,19 @@ export function sessionSummary(session: Session, settings: Settings): string {
   const stats = sessionStats(session);
   const phase = evaluatePhase(session, settings);
   const intervals = startToStartIntervals(done);
+  const elapsed = (session.endedAt ?? Date.now()) - session.startedAt;
   const lines = [
-    "צירים — סיכום מעקב",
+    "סיכום למיילדת — מעקב צירים בבית",
     `התחלה: ${format(session.startedAt, "d.M.yyyy HH:mm", { locale: he })}`,
     session.endedAt ? `סיום: ${format(session.endedAt, "HH:mm", { locale: he })}` : "מעקב פתוח",
+    `משך המעקב: ${formatClock(elapsed)}`,
     `צירים: ${stats.count}`,
     stats.count ? `משך ממוצע: ${formatClock(stats.avgDuration)}` : "",
     stats.avgInterval ? `מרווח ממוצע: ${formatClock(stats.avgInterval)}` : "",
     `מצב: ${PHASE_LABEL[phase]}`,
     session.waterBrokeAt
-      ? `מים ירדו: ${format(session.waterBrokeAt, "HH:mm", { locale: he })}`
-      : "",
+      ? `מים ירדו: כן, ${format(session.waterBrokeAt, "HH:mm", { locale: he })}`
+      : "מים ירדו: לא",
     "",
     "פירוט:",
   ].filter((line) => line !== "");
@@ -47,7 +49,7 @@ export function sessionSummary(session: Session, settings: Settings): string {
     lines.push(`${time}  משך ${dur}  מרווח ${interval}${intensity}`);
   });
 
-  lines.push("", "זה מעקב בלבד, לא ייעוץ רפואי.");
+  lines.push("", "זה מעקב בבית בלבד, לא ייעוץ רפואי.");
   return lines.join("\n");
 }
 
@@ -55,7 +57,7 @@ export async function shareSession(session: Session, settings: Settings): Promis
   const text = sessionSummary(session, settings);
   try {
     if (typeof navigator !== "undefined" && navigator.share) {
-      await navigator.share({ title: "סיכום צירים", text });
+      await navigator.share({ title: "סיכום צירים למיילדת", text });
       return "shared";
     }
   } catch (error) {
