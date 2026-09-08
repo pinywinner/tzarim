@@ -10,7 +10,7 @@ const COPY: Record<LaborPhase, { title: string; hint: string; tone: string }> = 
     tone: "bg-elevated text-fg",
   },
   early: {
-    title: "עוד מוקדם",
+    title: "נשארות בבית",
     hint: "עוד לא סדירים. אין צורך לזוז.",
     tone: "bg-calm/15 text-calm",
   },
@@ -20,12 +20,12 @@ const COPY: Record<LaborPhase, { title: string; hint: string; tone: string }> = 
     tone: "bg-warn/15 text-warn",
   },
   active: {
-    title: "הצירים סדירים",
-    hint: "חזקים, ובקצב שקבעת.",
+    title: "הדפוס מתמלא",
+    hint: "חזקים, ובקצב שקבעת. עוד קצת בבית.",
     tone: "bg-accent/15 text-accent",
   },
   go: {
-    title: "זמן לחדר לידה",
+    title: "זמן לצאת",
     hint: "התקשרי למיילדת, או צאי לדרך.",
     tone: "bg-danger text-danger-fg",
   },
@@ -37,6 +37,7 @@ type StatusBannerProps = {
   waterBrokeAt?: number | null;
   progress: number;
   showMeter: boolean;
+  meterLabel?: string;
   contractionRunning: boolean;
 };
 
@@ -46,6 +47,7 @@ export function StatusBanner({
   waterBrokeAt,
   progress,
   showMeter,
+  meterLabel,
   contractionRunning,
 }: StatusBannerProps) {
   if (waterBroke) {
@@ -70,13 +72,12 @@ export function StatusBanner({
   }
 
   const copy = COPY[phase];
-  const percent = Math.round(progress * 100);
   return (
     <div className={cn("rise-in rounded-xl px-4 py-3 shadow-border", copy.tone)}>
       <div className="flex items-baseline justify-between gap-3">
         <p className="text-base font-semibold">{copy.title}</p>
-        {showMeter ? (
-          <p className="text-xs font-medium tabular-nums opacity-80">{percent}% ליעד</p>
+        {showMeter && meterLabel ? (
+          <p className="text-xs font-medium tabular-nums opacity-80">{meterLabel}</p>
         ) : null}
       </div>
       <p className="mt-0.5 text-sm opacity-90">{copy.hint}</p>
@@ -84,7 +85,7 @@ export function StatusBanner({
         <div className="mt-2.5 h-1 overflow-hidden rounded-full bg-fg/10">
           <div
             className="h-full rounded-full bg-current transition-[width] duration-300 ease-out"
-            style={{ width: `${percent}%` }}
+            style={{ width: `${Math.round(progress * 100)}%` }}
           />
         </div>
       ) : null}
