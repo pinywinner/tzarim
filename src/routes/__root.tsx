@@ -17,7 +17,7 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: APP_NAME },
-      { name: "description", content: "מעקב צירים בלידה — משך, מרווח וכלל 5-1-1." },
+      { name: "description", content: "מעקב צירים בבית — משך, מרווח וכלל 5-1-1, עד שיוצאים לחדר לידה." },
       { name: "theme-color", content: "#F3EEE6" },
     ],
     links: [
@@ -58,7 +58,7 @@ function Splash() {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-bg">
       <p className="font-display text-3xl font-semibold tracking-tight text-fg">צירים</p>
-      <p className="mt-2 text-sm text-muted">מעקב בלידה</p>
+      <p className="mt-2 text-sm text-muted">מעקב בבית, עד שיוצאים</p>
     </div>
   );
 }
