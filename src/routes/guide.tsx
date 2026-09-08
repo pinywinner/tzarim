@@ -41,7 +41,7 @@ const SECTIONS = [
 function GuidePage() {
   return (
     <main className="flex min-h-0 flex-1 flex-col">
-      <TopBar title="מדריך" subtitle="למה לצפות, ומתי לזוז" />
+      <TopBar title="מדריך" subtitle="מתי נשארים בבית, ומתי יוצאים" />
       <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-5 pb-8">
         {SECTIONS.map((section) => {
           const urgent = "urgent" in section && section.urgent;
