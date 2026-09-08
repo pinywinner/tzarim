@@ -12,7 +12,7 @@ const STEPS = [
   {
     icon: HeartPulse,
     title: "כלל 5-1-1",
-    body: "לידה ראשונה: כל חמש דקות, כדקה, שעה ברצף — אז לחדר לידה. לידה חוזרת — מוקדם יותר. אפשר לשנות בהגדרות.",
+    body: "לידה ראשונה: כל חמש דקות, כדקה, שעה ברצף — אז יוצאים לחדר לידה. לידה חוזרת — מוקדם יותר. אפשר לשנות בהגדרות.",
   },
   {
     icon: Shield,
@@ -38,7 +38,7 @@ export function Onboarding() {
     >
       <div className="w-full max-w-md">
         <p className="font-display text-3xl font-semibold tracking-tight text-fg">צירים</p>
-        <p className="mt-1 text-sm text-muted">מעקב בלידה</p>
+        <p className="mt-1 text-sm text-muted">מעקב בבית, עד שיוצאים</p>
         <div className="mt-8 flex size-12 items-center justify-center rounded-lg bg-accent/15 text-accent">
           <Icon className="size-6" strokeWidth={1.8} />
         </div>
