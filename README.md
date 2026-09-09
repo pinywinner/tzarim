@@ -5,8 +5,9 @@
 ## הורדה לאנדרואיד
 
 [**הורידי את ה-APK (v1.2.0)**](https://github.com/pinywinner/tzarim/releases/download/v1.2.0/tzarim-1.2.0.apk)
+ · [AAB לפליי](https://github.com/pinywinner/tzarim/releases/download/v1.2.0/tzarim-1.2.0.aab)
 
-בטלפון: פתחי את הקובץ → אפשרי התקנה ממקור לא מוכר אם אנדרואיד מבקש. זו חבילת debug להתקנה ידנית, לא לחנות.
+בטלפון: פתחי את ה-APK → אפשרי התקנה ממקור לא מוכר אם אנדרואיד מבקש. לפליי מעלים את ה-AAB, לא את ה-APK.
 
 כל הגרסאות: [Releases](https://github.com/pinywinner/tzarim/releases)
 

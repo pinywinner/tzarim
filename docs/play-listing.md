@@ -58,7 +58,7 @@ This app is not a medical device and does not diagnose, treat, cure, or prevent 
 | Tags | pregnancy, labor, contractions, midwife |
 | Contains ads | No |
 | Target age | 18+ |
-| Privacy policy | https://pinywinner.github.io/tzarim/privacy.html |
+| Privacy policy | https://cdn.jsdelivr.net/gh/pinywinner/tzarim@main/docs/privacy.html |
 | Contact email | (your Play developer email) |
 
 ## Data safety
