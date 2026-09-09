@@ -35,7 +35,7 @@ export function StatusBanner({
 
   if (waterBroke) {
     return (
-      <div className="rise-in rounded-xl bg-danger px-4 py-3 text-danger-fg shadow-border">
+      <div data-intro-chrome className="rise-in rounded-xl bg-danger px-4 py-3 text-danger-fg shadow-border">
         <p className="text-base font-bold">{t("waterBannerTitle")}</p>
         <p className="mt-0.5 text-sm opacity-90">
           {t("waterBannerBody")}
@@ -47,7 +47,7 @@ export function StatusBanner({
 
   if (contractionRunning) {
     return (
-      <div className="rise-in rounded-xl bg-active/15 px-4 py-3 text-active shadow-border">
+      <div data-intro-chrome className="rise-in rounded-xl bg-active/15 px-4 py-3 text-active shadow-border">
         <p className="text-base font-bold">{t("contractionNowTitle")}</p>
         <p className="mt-0.5 text-sm opacity-90">{t("contractionNowHint")}</p>
       </div>
@@ -63,7 +63,7 @@ export function StatusBanner({
   }[phase];
 
   return (
-    <div className={cn("rise-in rounded-xl px-4 py-3 shadow-border", TONE[phase])}>
+    <div data-intro-chrome className={cn("rise-in rounded-xl px-4 py-3 shadow-border", TONE[phase])}>
       <div className="flex items-baseline justify-between gap-3">
         <p className="text-base font-bold">{copy.title}</p>
         {showMeter && meterLabel ? (

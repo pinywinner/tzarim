@@ -17,7 +17,10 @@ export function TopBar({
   const updateSettings = useAppStore((state) => state.updateSettings);
 
   return (
-    <header className="flex items-center justify-between gap-3 px-5 pb-3 pt-[max(1rem,env(safe-area-inset-top))]">
+    <header
+      data-intro-chrome
+      className="flex items-center justify-between gap-3 px-5 pb-3 pt-[max(1rem,env(safe-area-inset-top))]"
+    >
       <div className="min-w-0">
         <div className="flex items-center gap-2.5">
           <BrandWave className="w-11 shrink-0 text-active" />

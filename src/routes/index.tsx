@@ -110,7 +110,7 @@ function TimerPage() {
         )}
       </div>
 
-      <div className="shrink-0 border-t border-border bg-transparent px-5 pb-3 pt-3">
+      <div data-intro-chrome className="shrink-0 border-t border-border bg-transparent px-5 pb-3 pt-3">
         <div className="flex flex-col gap-3">
           {askingIntensity ? (
             <IntensityPicker
@@ -158,14 +158,16 @@ function ContractionStage({
       <div className="labor-enter flex min-h-0 flex-1 flex-col px-5 pt-[max(1rem,env(safe-area-inset-top))]">
         <div className="flex min-h-0 flex-1 flex-col items-center justify-center pb-8">
           <div className="flex flex-col items-center">
-            <p className="labor-enter-label text-lg font-semibold tracking-wide text-active">{t("laborActive")}</p>
+            <p data-intro-chrome className="labor-enter-label text-lg font-semibold tracking-wide text-active">{t("laborActive")}</p>
             <BrandWave mark="home" breathing className="mt-5 w-48" />
-            <RollingClock ms={elapsed} className="labor-enter-timer labor-timer mt-4 font-display text-fg" />
-            <p className="cue-breathe mt-5 font-display text-2xl font-bold text-fg">{t("breathe")}</p>
+            <span data-intro-chrome>
+              <RollingClock ms={elapsed} className="labor-enter-timer labor-timer mt-4 font-display text-fg" />
+            </span>
+            <p data-intro-chrome className="cue-breathe mt-5 font-display text-2xl font-bold text-fg">{t("breathe")}</p>
           </div>
         </div>
       </div>
-      <div className="labor-enter-cta shrink-0 px-5 pb-3 pt-1">
+      <div data-intro-chrome className="labor-enter-cta shrink-0 px-5 pb-3 pt-1">
         <div className="relative">
           <div className="cta-breathe pointer-events-none absolute inset-0 rounded-xl" aria-hidden="true" />
           <Button variant="hugeStop" size="huge" className="relative" onClick={onEnd}>
@@ -193,20 +195,20 @@ function RestStage({
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-8 py-4 text-center">
       <BrandWave mark="home" className="w-24" />
-      <div>
+      <div data-intro-chrome>
         <p className="text-sm font-medium text-muted">{t("theInterval")}</p>
         <p dir="ltr" className="mt-2 font-display text-labor font-black tabular-nums leading-none tracking-tight text-fg">
           {intervalMs != null ? formatClock(intervalMs) : "—"}
         </p>
       </div>
-      <div>
+      <div data-intro-chrome>
         <p className="text-sm font-medium text-muted">{t("lastContraction")}</p>
         <p className="mt-2 font-display text-4xl font-black tabular-nums leading-none text-fg">
           {lastDuration != null ? formatDurationSpoken(lastDuration, locale) : "—"}
         </p>
       </div>
       {reading ? (
-        <p className="max-w-sm text-sm leading-relaxed text-muted">{reading}</p>
+        <p data-intro-chrome className="max-w-sm text-sm leading-relaxed text-muted">{reading}</p>
       ) : null}
     </div>
   );

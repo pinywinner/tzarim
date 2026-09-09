@@ -72,7 +72,7 @@ function AppFrame() {
     <>
       {hydrated ? (
         <>
-          <div className="h-dvh overflow-hidden" dir="rtl" {...(blocking ? { inert: true } : {})}>
+          <div className="h-dvh overflow-hidden" dir="rtl" data-app-frame {...(blocking ? { inert: true } : {})}>
             <AppShell>
               <Outlet />
             </AppShell>

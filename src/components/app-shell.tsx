@@ -44,6 +44,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <>
           <div className="h-[var(--tabbar-offset)] shrink-0" aria-hidden="true" />
           <nav
+            data-intro-chrome
             className="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-lg"
             aria-label={t("navAria")}
           >

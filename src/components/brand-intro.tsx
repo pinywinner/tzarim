@@ -1,8 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { hapticTap } from "@/lib/haptics";
-import { isNativeApp } from "@/lib/native";
+import { isAndroidApp, isNativeApp } from "@/lib/native";
+import { SplashHandoff } from "@/lib/splash-handoff";
 
-const DURATION_MS = 1380;
+const DURATION_MS = 1400;
+
+function measureWave(): DOMRect | null {
+  const wave = document.querySelector<HTMLElement>("[data-onboarding-wave], [data-home-wave]");
+  if (!wave) return null;
+  const rect = wave.getBoundingClientRect();
+  return rect.width < 8 ? null : rect;
+}
 
 export function BrandIntro({
   ready,
@@ -11,7 +19,6 @@ export function BrandIntro({
   ready: boolean;
   onDone: () => void;
 }) {
-  const waveRef = useRef<SVGSVGElement>(null);
   const doneRef = useRef(onDone);
   doneRef.current = onDone;
   const finished = useRef(false);
@@ -19,14 +26,64 @@ export function BrandIntro({
   const finish = () => {
     if (finished.current) return;
     finished.current = true;
-    document.documentElement.classList.remove("brand-intro-active");
+    const wave = document.querySelector<HTMLElement>("[data-onboarding-wave], [data-home-wave]");
+    wave?.classList.remove("brand-intro-hero");
+    document.documentElement.classList.remove(
+      "brand-intro-active",
+      "brand-intro-playing",
+      "native-splash-playing",
+    );
     doneRef.current();
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!ready) return;
 
-    document.documentElement.classList.add("brand-intro-active");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (isNativeApp()) {
+        void import("@capacitor/splash-screen").then(({ SplashScreen }) =>
+          SplashScreen.hide({ fadeOutDuration: 0 }),
+        );
+        if (isAndroidApp()) void SplashHandoff.skip().catch(() => undefined);
+      }
+      finish();
+      return;
+    }
+
+    if (isAndroidApp()) {
+      document.documentElement.classList.add("native-splash-playing");
+      let cancelled = false;
+      const fallback = window.setTimeout(finish, 3200);
+      const start = window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          const rect = measureWave();
+          if (!rect || cancelled) {
+            window.clearTimeout(fallback);
+            finish();
+            return;
+          }
+          void SplashHandoff.land({
+            x: rect.left,
+            y: rect.top,
+            width: rect.width,
+            height: rect.height,
+          })
+            .catch(() => undefined)
+            .then(() => {
+              if (!cancelled) {
+                window.clearTimeout(fallback);
+                finish();
+              }
+            });
+        });
+      });
+      return () => {
+        cancelled = true;
+        window.cancelAnimationFrame(start);
+        window.clearTimeout(fallback);
+        document.documentElement.classList.remove("native-splash-playing");
+      };
+    }
 
     if (isNativeApp()) {
       void import("@capacitor/splash-screen").then(({ SplashScreen }) =>
@@ -34,70 +91,38 @@ export function BrandIntro({
       );
     }
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const wave = document.querySelector<HTMLElement>("[data-onboarding-wave], [data-home-wave]");
+    const rect = measureWave();
+    if (!wave || !rect) {
       finish();
       return;
     }
 
-    const wave = waveRef.current;
-    if (!wave) {
-      finish();
-      return;
-    }
+    const dx = window.innerWidth / 2 - (rect.left + rect.width / 2);
+    const dy = window.innerHeight / 2 - (rect.top + rect.height / 2);
+    const from = Math.max((window.innerWidth * 4.15) / rect.width, 12);
 
-    wave.style.transform = "none";
-    const from = wave.getBoundingClientRect();
-    const target = document.querySelector<HTMLElement>("[data-onboarding-wave], [data-home-wave]");
-    const fromCx = from.left + from.width / 2;
-    const fromCy = from.top + from.height / 2;
-    let dx = 0;
-    let dy = 0;
-    let endScale = 0.38;
-    if (target) {
-      const to = target.getBoundingClientRect();
-      dx = to.left + to.width / 2 - fromCx;
-      dy = to.top + to.height / 2 - fromCy;
-      if (from.width > 0) endScale = to.width / from.width;
-    }
     wave.style.setProperty("--intro-dx", `${dx}px`);
     wave.style.setProperty("--intro-dy", `${dy}px`);
-    wave.style.setProperty("--intro-end", String(endScale));
-    wave.classList.add("brand-intro-wave-run");
+    wave.style.setProperty("--intro-from", String(from));
+    wave.classList.add("brand-intro-hero");
+    document.documentElement.classList.add("brand-intro-active", "brand-intro-playing");
 
-    const haptic = window.setTimeout(() => hapticTap(), 1040);
-    const fallback = window.setTimeout(finish, DURATION_MS + 80);
+    const onEnd = (event: AnimationEvent) => {
+      if (event.animationName === "brand-intro-hero") finish();
+    };
+    wave.addEventListener("animationend", onEnd);
+    const haptic = window.setTimeout(() => hapticTap(), 420);
+    const timeout = window.setTimeout(finish, DURATION_MS + 80);
 
     return () => {
+      wave.removeEventListener("animationend", onEnd);
       window.clearTimeout(haptic);
-      window.clearTimeout(fallback);
-      document.documentElement.classList.remove("brand-intro-active");
+      window.clearTimeout(timeout);
+      wave.classList.remove("brand-intro-hero");
+      document.documentElement.classList.remove("brand-intro-active", "brand-intro-playing");
     };
   }, [ready]);
 
-  return (
-    <div
-      className="brand-intro"
-      role="presentation"
-      onAnimationEnd={(event) => {
-        if (event.animationName === "brand-intro-veil") finish();
-      }}
-    >
-      <p className="sr-only">מעקב צירים</p>
-      <svg
-        ref={waveRef}
-        viewBox="0 0 168 72"
-        className="brand-intro-wave"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M10 52c26 0 34 0 48-24C68 12 74 8 84 8s16 4 26 20c14 24 22 24 48 24"
-          stroke="currentColor"
-          strokeWidth="14"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </div>
-  );
+  return null;
 }

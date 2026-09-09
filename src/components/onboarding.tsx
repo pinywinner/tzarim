@@ -25,11 +25,14 @@ export function Onboarding() {
       aria-labelledby="onboarding-title"
     >
       <div className="w-full max-w-md">
-        <LanguageToggle className="mb-6" />
+        <div data-intro-chrome>
+          <LanguageToggle className="mb-6" />
+        </div>
         <BrandWave mark="onboarding" className="mb-4 w-20 text-active" />
-        <p className="font-display text-3xl font-bold tracking-tight text-fg">{t("appName")}</p>
-        <p className="mt-1 text-sm text-muted">{t("appTagline")}</p>
+        <p data-intro-chrome className="font-display text-3xl font-bold tracking-tight text-fg">{t("appName")}</p>
+        <p data-intro-chrome className="mt-1 text-sm text-muted">{t("appTagline")}</p>
 
+        <div data-intro-chrome>
         {step === 0 ? <WhoStep picked={picked} onPick={setPicked} /> : null}
         {step === 1 ? <MeasureStep /> : null}
         {step === 2 ? <DisclaimerStep /> : null}
@@ -57,6 +60,7 @@ export function Onboarding() {
           >
             {step === 2 ? t("letsStart") : t("continue")}
           </Button>
+        </div>
         </div>
       </div>
     </div>

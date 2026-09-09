@@ -9,8 +9,9 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -20,98 +21,242 @@ import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
 
-    private static final long LOGO_SETTLE_DURATION = 780L;
-    private static final long FADE_OUT_DURATION = 120L;
+    private static final int CREAM = Color.rgb(245, 241, 234);
+    private static final float START_SCALE = 6.2f;
+    private static final long PULSE_MS = 420L;
+    private static final long LAND_MS = 560L;
+    private static final long HOLD_MS = 90L;
+    private static final long FADE_MS = 180L;
+
+    private FrameLayout overlay;
+    private View cream;
+    private ImageView wave;
+    private Animator running;
+    private boolean pulseDone;
+    private boolean landing;
+    private boolean dismissed;
+    private float pendingX = Float.NaN;
+    private float pendingY;
+    private float pendingW;
+    private float pendingH;
+    private Runnable pendingDone;
+    private final Runnable fallback = this::dismissWave;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        registerPlugin(SplashHandoffPlugin.class);
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
 
-        // The native splash gives us the instant Android launch experience.
-        // This second, full-screen layer creates the branded motion we want:
-        // one huge wave that shrinks directly into the wave already visible
-        // in the center of the first web screen.
-        splashScreen.setOnExitAnimationListener(splashScreenViewProvider -> {
-            // Let the system splash disappear immediately; the custom layer
-            // below keeps the visual transition continuous.
-            splashScreenViewProvider.remove();
+        splashScreen.setOnExitAnimationListener(provider -> {
+            provider.remove();
             playWaveEntrance();
         });
     }
 
     private void playWaveEntrance() {
-        final FrameLayout overlay = new FrameLayout(this);
-        overlay.setBackgroundColor(Color.rgb(243, 238, 230));
+        if (overlay != null || isFinishing()) return;
+
+        overlay = new FrameLayout(this);
         overlay.setClickable(true);
         overlay.setFocusable(true);
 
-        final ImageView wave = new ImageView(this);
-        wave.setImageResource(il.tzarim.app.R.drawable.ic_wave);
-        wave.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        cream = new View(this);
+        cream.setBackgroundColor(CREAM);
+        overlay.addView(
+            cream,
+            new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        );
 
-        final int width = dp(112);
-        final int height = dp(48);
-        final FrameLayout.LayoutParams waveParams = new FrameLayout.LayoutParams(width, height);
+        wave = new ImageView(this);
+        wave.setImageResource(R.drawable.ic_wave);
+        wave.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        FrameLayout.LayoutParams waveParams = new FrameLayout.LayoutParams(dp(112), dp(48));
         waveParams.gravity = Gravity.CENTER;
         overlay.addView(wave, waveParams);
 
         addContentView(
-                overlay,
-                new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                )
+            overlay,
+            new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
         );
 
-        // Start absurdly large, so the user enters through the wave itself.
-        wave.setScaleX(5.6f);
-        wave.setScaleY(5.6f);
+        wave.setScaleX(START_SCALE);
+        wave.setScaleY(START_SCALE);
 
-        final ObjectAnimator settleX = ObjectAnimator.ofFloat(wave, View.SCALE_X, 5.6f, 1.10f);
-        final ObjectAnimator settleY = ObjectAnimator.ofFloat(wave, View.SCALE_Y, 5.6f, 1.10f);
-        settleX.setDuration(LOGO_SETTLE_DURATION);
-        settleY.setDuration(LOGO_SETTLE_DURATION);
-        settleX.setInterpolator(new DecelerateInterpolator(2.2f));
-        settleY.setInterpolator(new DecelerateInterpolator(2.2f));
+        ObjectAnimator pulseX = ObjectAnimator.ofFloat(wave, View.SCALE_X, START_SCALE, 6.4f, START_SCALE);
+        ObjectAnimator pulseY = ObjectAnimator.ofFloat(wave, View.SCALE_Y, START_SCALE, 7.2f, START_SCALE);
+        pulseX.setDuration(PULSE_MS);
+        pulseY.setDuration(PULSE_MS);
+        pulseX.setInterpolator(new AccelerateDecelerateInterpolator());
+        pulseY.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        final ObjectAnimator finalX = ObjectAnimator.ofFloat(wave, View.SCALE_X, 1.10f, 1.0f);
-        final ObjectAnimator finalY = ObjectAnimator.ofFloat(wave, View.SCALE_Y, 1.10f, 1.0f);
-        finalX.setDuration(180L);
-        finalY.setDuration(180L);
-        finalX.setInterpolator(new OvershootInterpolator(0.65f));
-        finalY.setInterpolator(new OvershootInterpolator(0.65f));
-
-        final AnimatorSet logoSettle = new AnimatorSet();
-        logoSettle.playTogether(settleX, settleY);
-        logoSettle.addListener(new AnimatorListenerAdapter() {
+        AnimatorSet pulse = new AnimatorSet();
+        pulse.playTogether(pulseX, pulseY);
+        pulse.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                final AnimatorSet finalSet = new AnimatorSet();
-                finalSet.playTogether(finalX, finalY);
-                finalSet.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        ObjectAnimator fade = ObjectAnimator.ofFloat(overlay, View.ALPHA, 1f, 0f);
-                        fade.setDuration(FADE_OUT_DURATION);
-                        fade.setInterpolator(new DecelerateInterpolator());
-                        fade.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                ViewGroup parent = (ViewGroup) overlay.getParent();
-                                if (parent != null) {
-                                    parent.removeView(overlay);
-                                }
-                            }
-                        });
-                        fade.start();
-                    }
-                });
-                finalSet.start();
+                pulseDone = true;
+                if (!Float.isNaN(pendingX)) {
+                    animateTo(pendingX, pendingY, pendingW, pendingH, pendingDone);
+                }
             }
         });
+        running = pulse;
+        pulse.start();
+        overlay.postDelayed(fallback, 2800);
+    }
 
-        logoSettle.start();
+    public void landWave(float cssX, float cssY, float cssW, float cssH, Runnable done) {
+        if (dismissed) {
+            if (done != null) done.run();
+            return;
+        }
+        if (wave == null || !pulseDone) {
+            pendingX = cssX;
+            pendingY = cssY;
+            pendingW = cssW;
+            pendingH = cssH;
+            pendingDone = done;
+            if (wave == null) playWaveEntrance();
+            return;
+        }
+        animateTo(cssX, cssY, cssW, cssH, done);
+    }
+
+    public void dismissWave() {
+        if (dismissed) return;
+        dismissed = true;
+        if (overlay != null) overlay.removeCallbacks(fallback);
+        if (running != null) running.cancel();
+        if (overlay == null) return;
+        ObjectAnimator fade = ObjectAnimator.ofFloat(overlay, View.ALPHA, 1f, 0f);
+        fade.setDuration(FADE_MS);
+        fade.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                removeOverlay();
+                if (pendingDone != null) {
+                    pendingDone.run();
+                    pendingDone = null;
+                }
+            }
+        });
+        fade.start();
+    }
+
+    private void animateTo(float cssX, float cssY, float cssW, float cssH, Runnable done) {
+        if (landing || dismissed) {
+            if (done != null && pendingDone != done) done.run();
+            return;
+        }
+        landing = true;
+        pendingDone = done;
+        if (wave == null || overlay == null) {
+            if (done != null) done.run();
+            return;
+        }
+        overlay.removeCallbacks(fallback);
+
+        WebView webView = getBridge() != null ? getBridge().getWebView() : null;
+        float dpr = getResources().getDisplayMetrics().density;
+        int[] webLoc = new int[] {0, 0};
+        int[] ovLoc = new int[] {0, 0};
+        if (webView != null) webView.getLocationInWindow(webLoc);
+        overlay.getLocationInWindow(ovLoc);
+
+        float targetW = cssW * dpr;
+        float targetH = cssH * dpr;
+        float targetLeft = webLoc[0] - ovLoc[0] + cssX * dpr;
+        float targetTop = webLoc[1] - ovLoc[1] + cssY * dpr;
+        float targetCx = targetLeft + targetW / 2f;
+        float targetCy = targetTop + targetH / 2f;
+
+        float layoutW = wave.getWidth() > 0 ? wave.getWidth() : dp(112);
+        float endScale = layoutW > 0 ? targetW / layoutW : 1f;
+
+        int ovW = overlay.getWidth();
+        int ovH = overlay.getHeight();
+        float fromCx = ovW / 2f;
+        float fromCy = ovH / 2f;
+        float tx = targetCx - fromCx;
+        float ty = targetCy - fromCy;
+
+        if (running != null) running.cancel();
+
+        ObjectAnimator sx = ObjectAnimator.ofFloat(wave, View.SCALE_X, wave.getScaleX(), endScale);
+        ObjectAnimator sy = ObjectAnimator.ofFloat(wave, View.SCALE_Y, wave.getScaleY(), endScale);
+        ObjectAnimator x = ObjectAnimator.ofFloat(wave, View.TRANSLATION_X, 0f, tx);
+        ObjectAnimator y = ObjectAnimator.ofFloat(wave, View.TRANSLATION_Y, 0f, ty);
+        sx.setDuration(LAND_MS);
+        sy.setDuration(LAND_MS);
+        x.setDuration(LAND_MS);
+        y.setDuration(LAND_MS);
+        DecelerateInterpolator ease = new DecelerateInterpolator(1.8f);
+        sx.setInterpolator(ease);
+        sy.setInterpolator(ease);
+        x.setInterpolator(ease);
+        y.setInterpolator(ease);
+
+        AnimatorSet land = new AnimatorSet();
+        land.playTogether(sx, sy, x, y);
+        land.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                overlay.postDelayed(() -> fadeCreamThenFinish(), HOLD_MS);
+            }
+        });
+        running = land;
+        land.start();
+    }
+
+    private void fadeCreamThenFinish() {
+        if (dismissed || cream == null) {
+            Runnable done = pendingDone;
+            pendingDone = null;
+            if (done != null) done.run();
+            removeOverlay();
+            return;
+        }
+        dismissed = true;
+        ObjectAnimator fade = ObjectAnimator.ofFloat(cream, View.ALPHA, 1f, 0f);
+        fade.setDuration(FADE_MS);
+        fade.setInterpolator(new DecelerateInterpolator());
+        fade.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Runnable done = pendingDone;
+                pendingDone = null;
+                if (done != null) done.run();
+                if (overlay != null) {
+                    overlay.postDelayed(MainActivity.this::removeOverlay, 48);
+                }
+            }
+        });
+        fade.start();
+    }
+
+    private void removeOverlay() {
+        if (overlay == null) return;
+        overlay.removeCallbacks(fallback);
+        ViewGroup parent = (ViewGroup) overlay.getParent();
+        if (parent != null) parent.removeView(overlay);
+        overlay = null;
+        cream = null;
+        wave = null;
+        running = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        if (overlay != null) overlay.removeCallbacks(fallback);
+        if (running != null) running.cancel();
+        super.onDestroy();
     }
 
     private int dp(int value) {
