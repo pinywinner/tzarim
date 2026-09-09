@@ -21,3 +21,22 @@ screenshots/
 .node_modules.lock
 .project_id
 public/__grok/
+
+# Capacitor: generate android/ios with npm run native:init. Ignore build output.
+android/.gradle/
+android/.idea/
+android/build/
+android/app/build/
+android/app/src/main/assets/public/
+android/capacitor-cordova-android-plugins/build/
+android/local.properties
+android/captures/
+ios/App/Pods/
+ios/App/build/
+ios/App/output/
+ios/DerivedData/
+ios/App/App/public/
+*.apk
+*.aab
+*.ipa
+*.dSYM.zip
