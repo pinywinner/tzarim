@@ -38,7 +38,7 @@ function Stepper({
       <div className="flex items-center gap-2" dir="ltr">
         <button
           type="button"
-          className="flex size-11 items-center justify-center rounded-md bg-surface text-lg text-fg shadow-border"
+          className="flex size-12 items-center justify-center rounded-md bg-surface-low text-lg text-fg"
           onClick={() => onChange(Math.max(min, value - step))}
           aria-label={t("decreaseAria", { label })}
         >
@@ -49,7 +49,7 @@ function Stepper({
         </p>
         <button
           type="button"
-          className="flex size-11 items-center justify-center rounded-md bg-surface text-lg text-fg shadow-border"
+          className="flex size-12 items-center justify-center rounded-md bg-surface-low text-lg text-fg"
           onClick={() => onChange(Math.min(max, value + step))}
           aria-label={t("increaseAria", { label })}
         >
@@ -72,7 +72,7 @@ function ToggleRow({
   onCheckedChange: (value: boolean) => void;
 }) {
   return (
-    <label className="flex items-center justify-between gap-4 py-3">
+    <label className="flex min-h-12 items-center justify-between gap-4 py-3">
       <span>
         <span className="block text-sm font-medium text-fg">{label}</span>
         <span className="block text-xs text-muted">{hint}</span>

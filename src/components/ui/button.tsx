@@ -4,24 +4,27 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 font-medium select-none disabled:pointer-events-none disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-bg transition-[scale,background-color,color,opacity,box-shadow] duration-150 ease-out active:not-disabled:scale-[0.96]",
+  "inline-flex items-center justify-center gap-2 font-medium select-none disabled:pointer-events-none disabled:opacity-38 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-bg transition-[transform,background-color,color,opacity,box-shadow] duration-150 ease-out active:not-disabled:scale-[0.98]",
   {
     variants: {
       variant: {
-        primary: "bg-accent text-accent-fg shadow-border",
-        secondary: "bg-elevated text-fg shadow-border",
-        outline: "bg-transparent text-fg shadow-border",
-        ghost: "bg-transparent text-muted hover:text-fg hover:bg-elevated",
-        danger: "bg-danger text-danger-fg",
-        huge: "bg-calm text-calm-fg shadow-cta",
-        hugeStop: "bg-brand-deep text-brand-deep-fg shadow-cta-stop",
+        primary:
+          "bg-primary text-on-primary hover:bg-brand-deep hover:text-brand-deep-fg",
+        secondary:
+          "bg-secondary-container text-on-secondary-container hover:bg-primary-container hover:text-on-primary-container",
+        outline:
+          "bg-transparent text-fg ring-1 ring-outline hover:bg-surface-low",
+        ghost: "bg-transparent text-muted hover:text-fg hover:bg-surface-low",
+        danger: "bg-error text-on-error hover:opacity-90",
+        huge: "bg-secondary text-on-secondary shadow-cta hover:brightness-[0.96]",
+        hugeStop: "bg-brand-deep text-brand-deep-fg shadow-cta-stop hover:brightness-[0.96]",
       },
       size: {
-        sm: "h-10 rounded-md px-3 text-sm",
-        md: "h-11 rounded-md px-4 text-sm",
-        lg: "h-12 rounded-lg px-5 text-base",
+        sm: "h-12 min-h-12 rounded-md px-4 text-sm",
+        md: "h-12 min-h-12 rounded-md px-4 text-sm",
+        lg: "h-14 min-h-14 rounded-lg px-5 text-base",
         huge: "h-20 w-full rounded-xl text-xl font-bold tracking-wide",
-        icon: "size-11 rounded-md",
+        icon: "size-12 min-h-12 min-w-12 rounded-md",
       },
     },
     defaultVariants: {

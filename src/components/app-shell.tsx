@@ -29,6 +29,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div
+      data-app-shell
       className={cn(
         "relative mx-auto flex h-dvh max-h-dvh w-full max-w-lg flex-col overflow-hidden text-fg transition-colors duration-300 md:border-x md:border-border",
         mood === "labor" ? "bg-labor-bg" : mood === "go" ? "bg-go-bg" : "bg-bg",
@@ -42,10 +43,10 @@ export function AppShell({ children }: { children: ReactNode }) {
         <>
           <div className="h-[var(--tabbar-offset)] shrink-0" aria-hidden="true" />
           <nav
-            className="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-lg px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+            className="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-lg"
             aria-label={t("navAria")}
           >
-            <ul className="grid grid-cols-4 rounded-full bg-elevated px-1.5 py-2 shadow-float">
+            <ul className="grid grid-cols-4 rounded-t-xl bg-elevated px-2 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-float">
               {nav.map((item) => {
                 const current = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
                 return (
@@ -55,14 +56,14 @@ export function AppShell({ children }: { children: ReactNode }) {
                       aria-current={current ? "page" : undefined}
                       onClick={() => hapticTap()}
                       className={cn(
-                        "flex min-h-14 flex-col items-center justify-center gap-1 text-xs leading-none tracking-wide transition-[color] duration-150",
+                        "flex min-h-14 flex-col items-center justify-center gap-1 text-label tracking-wide transition-[color] duration-150",
                         current ? "font-bold text-fg" : "font-medium text-muted",
                       )}
                     >
                       <span
                         className={cn(
-                          "flex size-9 items-center justify-center rounded-full text-accent transition-[background-color] duration-150",
-                          current && "bg-accent/20",
+                          "flex size-8 items-center justify-center rounded-full text-primary transition-[background-color] duration-150",
+                          current && "bg-primary-container text-on-primary-container",
                         )}
                       >
                         {item.icon === "wave" ? (

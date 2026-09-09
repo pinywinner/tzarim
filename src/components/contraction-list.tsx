@@ -102,7 +102,7 @@ export function ContractionList({
               <button
                 type="button"
                 onClick={() => onDelete(contraction.id)}
-                className="h-11 px-2 text-xs font-medium text-muted"
+                className="h-12 px-3 text-sm font-medium text-muted"
               >
                 {t("delete")}
               </button>

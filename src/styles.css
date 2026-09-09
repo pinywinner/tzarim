@@ -65,26 +65,52 @@
   --color-bg: var(--app-bg);
   --color-surface: var(--app-surface);
   --color-elevated: var(--app-elevated);
+  --color-surface-low: var(--app-surface-low);
+  --color-surface-high: var(--app-elevated);
   --color-fg: var(--app-fg);
   --color-muted: var(--app-muted);
   --color-subtle: var(--app-subtle);
   --color-border: var(--app-border);
+  --color-outline: var(--app-border);
+  --color-outline-variant: var(--app-track);
   --color-accent: var(--app-accent);
   --color-accent-fg: var(--app-accent-fg);
+  --color-primary: var(--app-accent);
+  --color-on-primary: var(--app-accent-fg);
+  --color-primary-container: var(--app-primary-container);
+  --color-on-primary-container: var(--app-on-primary-container);
   --color-brand-deep: var(--app-brand-deep);
   --color-brand-deep-fg: var(--app-brand-deep-fg);
   --color-calm: var(--app-calm);
   --color-calm-fg: var(--app-calm-fg);
+  --color-secondary: var(--app-calm);
+  --color-on-secondary: var(--app-calm-fg);
+  --color-secondary-container: var(--app-secondary-container);
+  --color-on-secondary-container: var(--app-on-secondary-container);
   --color-active: var(--app-active);
   --color-active-fg: var(--app-active-fg);
   --color-warn: var(--app-warn);
   --color-warn-fg: var(--app-warn-fg);
+  --color-tertiary: var(--app-warn);
+  --color-on-tertiary: var(--app-warn-fg);
   --color-danger: var(--app-danger);
   --color-danger-fg: var(--app-danger-fg);
+  --color-error: var(--app-danger);
+  --color-on-error: var(--app-danger-fg);
   --color-labor-bg: var(--app-labor);
   --color-go-bg: var(--app-go);
   --color-track: var(--app-track);
 
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.25;
+  --text-body: 0.875rem;
+  --text-body--line-height: 1.5;
+  --text-title: 1.25rem;
+  --text-title--line-height: 1.3;
+  --text-headline: 1.5rem;
+  --text-headline--line-height: 1.2;
+  --text-display: 1.875rem;
+  --text-display--line-height: 1.15;
   --text-timer: clamp(3rem, 13vw, 4.5rem);
   --text-labor: clamp(4.25rem, 20vw, 6.75rem);
   --radius-xs: 4px;
@@ -103,45 +129,38 @@
 :root {
   --app-canvas: #ebe6dc;
   --app-bg: #f5f1ea;
+  --app-surface-low: #efeae2;
   --app-surface: #fffdfc;
   --app-elevated: #fffdfc;
   --app-fg: #292724;
-  --app-muted: #716b63;
-  --app-subtle: #8c867e;
+  --app-muted: #5f5a53;
+  --app-subtle: #716b63;
   --app-border: #ded7cc;
   --app-accent: #b85c5c;
   --app-accent-fg: #fff8f6;
+  --app-primary-container: #f3d6d2;
+  --app-on-primary-container: #6e2c32;
   --app-brand-deep: #8f4046;
   --app-brand-deep-fg: #fff8f6;
-  --app-calm: #718c7a;
+  --app-calm: #5f7a68;
   --app-calm-fg: #f4f8f5;
+  --app-secondary-container: #dce6df;
+  --app-on-secondary-container: #24352c;
   --app-active: #c95d58;
   --app-active-fg: #fff8f6;
-  --app-warn: #c28a3d;
-  --app-warn-fg: #3a2a10;
+  --app-warn: #9a6c28;
+  --app-warn-fg: #fff8ee;
   --app-danger: #a94747;
   --app-danger-fg: #fff6f4;
   --app-labor: #f7e9e6;
   --app-go: #fbf2e3;
   --app-track: #e6e0d6;
-  --app-shadow:
-    0 0 0 1px rgb(41 39 36 / 0.06),
-    0 1px 2px -1px rgb(41 39 36 / 0.06),
-    0 8px 24px -12px rgb(41 39 36 / 0.12);
-  --app-shadow-cta:
-    inset 0 1px 0 rgb(255 255 255 / 0.22),
-    0 0 0 1px rgb(41 39 36 / 0.08),
-    0 14px 28px -14px rgb(113 140 122 / 0.55);
-  --app-shadow-cta-stop:
-    inset 0 1px 0 rgb(255 255 255 / 0.14),
-    0 0 0 1px rgb(41 39 36 / 0.14),
-    0 14px 28px -14px rgb(143 64 70 / 0.5);
-  --app-shadow-float:
-    0 0 0 1px rgb(41 39 36 / 0.05),
-    0 8px 20px -6px rgb(41 39 36 / 0.14),
-    0 22px 40px -16px rgb(41 39 36 / 0.18);
+  --app-shadow: 0 0 0 1px rgb(41 39 36 / 0.08);
+  --app-shadow-cta: 0 6px 16px -8px rgb(95 122 104 / 0.45);
+  --app-shadow-cta-stop: 0 6px 16px -8px rgb(143 64 70 / 0.4);
+  --app-shadow-float: 0 8px 24px -12px rgb(41 39 36 / 0.18);
 
-  --tabbar-offset: calc(4.85rem + max(0.75rem, env(safe-area-inset-bottom, 0px)));
+  --tabbar-offset: calc(4.65rem + max(0.5rem, env(safe-area-inset-bottom, 0px)));
 
   --motion-micro: 80ms;
   --motion-quick: 150ms;
@@ -153,18 +172,23 @@
 html.dark {
   --app-canvas: #1a1816;
   --app-bg: #211f1d;
+  --app-surface-low: #262320;
   --app-surface: #2b2825;
   --app-elevated: #332f2c;
   --app-fg: #f4efe8;
-  --app-muted: #b9b1a7;
-  --app-subtle: #8e877e;
+  --app-muted: #c9c1b6;
+  --app-subtle: #9a9288;
   --app-border: #3f3b36;
   --app-accent: #d36b65;
   --app-accent-fg: #1a1212;
+  --app-primary-container: #5a2e30;
+  --app-on-primary-container: #f6d4d0;
   --app-brand-deep: #c45c62;
   --app-brand-deep-fg: #1a1212;
   --app-calm: #829b89;
   --app-calm-fg: #142018;
+  --app-secondary-container: #2f3c34;
+  --app-on-secondary-container: #dce6df;
   --app-active: #d36b65;
   --app-active-fg: #1a1212;
   --app-warn: #d39a4a;
@@ -175,15 +199,9 @@ html.dark {
   --app-go: #2a261c;
   --app-track: #3a3632;
   --app-shadow: 0 0 0 1px rgb(255 255 255 / 0.08);
-  --app-shadow-cta:
-    inset 0 1px 0 rgb(255 255 255 / 0.12),
-    0 14px 28px -14px rgb(130 155 137 / 0.4);
-  --app-shadow-cta-stop:
-    inset 0 1px 0 rgb(255 255 255 / 0.08),
-    0 14px 28px -14px rgb(0 0 0 / 0.55);
-  --app-shadow-float:
-    0 0 0 1px rgb(255 255 255 / 0.08),
-    0 16px 36px -10px rgb(0 0 0 / 0.55);
+  --app-shadow-cta: 0 8px 20px -10px rgb(0 0 0 / 0.55);
+  --app-shadow-cta-stop: 0 8px 20px -10px rgb(0 0 0 / 0.55);
+  --app-shadow-float: 0 10px 28px -12px rgb(0 0 0 / 0.5);
 }
 
 @layer base {
@@ -385,14 +403,14 @@ html.native body {
 @keyframes cta-breathe {
   0%,
   100% {
-    opacity: 0.4;
+    opacity: 0.35;
     transform: scale(1);
     box-shadow: var(--app-shadow-cta-stop);
   }
   50% {
-    opacity: 1;
-    transform: scale(1.04);
-    box-shadow: 0 18px 36px -12px rgb(143 64 70 / 0.55);
+    opacity: 0.85;
+    transform: scale(1.03);
+    box-shadow: 0 10px 24px -10px rgb(143 64 70 / 0.38);
   }
 }
 

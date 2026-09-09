@@ -78,7 +78,7 @@ export function IntensityPicker({
       <button
         type="button"
         onClick={onSkip}
-        className="mt-3 flex h-11 w-full items-center justify-center rounded-md text-sm font-medium text-muted"
+        className="mt-3 flex h-12 w-full items-center justify-center rounded-md text-sm font-medium text-muted"
       >
         {t("skipNoIntensity")}
       </button>

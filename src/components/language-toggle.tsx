@@ -19,8 +19,8 @@ export function LanguageToggle({ className }: { className?: string }) {
         type="button"
         onClick={() => setLocale("he")}
         className={cn(
-          "h-10 rounded-full text-sm font-bold transition-[background-color,color] duration-150",
-          locale === "he" ? "bg-accent/15 text-fg" : "text-muted",
+          "h-12 rounded-full text-sm font-bold transition-[background-color,color] duration-150",
+          locale === "he" ? "bg-primary-container text-on-primary-container" : "text-muted",
         )}
         aria-pressed={locale === "he"}
       >
@@ -30,8 +30,8 @@ export function LanguageToggle({ className }: { className?: string }) {
         type="button"
         onClick={() => setLocale("en")}
         className={cn(
-          "h-10 rounded-full text-sm font-bold transition-[background-color,color] duration-150",
-          locale === "en" ? "bg-accent/15 text-fg" : "text-muted",
+          "h-12 rounded-full text-sm font-bold transition-[background-color,color] duration-150",
+          locale === "en" ? "bg-primary-container text-on-primary-container" : "text-muted",
         )}
         aria-pressed={locale === "en"}
       >
