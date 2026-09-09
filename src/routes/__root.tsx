@@ -9,7 +9,6 @@ import { StaleDialog } from "@/components/stale-dialog";
 import { ThemeSync } from "@/components/theme-sync";
 import { AuthProvider } from "@/lib/auth/provider";
 import { useAppStore } from "@/lib/store";
-import { useT } from "@/hooks/use-t";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "מעקב צירים";
@@ -77,7 +76,6 @@ function AppFrame() {
   const hydrated = useAppStore((state) => state.hydrated);
   const onboardingDone = useAppStore((state) => state.onboardingDone);
   const stalePromptId = useAppStore((state) => state.stalePromptId);
-  const { dir } = useT();
 
   if (!hydrated) return <Splash />;
 
@@ -85,7 +83,7 @@ function AppFrame() {
 
   return (
     <>
-      <div className="h-dvh overflow-hidden" {...(blocking ? { inert: true } : {})}>
+      <div className="h-dvh overflow-hidden" dir="rtl" {...(blocking ? { inert: true } : {})}>
         <AppShell>
           <Outlet />
         </AppShell>
@@ -94,7 +92,7 @@ function AppFrame() {
       <StaleDialog />
       <Toaster
         position="top-center"
-        dir={dir}
+        dir="rtl"
         toastOptions={{
           className: "font-sans !bg-elevated !text-fg !border-border",
         }}

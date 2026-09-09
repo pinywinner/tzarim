@@ -30,6 +30,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div
       data-app-shell
+      dir="rtl"
       className={cn(
         "relative mx-auto flex h-dvh max-h-dvh w-full max-w-lg flex-col overflow-hidden text-fg transition-colors duration-300 md:border-x md:border-border",
         mood === "labor" ? "bg-labor-bg" : mood === "go" ? "bg-go-bg" : "bg-bg",
@@ -56,7 +57,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                       aria-current={current ? "page" : undefined}
                       onClick={() => hapticTap()}
                       className={cn(
-                        "flex min-h-14 flex-col items-center justify-center gap-1 text-label tracking-wide transition-[color] duration-150",
+                        "flex min-h-14 flex-col items-center justify-center gap-1 whitespace-nowrap text-label tracking-wide transition-[color] duration-150",
                         current ? "font-bold text-fg" : "font-medium text-muted",
                       )}
                     >

@@ -19,6 +19,7 @@ export function Onboarding() {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-bg px-5"
+      dir="rtl"
       role="dialog"
       aria-modal="true"
       aria-labelledby="onboarding-title"

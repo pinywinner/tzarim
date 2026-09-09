@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { dirOf } from "@/lib/i18n";
 import { useLocale } from "@/hooks/use-t";
 
 export function LanguageSync() {
@@ -8,7 +7,7 @@ export function LanguageSync() {
   useEffect(() => {
     const root = document.documentElement;
     root.lang = locale;
-    root.dir = dirOf(locale);
+    root.dir = "rtl";
   }, [locale]);
 
   return null;
