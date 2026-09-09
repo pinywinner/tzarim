@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 
 export function Sheet({
@@ -25,7 +26,9 @@ export function Sheet({
     };
   }, [onDismiss]);
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-fg/40 sm:items-center sm:px-5"
       role="dialog"
@@ -43,6 +46,7 @@ export function Sheet({
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-outline-variant sm:hidden" aria-hidden="true" />
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

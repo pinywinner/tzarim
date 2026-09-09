@@ -194,15 +194,15 @@ function RestStage({
     <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-8 py-4 text-center">
       <BrandWave className="w-24" />
       <div>
-        <p className="text-sm font-medium text-muted">{t("lastContraction")}</p>
-        <p className="mt-2 font-display text-4xl font-black tabular-nums leading-none text-fg">
-          {lastDuration != null ? formatDurationSpoken(lastDuration, locale) : "—"}
-        </p>
-      </div>
-      <div>
         <p className="text-sm font-medium text-muted">{t("theInterval")}</p>
         <p dir="ltr" className="mt-2 font-display text-labor font-black tabular-nums leading-none tracking-tight text-fg">
           {intervalMs != null ? formatClock(intervalMs) : "—"}
+        </p>
+      </div>
+      <div>
+        <p className="text-sm font-medium text-muted">{t("lastContraction")}</p>
+        <p className="mt-2 font-display text-4xl font-black tabular-nums leading-none text-fg">
+          {lastDuration != null ? formatDurationSpoken(lastDuration, locale) : "—"}
         </p>
       </div>
       {reading ? (
