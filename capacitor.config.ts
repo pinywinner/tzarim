@@ -2,7 +2,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
   appId: "il.tzarim.app",
-  appName: "צירים",
+  appName: "מעקב צירים",
   webDir: "dist/client",
   server: {
     androidScheme: "https",
