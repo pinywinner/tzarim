@@ -391,11 +391,11 @@ html.native body {
 @keyframes wave-breathe {
   0%,
   100% {
-    transform: scale(0.94, 0.78);
-    opacity: 0.72;
+    transform: scale(0.9, 0.78);
+    opacity: 0.78;
   }
   50% {
-    transform: scale(1.06, 1.16);
+    transform: scale(1.1, 1.24);
     opacity: 1;
   }
 }
@@ -440,13 +440,20 @@ html.native body {
   animation: timer-in 300ms var(--ease-smooth-out) both;
 }
 
-.labor-enter-cta {
-  animation: rise-in 300ms var(--ease-smooth-out) both;
+.labor-timer {
+  font-size: clamp(3.75rem, 18vw, 5.5rem);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
 }
 
 .wave-breathe {
   transform-origin: 50% 88%;
-  animation: wave-breathe 4.4s ease-in-out infinite;
+  animation: wave-breathe 4.8s ease-in-out infinite;
+}
+
+.labor-enter-cta {
+  animation: rise-in 300ms var(--ease-smooth-out) both;
 }
 
 .cta-breathe {

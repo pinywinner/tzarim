@@ -190,23 +190,24 @@ function ContractionStage({
   const { t } = useT();
   return (
     <>
-      <div className="labor-enter flex min-h-0 flex-1 flex-col items-center justify-center px-5 pt-[max(1rem,env(safe-area-inset-top))]">
-        <p className="labor-enter-label text-sm font-medium tracking-wide text-active">{t("laborActive")}</p>
-        <BrandWave breathing className="mt-8 w-36" />
-        <RollingClock
-          ms={elapsed}
-          className="labor-enter-timer mt-5 font-display text-labor font-black leading-none tracking-tight text-fg"
-        />
-        <p className="cue-breathe mt-8 font-display text-2xl font-bold text-muted">{t("breathe")}</p>
+      <div className="labor-enter flex min-h-0 flex-1 flex-col px-5 pt-[max(1rem,env(safe-area-inset-top))]">
+        <div className="flex min-h-0 flex-1 flex-col items-center justify-center pb-8">
+          <div className="flex flex-col items-center">
+            <p className="labor-enter-label text-lg font-semibold tracking-wide text-active">{t("laborActive")}</p>
+            <BrandWave breathing className="mt-5 w-48" />
+            <RollingClock ms={elapsed} className="labor-enter-timer labor-timer mt-4 font-display text-fg" />
+            <p className="cue-breathe mt-5 font-display text-2xl font-bold text-fg">{t("breathe")}</p>
+          </div>
+        </div>
       </div>
-      <div className="labor-enter-cta shrink-0 px-5 pb-3 pt-3">
+      <div className="labor-enter-cta shrink-0 px-5 pb-3 pt-1">
         <div className="relative">
           <div className="cta-breathe pointer-events-none absolute inset-0 rounded-xl" aria-hidden="true" />
           <Button variant="hugeStop" size="huge" className="relative" onClick={onEnd}>
             {t("stop")}
           </Button>
         </div>
-        <Button variant="ghost" className="mt-2 w-full" onClick={onCancel}>
+        <Button variant="ghost" className="mt-1 w-full text-base font-semibold text-fg" onClick={onCancel}>
           {t("accidental")}
         </Button>
       </div>

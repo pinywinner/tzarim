@@ -24,7 +24,7 @@ function RollingDigit({ value }: { value: string }) {
   }, [value]);
 
   return (
-    <span className="relative inline-block h-[1em] w-[1ch] overflow-hidden align-baseline">
+    <span className="relative inline-block h-[1em] w-[0.62em] overflow-hidden align-baseline">
       {pair ? (
         <span className="digit-roll flex flex-col">
           <span className="grid h-[1em] place-items-center">{pair[0]}</span>
