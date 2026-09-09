@@ -20,7 +20,7 @@ import com.getcapacitor.BridgeActivity;
 public class MainActivity extends BridgeActivity {
 
     private static final int CREAM = Color.rgb(245, 241, 234);
-    private static final float START_SCALE = 6.2f;
+    private static final float START_SCALE = 11.5f;
     private static final long PULSE_MS = 420L;
     private static final long LAND_MS = 560L;
     private static final long HOLD_MS = 80L;
@@ -83,8 +83,8 @@ public class MainActivity extends BridgeActivity {
         wave.setScaleX(START_SCALE);
         wave.setScaleY(START_SCALE);
 
-        ObjectAnimator pulseX = ObjectAnimator.ofFloat(wave, View.SCALE_X, START_SCALE, 6.4f, START_SCALE);
-        ObjectAnimator pulseY = ObjectAnimator.ofFloat(wave, View.SCALE_Y, START_SCALE, 7.2f, START_SCALE);
+        ObjectAnimator pulseX = ObjectAnimator.ofFloat(wave, View.SCALE_X, START_SCALE, 11.8f, START_SCALE);
+        ObjectAnimator pulseY = ObjectAnimator.ofFloat(wave, View.SCALE_Y, START_SCALE, 13.2f, START_SCALE);
         pulseX.setDuration(PULSE_MS);
         pulseY.setDuration(PULSE_MS);
         pulseX.setInterpolator(new AccelerateDecelerateInterpolator());
