@@ -230,7 +230,7 @@ function RestStage({
       </div>
       <div>
         <p className="text-sm font-medium text-muted">המרווח</p>
-        <p className="mt-2 font-display text-labor font-black tabular-nums leading-none tracking-tight text-fg">
+        <p dir="ltr" className="mt-2 font-display text-labor font-black tabular-nums leading-none tracking-tight text-fg">
           {intervalMs != null ? formatClock(intervalMs) : "—"}
         </p>
       </div>

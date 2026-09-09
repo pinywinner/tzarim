@@ -47,11 +47,11 @@ export function RollingClock({
   const text = formatLaborClock(ms);
 
   return (
-    <span className={cn("inline-flex items-baseline tabular-nums", className)}>
+    <span dir="ltr" className={cn("inline-flex items-baseline tabular-nums", className)}>
       <span className="sr-only" aria-live="polite">
         {text}
       </span>
-      <span aria-hidden="true" className="inline-flex items-baseline">
+      <span aria-hidden="true" className="inline-flex flex-row items-baseline">
         {Array.from(text).map((ch, index) =>
           ch === ":" ? (
             <span key="colon" className="mx-[0.04em]">
