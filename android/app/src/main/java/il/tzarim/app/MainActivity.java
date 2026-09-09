@@ -95,7 +95,7 @@ public class MainActivity extends BridgeActivity {
         pulse.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (animation.isCanceled() || dismissed) return;
+                if (dismissed) return;
                 pulseDone = true;
                 if (!Float.isNaN(pendingX)) {
                     animateTo(pendingX, pendingY, pendingW, pendingH, pendingDone);
@@ -191,7 +191,7 @@ public class MainActivity extends BridgeActivity {
         land.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (animation.isCanceled() || dismissed || overlay == null) return;
+                if (dismissed || overlay == null) return;
                 overlay.postDelayed(() -> fadeCreamThenFinish(), HOLD_MS);
             }
         });
