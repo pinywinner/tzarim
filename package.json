@@ -10,9 +10,20 @@
     "preview": "node scripts/with-app-env.mjs vite preview",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test src/lib/contractions.test.ts",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "native:web": "node scripts/native-web.mjs build",
+    "native:sync": "node scripts/native-web.mjs sync",
+    "native:init": "node scripts/native-web.mjs init",
+    "native:android": "node scripts/native-web.mjs sync && npx cap open android",
+    "native:ios": "node scripts/native-web.mjs sync && npx cap open ios"
   },
   "dependencies": {
+    "@capacitor-community/keep-awake": "^8.0.1",
+    "@capacitor/core": "^8.5.1",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/share": "^8.0.1",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.3",
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-switch": "^1.2.6",
     "@tailwindcss/vite": "^4.3.0",
@@ -32,6 +43,9 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@capacitor/android": "^8.5.1",
+    "@capacitor/cli": "^8.5.1",
+    "@capacitor/ios": "^8.5.1",
     "@eslint/js": "^9.20.0",
     "@types/node": "^22.16.5",
     "@types/react": "^19.2.0",
