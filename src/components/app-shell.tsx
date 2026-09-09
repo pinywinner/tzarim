@@ -1,13 +1,14 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Clock3, List, Settings2 } from "lucide-react";
+import { BookOpen, List, Settings2 } from "lucide-react";
 import type { ReactNode } from "react";
+import { BrandWave } from "@/components/brand-wave";
 import { useNow } from "@/hooks/use-now";
 import { activeContraction, evaluatePhase } from "@/lib/contractions";
 import { useAppStore, useCurrentSession } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { to: "/", label: "עכשיו", icon: Clock3 },
+  { to: "/", label: "עכשיו", icon: "wave" },
   { to: "/history", label: "היסטוריה", icon: List },
   { to: "/guide", label: "מדריך", icon: BookOpen },
   { to: "/settings", label: "הגדרות", icon: Settings2 },
@@ -45,7 +46,6 @@ export function AppShell({ children }: { children: ReactNode }) {
             <ul className="grid grid-cols-4 rounded-full bg-elevated px-1.5 py-2 shadow-float">
               {NAV.map((item) => {
                 const current = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
-                const Icon = item.icon;
                 return (
                   <li key={item.to}>
                     <Link
@@ -62,7 +62,11 @@ export function AppShell({ children }: { children: ReactNode }) {
                           current && "bg-accent/20",
                         )}
                       >
-                        <Icon className="size-5" strokeWidth={current ? 2.15 : 1.8} />
+                        {item.icon === "wave" ? (
+                          <BrandWave className="w-7 text-current" />
+                        ) : (
+                          <item.icon className="size-5" strokeWidth={current ? 2.15 : 1.8} />
+                        )}
                       </span>
                       {item.label}
                     </Link>

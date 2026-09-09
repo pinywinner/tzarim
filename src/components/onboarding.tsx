@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Clock3, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
+import { BrandWave } from "@/components/brand-wave";
 import { Button } from "@/components/ui/button";
 import type { BirthType } from "@/lib/contractions";
 import { useAppStore } from "@/lib/store";
@@ -25,6 +26,7 @@ export function Onboarding() {
       aria-labelledby="onboarding-title"
     >
       <div className="w-full max-w-md">
+        <BrandWave className="mb-4 w-20 text-active" />
         <p className="font-display text-3xl font-bold tracking-tight text-fg">מעקב צירים</p>
         <p className="mt-1 text-sm text-muted">מעקב בבית, עד שיוצאים</p>
 
@@ -102,8 +104,8 @@ function WhoStep({
 function MeasureStep() {
   return (
     <>
-      <div className="mt-8 flex size-12 items-center justify-center rounded-lg bg-accent/15 text-accent">
-        <Clock3 className="size-6" strokeWidth={1.8} />
+      <div className="mt-8 flex h-12 w-20 items-center text-active">
+        <BrandWave className="w-20" />
       </div>
       <p id="onboarding-title" className="mt-5 font-display text-2xl font-bold text-fg">
         את מודדת. אנחנו מחשבים.

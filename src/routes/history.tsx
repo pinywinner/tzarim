@@ -4,7 +4,6 @@ import { he } from "date-fns/locale";
 import { Share2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { BrandWave } from "@/components/brand-wave";
 import { ConfirmSheet } from "@/components/confirm-sheet";
 import { ContractionList } from "@/components/contraction-list";
 import { IntervalSparkline } from "@/components/interval-sparkline";
@@ -36,7 +35,6 @@ function HistoryPage() {
     <main className="flex min-h-0 flex-1 flex-col">
       <TopBar title="היסטוריה" subtitle="המעקב הפתוח, והקודמים" />
       <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-6">
-        <BrandWave className="mx-auto w-16 text-active/70" />
         <StatsRow session={session} stats={stats} />
         <IntervalSparkline session={session} />
 

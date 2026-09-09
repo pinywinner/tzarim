@@ -243,7 +243,6 @@ function RestStage({
 function IdleStage() {
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center justify-center py-8 text-center">
-      <BrandWave className="mx-auto mb-6 w-28 text-active/80" />
       <p className="font-display text-2xl font-bold text-fg">כשהציר מתחיל</p>
       <p className="mt-2 text-sm text-muted">לחצי ״התחיל״. זהו.</p>
     </div>
