@@ -197,8 +197,9 @@ function ContractionStage({
         <p className="cue-breathe mt-8 font-display text-2xl font-bold text-muted">נשמי.</p>
       </div>
       <div className="labor-enter-cta shrink-0 px-5 pb-3 pt-3">
-        <div className="cta-breathe">
-          <Button variant="hugeStop" size="huge" onClick={onEnd}>
+        <div className="relative">
+          <div className="cta-breathe pointer-events-none absolute inset-0 rounded-xl" aria-hidden="true" />
+          <Button variant="hugeStop" size="huge" className="relative" onClick={onEnd}>
             סיימתי
           </Button>
         </div>
