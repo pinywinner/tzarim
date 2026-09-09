@@ -147,6 +147,11 @@ html.dark {
   }
 }
 
+html.native,
+html.native body {
+  overscroll-behavior: none;
+}
+
 @keyframes ring-breathe {
   0%,
   100% {
