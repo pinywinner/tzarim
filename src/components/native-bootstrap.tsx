@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { isAndroidApp, isNativeApp } from "@/lib/native";
+import { isNativeApp } from "@/lib/native";
 import { useAppStore } from "@/lib/store";
 
 export function NativeBootstrap() {
@@ -9,11 +9,9 @@ export function NativeBootstrap() {
   useEffect(() => {
     if (!isNativeApp()) return;
     document.documentElement.classList.add("native");
-    if (isAndroidApp()) return;
-    const fallback = window.setTimeout(() => {
-      void import("@capacitor/splash-screen").then(({ SplashScreen }) => SplashScreen.hide());
-    }, 2500);
-    return () => window.clearTimeout(fallback);
+    void import("@capacitor/splash-screen").then(({ SplashScreen }) =>
+      SplashScreen.hide({ fadeOutDuration: 0 }),
+    );
   }, []);
 
   useEffect(() => {

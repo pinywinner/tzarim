@@ -39,13 +39,14 @@ export function BrandIntro({
   useLayoutEffect(() => {
     if (!ready) return;
 
+    if (isNativeApp()) {
+      void import("@capacitor/splash-screen").then(({ SplashScreen }) =>
+        SplashScreen.hide({ fadeOutDuration: 0 }),
+      );
+    }
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      if (isNativeApp()) {
-        void import("@capacitor/splash-screen").then(({ SplashScreen }) =>
-          SplashScreen.hide({ fadeOutDuration: 0 }),
-        );
-        if (isAndroidApp()) void SplashHandoff.skip().catch(() => undefined);
-      }
+      if (isAndroidApp()) void SplashHandoff.skip().catch(() => undefined);
       finish();
       return;
     }
@@ -53,42 +54,42 @@ export function BrandIntro({
     if (isAndroidApp()) {
       document.documentElement.classList.add("native-splash-playing");
       let cancelled = false;
-      const fallback = window.setTimeout(finish, 3200);
+      const fallback = window.setTimeout(() => {
+        void SplashHandoff.skip().catch(() => undefined);
+        finish();
+      }, 2000);
+
       const start = window.requestAnimationFrame(() => {
         window.requestAnimationFrame(() => {
+          if (cancelled) return;
           const rect = measureWave();
-          if (!rect || cancelled) {
+          if (!rect) {
             window.clearTimeout(fallback);
+            void SplashHandoff.skip().catch(() => undefined);
             finish();
             return;
           }
-          void SplashHandoff.land({
+          const landed = SplashHandoff.land({
             x: rect.left,
             y: rect.top,
             width: rect.width,
             height: rect.height,
-          })
-            .catch(() => undefined)
-            .then(() => {
-              if (!cancelled) {
-                window.clearTimeout(fallback);
-                finish();
-              }
-            });
+          }).catch(() => undefined);
+          const cap = new Promise<void>((resolve) => window.setTimeout(resolve, 1800));
+          void Promise.race([landed, cap]).then(() => {
+            if (cancelled) return;
+            window.clearTimeout(fallback);
+            finish();
+          });
         });
       });
+
       return () => {
         cancelled = true;
         window.cancelAnimationFrame(start);
         window.clearTimeout(fallback);
         document.documentElement.classList.remove("native-splash-playing");
       };
-    }
-
-    if (isNativeApp()) {
-      void import("@capacitor/splash-screen").then(({ SplashScreen }) =>
-        SplashScreen.hide({ fadeOutDuration: 0 }),
-      );
     }
 
     const wave = document.querySelector<HTMLElement>("[data-onboarding-wave], [data-home-wave]");
