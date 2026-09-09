@@ -56,7 +56,7 @@ export function sessionSummary(session: Session, settings: Settings): string {
 
 export async function shareSession(session: Session, settings: Settings): Promise<"shared" | "copied" | "failed"> {
   const text = sessionSummary(session, settings);
-  const title = "סיכום צירים למיילדת";
+  const title = "סיכום מעקב צירים למיילדת";
 
   if (isNativeApp()) {
     try {
