@@ -78,7 +78,7 @@ function AppFrame() {
 
   return (
     <>
-      <div {...(blocking ? { inert: true } : {})}>
+      <div className="h-dvh overflow-hidden" {...(blocking ? { inert: true } : {})}>
         <AppShell>
           <Outlet />
         </AppShell>
