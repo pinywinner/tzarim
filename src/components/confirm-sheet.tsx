@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
+import { useT } from "@/hooks/use-t";
 
 export function ConfirmSheet({
   title,
   body,
   confirmLabel,
-  cancelLabel = "לא עכשיו",
+  cancelLabel,
   danger,
   onConfirm,
   onCancel,
@@ -17,6 +18,7 @@ export function ConfirmSheet({
   onConfirm: () => void;
   onCancel: () => void;
 }) {
+  const { t } = useT();
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-fg/45 px-5"
@@ -34,7 +36,7 @@ export function ConfirmSheet({
             {confirmLabel}
           </Button>
           <Button size="lg" variant="secondary" onClick={onCancel}>
-            {cancelLabel}
+            {cancelLabel ?? t("notNow")}
           </Button>
         </div>
       </div>

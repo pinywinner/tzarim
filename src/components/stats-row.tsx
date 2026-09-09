@@ -1,3 +1,4 @@
+import { useT } from "@/hooks/use-t";
 import { formatClock, intervalTrend, type Session, type SessionStats } from "@/lib/contractions";
 import { cn } from "@/lib/utils";
 
@@ -26,32 +27,27 @@ function Stat({
   );
 }
 
-const TREND: Record<NonNullable<ReturnType<typeof intervalTrend>>, string> = {
-  shorter: "מתקרבים",
-  longer: "מתרחקים",
-  stable: "בלי שינוי",
-};
-
 export function StatsRow({ session, stats }: { session: Session; stats: SessionStats }) {
+  const { t } = useT();
   const trend = intervalTrend(session.contractions);
+  const trendLabel =
+    trend === "shorter" ? t("trendShorter") : trend === "longer" ? t("trendLonger") : trend === "stable" ? t("trendStable") : undefined;
 
   return (
     <div className="grid grid-cols-3 rounded-xl bg-elevated px-1 py-3 shadow-border">
+      <Stat label={t("avgDuration")} value={stats.count ? formatClock(stats.avgDuration) : "—"} />
       <Stat
-        label="משך ממוצע"
-        value={stats.count ? formatClock(stats.avgDuration) : "—"}
-      />
-      <Stat
-        label="מרווח ממוצע"
+        label={t("avgInterval")}
         value={stats.avgInterval ? formatClock(stats.avgInterval) : "—"}
-        hint={trend ? TREND[trend] : undefined}
+        hint={trendLabel}
       />
-      <Stat label="צירים" value={String(stats.count)} last />
+      <Stat label={t("contractions")} value={String(stats.count)} last />
     </div>
   );
 }
 
 export function TrendNote({ session }: { session: Session }) {
+  const { t } = useT();
   const trend = intervalTrend(session.contractions);
   if (!trend) return null;
   return (
@@ -61,11 +57,7 @@ export function TrendNote({ session }: { session: Session }) {
         trend === "shorter" ? "text-accent" : "text-muted",
       )}
     >
-      {trend === "shorter"
-        ? "המרווחים מתקצרים."
-        : trend === "longer"
-          ? "המרווחים מתארכים. המשיכי למדוד."
-          : "המרווחים יציבים."}
+      {trend === "shorter" ? t("trendShorterNote") : trend === "longer" ? t("trendLongerNote") : t("trendStableNote")}
     </p>
   );
 }

@@ -1,4 +1,5 @@
 import { createId } from "./utils.ts";
+import { t, type Locale } from "./i18n.ts";
 
 export type Intensity = 1 | 2 | 3 | 4 | 5;
 
@@ -29,6 +30,7 @@ export type Settings = {
   keepAwake: boolean;
   vibration: boolean;
   sound: boolean;
+  locale: Locale;
 };
 
 export type LaborPhase = "idle" | "early" | "establishing" | "active" | "go";
@@ -48,6 +50,7 @@ export const DEFAULT_SETTINGS: Settings = {
   keepAwake: true,
   vibration: true,
   sound: false,
+  locale: "he",
 };
 
 export function createSession(now = Date.now()): Session {
@@ -252,6 +255,7 @@ export function patternWindowCopy(
   session: Session,
   settings: Settings,
   now = Date.now(),
+  locale: Locale = settings.locale ?? "he",
 ): string {
   const windowMs = settings.patternMinutes * 60_000;
   const windowMin = settings.patternMinutes;
@@ -261,9 +265,9 @@ export function patternWindowCopy(
   const sample = inWindow.length >= 2 ? inWindow : done;
   const span = now - (sample[0]?.startedAt ?? now);
   const spanMin = Math.min(windowMin, Math.max(0, Math.round(span / 60_000)));
-  if (windowMin === 60) return `${spanMin} דק׳ מהשעה בדפוס`;
-  if (windowMin === 30) return `${spanMin} דק׳ מחצי השעה בדפוס`;
-  return `${spanMin} מתוך ${windowMin} דק׳ בדפוס`;
+  if (windowMin === 60) return t(locale, "patternWindowHour", { min: spanMin });
+  if (windowMin === 30) return t(locale, "patternWindowHalf", { min: spanMin });
+  return t(locale, "patternWindowCustom", { min: spanMin, window: windowMin });
 }
 
 export function formatClock(ms: number): string {
@@ -288,11 +292,11 @@ export function formatSecondsHe(ms: number): string {
   return `${minutes}:${pad(seconds)} דק׳`;
 }
 
-export function formatDurationSpoken(ms: number): string {
+export function formatDurationSpoken(ms: number, locale: Locale = "he"): string {
   const totalSec = Math.round(Math.max(0, ms) / 1000);
-  if (totalSec === 1) return "שנייה אחת";
-  if (totalSec < 60) return `${totalSec} שניות`;
-  if (totalSec === 60) return "דקה";
+  if (totalSec === 1) return t(locale, "durationOneSecond");
+  if (totalSec < 60) return t(locale, "durationSeconds", { n: totalSec });
+  if (totalSec === 60) return t(locale, "durationOneMinute");
   return formatClock(ms);
 }
 

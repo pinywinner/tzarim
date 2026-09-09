@@ -3,19 +3,14 @@ import { BookOpen, List, Settings2 } from "lucide-react";
 import type { ReactNode } from "react";
 import { BrandWave } from "@/components/brand-wave";
 import { useNow } from "@/hooks/use-now";
+import { useT } from "@/hooks/use-t";
 import { activeContraction, evaluatePhase } from "@/lib/contractions";
-import { useAppStore, useCurrentSession } from "@/lib/store";
 import { hapticTap } from "@/lib/haptics";
+import { useAppStore, useCurrentSession } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
-const NAV = [
-  { to: "/", label: "עכשיו", icon: "wave" },
-  { to: "/history", label: "היסטוריה", icon: List },
-  { to: "/guide", label: "מדריך", icon: BookOpen },
-  { to: "/settings", label: "הגדרות", icon: Settings2 },
-] as const;
-
 export function AppShell({ children }: { children: ReactNode }) {
+  const { t } = useT();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const session = useCurrentSession();
   const settings = useAppStore((state) => state.settings);
@@ -25,6 +20,12 @@ export function AppShell({ children }: { children: ReactNode }) {
   const now = useNow(ticking);
   const phase = evaluatePhase(session, settings, now);
   const mood = active ? "labor" : phase === "go" ? "go" : "rest";
+  const nav = [
+    { to: "/", label: t("navNow"), icon: "wave" as const },
+    { to: "/history", label: t("navHistory"), icon: List },
+    { to: "/guide", label: t("navGuide"), icon: BookOpen },
+    { to: "/settings", label: t("navSettings"), icon: Settings2 },
+  ];
 
   return (
     <div
@@ -42,10 +43,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="h-[var(--tabbar-offset)] shrink-0" aria-hidden="true" />
           <nav
             className="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-lg px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
-            aria-label="ניווט ראשי"
+            aria-label={t("navAria")}
           >
             <ul className="grid grid-cols-4 rounded-full bg-elevated px-1.5 py-2 shadow-float">
-              {NAV.map((item) => {
+              {nav.map((item) => {
                 const current = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
                 return (
                   <li key={item.to}>

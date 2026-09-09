@@ -2,21 +2,17 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ConfirmSheet } from "@/components/confirm-sheet";
+import { LanguageToggle } from "@/components/language-toggle";
 import { TopBar } from "@/components/top-bar";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { useT } from "@/hooks/use-t";
 import { APP_VERSION } from "@/lib/app-version";
 import { PRESETS, type BirthType } from "@/lib/contractions";
 import { useAppStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/settings")({ component: SettingsPage });
-
-const BIRTH_OPTIONS: { id: BirthType; title: string; hint: string }[] = [
-  { id: "first", title: "לידה ראשונה", hint: "כל 5 דק׳ · דקה · שעה" },
-  { id: "subsequent", title: "לידה חוזרת", hint: "כל 7 דק׳ · 45 שנ׳ · חצי שעה" },
-  { id: "custom", title: "מותאם אישית", hint: "את קובעת את היעד" },
-];
 
 function Stepper({
   label,
@@ -35,6 +31,7 @@ function Stepper({
   step: number;
   onChange: (value: number) => void;
 }) {
+  const { t } = useT();
   return (
     <div className="flex items-center justify-between gap-3 py-2">
       <p className="text-sm font-medium text-fg">{label}</p>
@@ -43,7 +40,7 @@ function Stepper({
           type="button"
           className="flex size-11 items-center justify-center rounded-md bg-surface text-lg text-fg shadow-border"
           onClick={() => onChange(Math.max(min, value - step))}
-          aria-label={`הקטיני ${label}`}
+          aria-label={t("decreaseAria", { label })}
         >
           −
         </button>
@@ -54,7 +51,7 @@ function Stepper({
           type="button"
           className="flex size-11 items-center justify-center rounded-md bg-surface text-lg text-fg shadow-border"
           onClick={() => onChange(Math.min(max, value + step))}
-          aria-label={`הגדילי ${label}`}
+          aria-label={t("increaseAria", { label })}
         >
           +
         </button>
@@ -86,18 +83,30 @@ function ToggleRow({
 }
 
 function SettingsPage() {
+  const { t } = useT();
   const settings = useAppStore((state) => state.settings);
   const setBirthType = useAppStore((state) => state.setBirthType);
   const updateSettings = useAppStore((state) => state.updateSettings);
   const resetAll = useAppStore((state) => state.resetAll);
   const [confirmReset, setConfirmReset] = useState(false);
+  const birthOptions: { id: BirthType; title: string; hint: string }[] = [
+    { id: "first", title: t("birthFirst"), hint: t("birthFirstHint") },
+    { id: "subsequent", title: t("birthSubsequent"), hint: t("birthSubsequentHint") },
+    { id: "custom", title: t("birthCustom"), hint: t("birthCustomHint") },
+  ];
 
   return (
     <main className="flex min-h-0 flex-1 flex-col">
-      <TopBar title="הגדרות" subtitle="יעד, מסך ונתונים" />
+      <TopBar title={t("settingsTitle")} subtitle={t("settingsSub")} />
       <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-8">
+        <section className="rounded-xl bg-elevated p-3 shadow-border">
+          <p className="px-1 text-sm font-medium text-fg">{t("language")}</p>
+          <p className="mb-3 px-1 text-xs text-muted">{t("languageHint")}</p>
+          <LanguageToggle />
+        </section>
+
         <section className="rounded-xl bg-elevated p-2 shadow-border">
-          {BIRTH_OPTIONS.map((option) => {
+          {birthOptions.map((option) => {
             const selected = settings.birthType === option.id;
             return (
               <button
@@ -105,7 +114,7 @@ function SettingsPage() {
                 type="button"
                 onClick={() => setBirthType(option.id)}
                 className={cn(
-                  "flex w-full items-center justify-between rounded-lg px-3 py-3 text-right transition-[background-color] duration-150",
+                  "flex w-full items-center justify-between rounded-lg px-3 py-3 text-start transition-[background-color] duration-150",
                   selected ? "bg-accent/10" : "",
                 )}
               >
@@ -121,9 +130,9 @@ function SettingsPage() {
 
         <section className="rounded-xl bg-elevated px-4 py-2 shadow-border">
           <Stepper
-            label="מרווח יעד"
+            label={t("targetInterval")}
             value={settings.intervalMinutes}
-            unit="דק׳"
+            unit={t("unitMin")}
             min={2}
             max={15}
             step={1}
@@ -142,9 +151,9 @@ function SettingsPage() {
             }}
           />
           <Stepper
-            label="משך יעד"
+            label={t("targetDuration")}
             value={settings.durationSeconds}
-            unit="שנ׳"
+            unit={t("unitSec")}
             min={20}
             max={90}
             step={5}
@@ -156,9 +165,9 @@ function SettingsPage() {
             }
           />
           <Stepper
-            label="זמן ברצף"
+            label={t("targetWindow")}
             value={settings.patternMinutes}
-            unit="דק׳"
+            unit={t("unitMin")}
             min={15}
             max={120}
             step={5}
@@ -173,52 +182,48 @@ function SettingsPage() {
 
         <section className="rounded-xl bg-elevated px-4 shadow-border">
           <ToggleRow
-            label="מצב לילה"
-            hint="מסך כהה לחדר חשוך"
+            label={t("darkMode")}
+            hint={t("darkModeHint")}
             checked={settings.theme === "dark"}
             onCheckedChange={(checked) => updateSettings({ theme: checked ? "dark" : "light" })}
           />
           <ToggleRow
-            label="מסך דולק"
-            hint="כשהמעקב פתוח המסך לא ייכבה"
+            label={t("keepAwake")}
+            hint={t("keepAwakeHint")}
             checked={settings.keepAwake}
             onCheckedChange={(keepAwake) => updateSettings({ keepAwake })}
           />
           <ToggleRow
-            label="רטט"
-            hint="רטט קצר כשהציר מתחיל ונגמר"
+            label={t("vibration")}
+            hint={t("vibrationHint")}
             checked={settings.vibration}
             onCheckedChange={(vibration) => updateSettings({ vibration })}
           />
           <ToggleRow
-            label="צליל"
-            hint="כבוי כברירת מחדל — לחדר שקט"
+            label={t("sound")}
+            hint={t("soundHint")}
             checked={settings.sound}
             onCheckedChange={(sound) => updateSettings({ sound })}
           />
         </section>
 
         <Button variant="outline" onClick={() => setConfirmReset(true)}>
-          מחקי את כל הנתונים במכשיר
+          {t("resetData")}
         </Button>
-        <p className="text-center text-xs leading-relaxed text-muted">
-          הנתונים נשמרים רק במכשיר הזה. אין חשבון, אין ענן, אין שיתוף אוטומטי.
-        </p>
-        <p className="text-center text-xs text-muted">
-          גרסה <span dir="ltr">{APP_VERSION}</span>
-        </p>
+        <p className="text-center text-xs leading-relaxed text-muted">{t("dataStay")}</p>
+        <p className="text-center text-xs text-muted">{t("version", { v: APP_VERSION })}</p>
       </div>
 
       {confirmReset ? (
         <ConfirmSheet
-          title="למחוק הכול?"
-          body="כל המעקבים והצירים במכשיר יימחקו. אין חזרה."
-          confirmLabel="מחקי הכול"
+          title={t("resetTitle")}
+          body={t("resetBody")}
+          confirmLabel={t("resetConfirm")}
           danger
           onConfirm={() => {
             resetAll();
             setConfirmReset(false);
-            toast("הכול נמחק מהמכשיר");
+            toast(t("resetToast"));
           }}
           onCancel={() => setConfirmReset(false)}
         />

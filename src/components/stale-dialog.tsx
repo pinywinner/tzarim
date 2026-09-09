@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
+import { useNow } from "@/hooks/use-now";
+import { useT } from "@/hooks/use-t";
 import { formatClock, durationOf, activeContraction } from "@/lib/contractions";
 import { useCurrentSession, useAppStore } from "@/lib/store";
-import { useNow } from "@/hooks/use-now";
 
 export function StaleDialog() {
+  const { t } = useT();
   const session = useCurrentSession();
   const stalePromptId = useAppStore((state) => state.stalePromptId);
   const resolveStale = useAppStore((state) => state.resolveStale);
@@ -21,17 +23,17 @@ export function StaleDialog() {
     >
       <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-border">
         <p id="stale-title" className="font-display text-2xl font-bold text-fg">
-          הציר נשאר פתוח
+          {t("staleTitle")}
         </p>
         <p className="mt-2 text-sm leading-relaxed text-muted">
-          כבר {formatClock(durationOf(active, now))}. לסגור, או שלחצת בטעות?
+          {t("staleBody", { clock: formatClock(durationOf(active, now)) })}
         </p>
         <div className="mt-6 flex flex-col gap-2">
           <Button size="lg" onClick={() => resolveStale("end")}>
-            סיימי את הציר
+            {t("staleEnd")}
           </Button>
           <Button size="lg" variant="secondary" onClick={() => resolveStale("cancel")}>
-            לחצתי בטעות
+            {t("accidental")}
           </Button>
         </div>
       </div>

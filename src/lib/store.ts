@@ -293,6 +293,14 @@ export const useAppStore = create<AppState & AppActions>()(
         currentSessionId: state.currentSessionId,
         pendingIntensityId: state.pendingIntensityId,
       }),
+      merge: (persisted, current) => {
+        const incoming = (persisted ?? {}) as Partial<AppState>;
+        return {
+          ...current,
+          ...incoming,
+          settings: { ...DEFAULT_SETTINGS, ...incoming.settings },
+        };
+      },
       onRehydrateStorage: () => () => {
         useAppStore.getState().setHydrated(true);
         useAppStore.getState().checkStaleOnResume();

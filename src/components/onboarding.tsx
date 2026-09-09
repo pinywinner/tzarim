@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { Shield } from "lucide-react";
 import { BrandWave } from "@/components/brand-wave";
+import { LanguageToggle } from "@/components/language-toggle";
 import { Button } from "@/components/ui/button";
+import { useT } from "@/hooks/use-t";
 import type { BirthType } from "@/lib/contractions";
 import { useAppStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
-const BIRTH: { id: Exclude<BirthType, "custom">; title: string; hint: string }[] = [
-  { id: "first", title: "לידה ראשונה", hint: "כלל 5-1-1 · כל 5 דק׳, כדקה, שעה" },
-  { id: "subsequent", title: "לידה חוזרת", hint: "כלל 7-0.75-0.5 · כל 7 דק׳, 45 שנ׳, חצי שעה" },
-];
-
 export function Onboarding() {
+  const { t } = useT();
   const [step, setStep] = useState(0);
   const [picked, setPicked] = useState<Exclude<BirthType, "custom"> | null>(null);
   const complete = useAppStore((state) => state.completeOnboarding);
@@ -26,9 +24,10 @@ export function Onboarding() {
       aria-labelledby="onboarding-title"
     >
       <div className="w-full max-w-md">
+        <LanguageToggle className="mb-6" />
         <BrandWave className="mb-4 w-20 text-active" />
-        <p className="font-display text-3xl font-bold tracking-tight text-fg">מעקב צירים</p>
-        <p className="mt-1 text-sm text-muted">בזמן ציר — מה לעשות עכשיו</p>
+        <p className="font-display text-3xl font-bold tracking-tight text-fg">{t("appName")}</p>
+        <p className="mt-1 text-sm text-muted">{t("appTagline")}</p>
 
         {step === 0 ? <WhoStep picked={picked} onPick={setPicked} /> : null}
         {step === 1 ? <MeasureStep /> : null}
@@ -44,7 +43,7 @@ export function Onboarding() {
         </div>
         <div className="mt-6 flex gap-2">
           <Button variant="secondary" className="flex-1" onClick={finish}>
-            דלגי
+            {t("skip")}
           </Button>
           <Button
             className="flex-[2]"
@@ -55,7 +54,7 @@ export function Onboarding() {
               else setStep((value) => value + 1);
             }}
           >
-            {step === 2 ? "בואי נתחיל" : "המשיכי"}
+            {step === 2 ? t("letsStart") : t("continue")}
           </Button>
         </div>
       </div>
@@ -70,16 +69,19 @@ function WhoStep({
   picked: Exclude<BirthType, "custom"> | null;
   onPick: (id: Exclude<BirthType, "custom">) => void;
 }) {
+  const { t } = useT();
+  const birth = [
+    { id: "first" as const, title: t("birthFirst"), hint: t("onboardingFirstHint") },
+    { id: "subsequent" as const, title: t("birthSubsequent"), hint: t("onboardingSubsequentHint") },
+  ];
   return (
     <>
       <p id="onboarding-title" className="mt-8 font-display text-2xl font-bold text-fg">
-        מי את?
+        {t("onboardingWho")}
       </p>
-      <p className="mt-3 text-sm leading-relaxed text-muted">
-        זה קובע מתי נגיד שהדפוס התמלא. אפשר לשנות אחר כך בהגדרות.
-      </p>
+      <p className="mt-3 text-sm leading-relaxed text-muted">{t("onboardingWhoBody")}</p>
       <div className="mt-6 flex flex-col gap-2">
-        {BIRTH.map((option) => {
+        {birth.map((option) => {
           const selected = picked === option.id;
           return (
             <button
@@ -87,7 +89,7 @@ function WhoStep({
               type="button"
               onClick={() => onPick(option.id)}
               className={cn(
-                "rounded-xl px-4 py-4 text-right shadow-border transition-[background-color,box-shadow] duration-150",
+                "rounded-xl px-4 py-4 text-start shadow-border transition-[background-color,box-shadow] duration-150",
                 selected ? "bg-accent/10" : "bg-elevated",
               )}
             >
@@ -102,33 +104,31 @@ function WhoStep({
 }
 
 function MeasureStep() {
+  const { t } = useT();
   return (
     <>
       <div className="mt-8 flex h-12 w-20 items-center text-active">
         <BrandWave className="w-20" />
       </div>
       <p id="onboarding-title" className="mt-5 font-display text-2xl font-bold text-fg">
-        את מודדת. אנחנו מחשבים.
+        {t("onboardingMeasure")}
       </p>
-      <p className="mt-3 text-sm leading-relaxed text-muted">
-        כשהציר מתחיל — לחצי ״התחיל״. כשהוא יורד — ״סיימתי״. משך ומרווח נמדדים לבד.
-      </p>
+      <p className="mt-3 text-sm leading-relaxed text-muted">{t("onboardingMeasureBody")}</p>
     </>
   );
 }
 
 function DisclaimerStep() {
+  const { t } = useT();
   return (
     <>
       <div className="mt-8 flex size-12 items-center justify-center rounded-lg bg-accent/15 text-accent">
         <Shield className="size-6" strokeWidth={1.8} />
       </div>
       <p id="onboarding-title" className="mt-5 font-display text-2xl font-bold text-fg">
-        מעקב, לא ייעוץ רפואי
+        {t("onboardingDisclaimer")}
       </p>
-      <p className="mt-3 text-sm leading-relaxed text-muted">
-        מים, דימום, פחות תנועות, או שאת לא מרגישה טוב — מיד לחדר לידה או למד״א 101. אל תחכי לכלל.
-      </p>
+      <p className="mt-3 text-sm leading-relaxed text-muted">{t("onboardingDisclaimerBody")}</p>
     </>
   );
 }

@@ -1,3 +1,4 @@
+import { useT } from "@/hooks/use-t";
 import { completedContractions, startToStartIntervals, type Session } from "@/lib/contractions";
 
 function smoothPath(points: Array<{ x: number; y: number }>): string {
@@ -14,6 +15,7 @@ function smoothPath(points: Array<{ x: number; y: number }>): string {
 }
 
 export function IntervalSparkline({ session }: { session: Session }) {
+  const { t } = useT();
   const intervals = startToStartIntervals(completedContractions(session));
   if (intervals.length < 2) return null;
 
@@ -32,9 +34,9 @@ export function IntervalSparkline({ session }: { session: Session }) {
 
   return (
     <div className="rise-in rounded-xl bg-elevated px-4 py-3 shadow-border">
-      <p className="text-sm font-medium text-fg">המרווחים</p>
-      <p className="mb-2 text-xs text-muted">יורד — הצירים מתקרבים</p>
-      <svg viewBox={`0 0 ${width} ${height}`} className="h-16 w-full overflow-visible" role="img" aria-label="המרווחים לאורך הזמן">
+      <p className="text-sm font-medium text-fg">{t("intervalsTitle")}</p>
+      <p className="mb-2 text-xs text-muted">{t("intervalsHint")}</p>
+      <svg viewBox={`0 0 ${width} ${height}`} className="h-16 w-full overflow-visible" role="img" aria-label={t("intervalsAria")}>
         <path d={area} className="fill-active/10" />
         <path
           d={line}

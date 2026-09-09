@@ -1,5 +1,4 @@
 import { format } from "date-fns";
-import { he } from "date-fns/locale";
 import {
   completedContractions,
   durationOf,
@@ -7,56 +6,63 @@ import {
   formatClock,
   sessionStats,
   startToStartIntervals,
+  type LaborPhase,
   type Session,
   type Settings,
 } from "@/lib/contractions";
+import { dateLocaleOf, t, type Locale, type MessageKey } from "@/lib/i18n";
 import { isNativeApp } from "@/lib/native";
 
-const PHASE_LABEL = {
-  idle: "עוד לא התחיל",
-  early: "נשארות בבית",
-  establishing: "הצירים מתקרבים",
-  active: "הדפוס מתמלא",
-  go: "זמן לצאת לחדר לידה",
-} as const;
+const PHASE_KEY: Record<LaborPhase, MessageKey> = {
+  idle: "phaseShareIdle",
+  early: "phaseShareEarly",
+  establishing: "phaseShareEstablishing",
+  active: "phaseShareActive",
+  go: "phaseShareGo",
+};
 
 export function sessionSummary(session: Session, settings: Settings): string {
+  const locale: Locale = settings.locale ?? "he";
+  const dates = dateLocaleOf(locale);
   const done = completedContractions(session);
   const stats = sessionStats(session);
   const phase = evaluatePhase(session, settings);
   const intervals = startToStartIntervals(done);
   const elapsed = (session.endedAt ?? Date.now()) - session.startedAt;
   const lines = [
-    "סיכום למיילדת — מעקב צירים בבית",
-    `התחלה: ${format(session.startedAt, "d.M.yyyy HH:mm", { locale: he })}`,
-    session.endedAt ? `סיום: ${format(session.endedAt, "HH:mm", { locale: he })}` : "מעקב פתוח",
-    `משך המעקב: ${formatClock(elapsed)}`,
-    `צירים: ${stats.count}`,
-    stats.count ? `משך ממוצע: ${formatClock(stats.avgDuration)}` : "",
-    stats.avgInterval ? `מרווח ממוצע: ${formatClock(stats.avgInterval)}` : "",
-    `מצב: ${PHASE_LABEL[phase]}`,
+    t(locale, "shareHeadline"),
+    t(locale, "shareStart", { when: format(session.startedAt, "d.M.yyyy HH:mm", { locale: dates }) }),
+    session.endedAt
+      ? t(locale, "shareEnd", { when: format(session.endedAt, "HH:mm", { locale: dates }) })
+      : t(locale, "shareOpen"),
+    t(locale, "shareElapsed", { clock: formatClock(elapsed) }),
+    t(locale, "shareCount", { n: stats.count }),
+    stats.count ? t(locale, "shareAvgDuration", { clock: formatClock(stats.avgDuration) }) : "",
+    stats.avgInterval ? t(locale, "shareAvgInterval", { clock: formatClock(stats.avgInterval) }) : "",
+    t(locale, "sharePhase", { phase: t(locale, PHASE_KEY[phase]) }),
     session.waterBrokeAt
-      ? `מים ירדו: כן, ${format(session.waterBrokeAt, "HH:mm", { locale: he })}`
-      : "מים ירדו: לא",
+      ? t(locale, "shareWaterYes", { when: format(session.waterBrokeAt, "HH:mm", { locale: dates }) })
+      : t(locale, "shareWaterNo"),
     "",
-    "פירוט:",
+    t(locale, "shareDetail"),
   ].filter((line) => line !== "");
 
   done.forEach((contraction, index) => {
-    const time = format(contraction.startedAt, "HH:mm", { locale: he });
+    const time = format(contraction.startedAt, "HH:mm", { locale: dates });
     const dur = formatClock(durationOf(contraction));
     const interval = index > 0 ? formatClock(intervals[index - 1] ?? 0) : "—";
-    const intensity = contraction.intensity ? ` עוצמה ${contraction.intensity}` : "";
-    lines.push(`${time}  משך ${dur}  מרווח ${interval}${intensity}`);
+    const intensity = contraction.intensity ? t(locale, "shareIntensity", { n: contraction.intensity }) : "";
+    lines.push(t(locale, "shareRow", { time, dur, interval, intensity }));
   });
 
-  lines.push("", "זה מעקב בבית בלבד, לא ייעוץ רפואי.");
+  lines.push("", t(locale, "shareFooter"));
   return lines.join("\n");
 }
 
 export async function shareSession(session: Session, settings: Settings): Promise<"shared" | "copied" | "failed"> {
+  const locale: Locale = settings.locale ?? "he";
   const text = sessionSummary(session, settings);
-  const title = "סיכום מעקב צירים למיילדת";
+  const title = t(locale, "shareTitle");
 
   if (isNativeApp()) {
     try {

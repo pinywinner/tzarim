@@ -1,34 +1,15 @@
 import { format } from "date-fns";
-import { he } from "date-fns/locale";
+import { useT } from "@/hooks/use-t";
 import type { LaborPhase } from "@/lib/contractions";
+import { dateLocaleOf } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-const COPY: Record<LaborPhase, { title: string; hint: string; tone: string }> = {
-  idle: {
-    title: "עוד אין צירים",
-    hint: "לחצי ״התחיל״ כשהציר עולה.",
-    tone: "bg-elevated text-fg",
-  },
-  early: {
-    title: "נשארות בבית",
-    hint: "עוד לא סדירים. אין צורך לזוז.",
-    tone: "bg-calm/15 text-calm",
-  },
-  establishing: {
-    title: "הצירים מתקרבים",
-    hint: "המרווחים מתקצרים. הישארי קרובה לחדר לידה.",
-    tone: "bg-warn/15 text-warn",
-  },
-  active: {
-    title: "הדפוס מתמלא",
-    hint: "חזקים, ובקצב שקבעת. עוד קצת בבית.",
-    tone: "bg-active/15 text-active",
-  },
-  go: {
-    title: "זמן לצאת",
-    hint: "התקשרי למיילדת, או צאי לדרך.",
-    tone: "bg-warn/20 text-warn",
-  },
+const TONE: Record<LaborPhase, string> = {
+  idle: "bg-elevated text-fg",
+  early: "bg-calm/15 text-calm",
+  establishing: "bg-warn/15 text-warn",
+  active: "bg-active/15 text-active",
+  go: "bg-warn/20 text-warn",
 };
 
 type StatusBannerProps = {
@@ -50,13 +31,15 @@ export function StatusBanner({
   meterLabel,
   contractionRunning,
 }: StatusBannerProps) {
+  const { t, locale } = useT();
+
   if (waterBroke) {
     return (
       <div className="rise-in rounded-xl bg-danger px-4 py-3 text-danger-fg shadow-border">
-        <p className="text-base font-bold">המים ירדו</p>
+        <p className="text-base font-bold">{t("waterBannerTitle")}</p>
         <p className="mt-0.5 text-sm opacity-90">
-          פני לחדר לידה, גם אם הצירים עוד רחוקים
-          {waterBrokeAt ? ` · ${format(waterBrokeAt, "HH:mm", { locale: he })}` : ""}.
+          {t("waterBannerBody")}
+          {waterBrokeAt ? ` · ${format(waterBrokeAt, "HH:mm", { locale: dateLocaleOf(locale) })}` : ""}.
         </p>
       </div>
     );
@@ -65,15 +48,22 @@ export function StatusBanner({
   if (contractionRunning) {
     return (
       <div className="rise-in rounded-xl bg-active/15 px-4 py-3 text-active shadow-border">
-        <p className="text-base font-bold">הציר עכשיו</p>
-        <p className="mt-0.5 text-sm opacity-90">לחצי ״סיימתי״ כשהציר יורד לגמרי.</p>
+        <p className="text-base font-bold">{t("contractionNowTitle")}</p>
+        <p className="mt-0.5 text-sm opacity-90">{t("contractionNowHint")}</p>
       </div>
     );
   }
 
-  const copy = COPY[phase];
+  const copy = {
+    idle: { title: t("phaseIdleTitle"), hint: t("phaseIdleHint") },
+    early: { title: t("phaseEarlyTitle"), hint: t("phaseEarlyHint") },
+    establishing: { title: t("phaseEstablishingTitle"), hint: t("phaseEstablishingHint") },
+    active: { title: t("phaseActiveTitle"), hint: t("phaseActiveHint") },
+    go: { title: t("phaseGoTitle"), hint: t("phaseGoHint") },
+  }[phase];
+
   return (
-    <div className={cn("rise-in rounded-xl px-4 py-3 shadow-border", copy.tone)}>
+    <div className={cn("rise-in rounded-xl px-4 py-3 shadow-border", TONE[phase])}>
       <div className="flex items-baseline justify-between gap-3">
         <p className="text-base font-bold">{copy.title}</p>
         {showMeter && meterLabel ? (

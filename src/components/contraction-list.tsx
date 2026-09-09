@@ -1,6 +1,6 @@
 import { EmptyWave } from "@/components/brand-wave";
 import { format } from "date-fns";
-import { he } from "date-fns/locale";
+import { useT } from "@/hooks/use-t";
 import {
   completedContractions,
   durationOf,
@@ -8,6 +8,7 @@ import {
   startToStartIntervals,
   type Session,
 } from "@/lib/contractions";
+import { dateLocaleOf } from "@/lib/i18n";
 
 function Bar({
   value,
@@ -23,7 +24,7 @@ function Bar({
   const width = `${Math.max(8, Math.min(100, (value / Math.max(max, 1)) * 100))}%`;
   return (
     <div className="flex items-center gap-2">
-      <span className="w-12 shrink-0 text-xs text-muted">{label}</span>
+      <span className="w-14 shrink-0 text-xs text-muted">{label}</span>
       <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-track">
         <div
           className={tone === "accent" ? "h-full rounded-full bg-accent" : "h-full rounded-full bg-calm"}
@@ -50,6 +51,7 @@ export function ContractionList({
   durationCapMs?: number;
   intervalCapMs?: number;
 }) {
+  const { t, locale } = useT();
   const done = completedContractions(session);
   const visible = limit ? [...done].reverse().slice(0, limit) : [...done].reverse();
   const intervals = startToStartIntervals(done);
@@ -60,7 +62,7 @@ export function ContractionList({
 
   if (visible.length === 0) {
     return (
-      <EmptyWave title="עוד אין צירים" body="כל ציר יישמר כאן, לפי סדר." className="rounded-xl bg-elevated py-12 shadow-border" />
+      <EmptyWave title={t("listEmptyTitle")} body={t("listEmptyBody")} className="rounded-xl bg-elevated py-12 shadow-border" />
     );
   }
 
@@ -78,22 +80,22 @@ export function ContractionList({
             className="flex items-center gap-3 border-b border-border px-4 py-4 last:border-b-0"
           >
             <div className="min-w-14 font-display text-base font-bold tabular-nums text-fg">
-              {format(contraction.startedAt, "HH:mm", { locale: he })}
+              {format(contraction.startedAt, "HH:mm", { locale: dateLocaleOf(locale) })}
             </div>
             <div className="min-w-0 flex-1 space-y-1.5">
               <Bar
                 value={durationOf(contraction)}
                 max={maxDuration}
                 tone="accent"
-                label="משך"
+                label={t("duration")}
               />
               {interval != null ? (
-                <Bar value={interval} max={maxInterval} tone="calm" label="מרווח" />
+                <Bar value={interval} max={maxInterval} tone="calm" label={t("interval")} />
               ) : (
-                <p className="text-xs text-muted">הציר הראשון</p>
+                <p className="text-xs text-muted">{t("firstContraction")}</p>
               )}
               {contraction.intensity ? (
-                <p className="text-xs text-muted">עוצמה {contraction.intensity}</p>
+                <p className="text-xs text-muted">{t("intensityValue", { n: contraction.intensity })}</p>
               ) : null}
             </div>
             {onDelete ? (
@@ -102,7 +104,7 @@ export function ContractionList({
                 onClick={() => onDelete(contraction.id)}
                 className="h-11 px-2 text-xs font-medium text-muted"
               >
-                מחקי
+                {t("delete")}
               </button>
             ) : null}
           </li>

@@ -28,10 +28,12 @@ import { hapticEnd, hapticStart } from "@/lib/haptics";
 import { interpretLabor } from "@/lib/interpret";
 import { useAppStore, useCurrentSession } from "@/lib/store";
 import { bindWakeLockVisibility, setWakeLock } from "@/lib/wake-lock";
+import { useT } from "@/hooks/use-t";
 
 export const Route = createFileRoute("/")({ component: TimerPage });
 
 function TimerPage() {
+  const { t } = useT();
   const session = useCurrentSession();
   const settings = useAppStore((state) => state.settings);
   const startContraction = useAppStore((state) => state.startContraction);
@@ -85,14 +87,14 @@ function TimerPage() {
       onClick={() => {
         if (session.waterBrokeAt) {
           setWaterBroke(false);
-          toast("הסימון בוטל");
+          toast(t("waterCleared"));
         } else {
           setConfirmWater(true);
         }
       }}
     >
       <Droplets className="size-4" />
-      {session.waterBrokeAt ? "המים לא ירדו" : "המים ירדו"}
+      {session.waterBrokeAt ? t("waterNotBroke") : t("waterBroke")}
     </Button>
   );
 
@@ -106,7 +108,7 @@ function TimerPage() {
 
   return (
     <main className="flex min-h-0 flex-1 flex-col">
-      <TopBar title="מעקב צירים" subtitle="בזמן ציר — מה לעשות עכשיו" />
+      <TopBar title={t("appName")} subtitle={t("appTagline")} />
       <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-4">
         <StatusBanner
           phase={phase}
@@ -140,7 +142,7 @@ function TimerPage() {
             />
           ) : null}
           <Button variant="huge" size="huge" onClick={onStart}>
-            התחיל
+            {t("start")}
           </Button>
           <div className="grid grid-cols-2 gap-2">
             {waterButton}
@@ -149,11 +151,11 @@ function TimerPage() {
               disabled={session.contractions.length === 0}
               onClick={() => {
                 undoLast();
-                toast("הציר האחרון בוטל");
+                toast(t("undoToast"));
               }}
             >
               <Undo2 className="size-4" />
-              בטלי אחרון
+              {t("undoLast")}
             </Button>
           </div>
         </div>
@@ -161,9 +163,9 @@ function TimerPage() {
 
       {confirmWater ? (
         <ConfirmSheet
-          title="המים ירדו?"
-          body="פני לחדר לידה, גם אם הצירים עוד רחוקים. אפשר לבטל אם לחצת בטעות."
-          confirmLabel="כן, המים ירדו"
+          title={t("waterTitle")}
+          body={t("waterBody")}
+          confirmLabel={t("waterConfirm")}
           danger
           onConfirm={() => {
             setWaterBroke(true);
@@ -185,26 +187,27 @@ function ContractionStage({
   onEnd: () => void;
   onCancel: () => void;
 }) {
+  const { t } = useT();
   return (
     <>
       <div className="labor-enter flex min-h-0 flex-1 flex-col items-center justify-center px-5 pt-[max(1rem,env(safe-area-inset-top))]">
-        <p className="labor-enter-label text-sm font-medium tracking-wide text-active">ציר פעיל</p>
+        <p className="labor-enter-label text-sm font-medium tracking-wide text-active">{t("laborActive")}</p>
         <BrandWave breathing className="mt-8 w-36" />
         <RollingClock
           ms={elapsed}
           className="labor-enter-timer mt-5 font-display text-labor font-black leading-none tracking-tight text-fg"
         />
-        <p className="cue-breathe mt-8 font-display text-2xl font-bold text-muted">נשמי.</p>
+        <p className="cue-breathe mt-8 font-display text-2xl font-bold text-muted">{t("breathe")}</p>
       </div>
       <div className="labor-enter-cta shrink-0 px-5 pb-3 pt-3">
         <div className="relative">
           <div className="cta-breathe pointer-events-none absolute inset-0 rounded-xl" aria-hidden="true" />
           <Button variant="hugeStop" size="huge" className="relative" onClick={onEnd}>
-            סיימתי
+            {t("stop")}
           </Button>
         </div>
         <Button variant="ghost" className="mt-2 w-full" onClick={onCancel}>
-          לחצתי בטעות
+          {t("accidental")}
         </Button>
       </div>
     </>
@@ -220,17 +223,18 @@ function RestStage({
   intervalMs: number | null;
   reading: string | null;
 }) {
+  const { t, locale } = useT();
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-8 py-4 text-center">
       <BrandWave className="w-24" />
       <div>
-        <p className="text-sm font-medium text-muted">הציר האחרון</p>
+        <p className="text-sm font-medium text-muted">{t("lastContraction")}</p>
         <p className="mt-2 font-display text-4xl font-black tabular-nums leading-none text-fg">
-          {lastDuration != null ? formatDurationSpoken(lastDuration) : "—"}
+          {lastDuration != null ? formatDurationSpoken(lastDuration, locale) : "—"}
         </p>
       </div>
       <div>
-        <p className="text-sm font-medium text-muted">המרווח</p>
+        <p className="text-sm font-medium text-muted">{t("theInterval")}</p>
         <p dir="ltr" className="mt-2 font-display text-labor font-black tabular-nums leading-none tracking-tight text-fg">
           {intervalMs != null ? formatClock(intervalMs) : "—"}
         </p>
@@ -243,11 +247,7 @@ function RestStage({
 }
 
 function IdleStage() {
-  return (
-    <EmptyWave
-      className="flex-1 py-8"
-      title="כשהציר מתחיל"
-      body={"לחצי ״התחיל״. זהו."}
-    />
-  );
+  const { t } = useT();
+  return <EmptyWave className="flex-1 py-8" title={t("idleTitle")} body={t("idleBody")} />;
 }
+

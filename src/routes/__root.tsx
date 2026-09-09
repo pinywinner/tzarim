@@ -1,5 +1,6 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { Toaster } from "sonner";
+import { LanguageSync } from "@/components/language-sync";
 import { NativeBootstrap } from "@/components/native-bootstrap";
 import { AppShell } from "@/components/app-shell";
 import { Onboarding } from "@/components/onboarding";
@@ -8,6 +9,7 @@ import { StaleDialog } from "@/components/stale-dialog";
 import { ThemeSync } from "@/components/theme-sync";
 import { AuthProvider } from "@/lib/auth/provider";
 import { useAppStore } from "@/lib/store";
+import { useT } from "@/hooks/use-t";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "מעקב צירים";
@@ -44,6 +46,7 @@ function RootDocument() {
         <PreviewHostBridge />
         <AuthProvider>
           <ThemeSync />
+          <LanguageSync />
           <NativeBootstrap />
           <AppFrame />
         </AuthProvider>
@@ -56,7 +59,7 @@ function RootDocument() {
 function Splash() {
   return (
     <div className="flex min-h-dvh items-center justify-center bg-bg">
-      <p className="sr-only">מעקב צירים</p>
+      <p className="sr-only">{APP_NAME}</p>
       <svg viewBox="0 0 168 72" className="w-44 text-active" fill="none" aria-hidden="true">
         <path
           d="M10 52c26 0 34 0 48-24C68 12 74 8 84 8s16 4 26 20c14 24 22 24 48 24"
@@ -74,6 +77,7 @@ function AppFrame() {
   const hydrated = useAppStore((state) => state.hydrated);
   const onboardingDone = useAppStore((state) => state.onboardingDone);
   const stalePromptId = useAppStore((state) => state.stalePromptId);
+  const { dir } = useT();
 
   if (!hydrated) return <Splash />;
 
@@ -90,7 +94,7 @@ function AppFrame() {
       <StaleDialog />
       <Toaster
         position="top-center"
-        dir="rtl"
+        dir={dir}
         toastOptions={{
           className: "font-sans !bg-elevated !text-fg !border-border",
         }}
