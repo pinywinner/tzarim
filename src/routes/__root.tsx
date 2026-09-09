@@ -20,7 +20,7 @@ export const Route = createRootRoute({
       { title: APP_NAME },
       { name: "application-name", content: APP_NAME },
       { name: "apple-mobile-web-app-title", content: APP_NAME },
-      { name: "description", content: "מעקב צירים בבית — משך, מרווח וכלל 5-1-1, עד שיוצאים לחדר לידה." },
+      { name: "description", content: "בזמן צירים, כשקשה לחשוב — מה לעשות עכשיו. משך, מרווח, ומתי יוצאים לחדר לידה." },
       { name: "theme-color", content: "#F5F1EA" },
     ],
     links: [

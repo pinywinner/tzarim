@@ -106,7 +106,7 @@ function TimerPage() {
 
   return (
     <main className="flex min-h-0 flex-1 flex-col">
-      <TopBar title="מעקב צירים" subtitle="מעקב בבית, עד שיוצאים" />
+      <TopBar title="מעקב צירים" subtitle="בזמן ציר — מה לעשות עכשיו" />
       <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-4">
         <StatusBanner
           phase={phase}

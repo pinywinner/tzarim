@@ -28,7 +28,7 @@ export function Onboarding() {
       <div className="w-full max-w-md">
         <BrandWave className="mb-4 w-20 text-active" />
         <p className="font-display text-3xl font-bold tracking-tight text-fg">מעקב צירים</p>
-        <p className="mt-1 text-sm text-muted">מעקב בבית, עד שיוצאים</p>
+        <p className="mt-1 text-sm text-muted">בזמן ציר — מה לעשות עכשיו</p>
 
         {step === 0 ? <WhoStep picked={picked} onPick={setPicked} /> : null}
         {step === 1 ? <MeasureStep /> : null}
