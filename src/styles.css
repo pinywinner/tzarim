@@ -331,14 +331,126 @@ html.native body {
 .rise-in-3 {
   animation-delay: 120ms;
 }
-.rise-in-4 {
-  animation-delay: 160ms;
+@keyframes labor-wash {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes labor-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes timer-in {
+  from {
+    transform: scale(0.96);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes wave-breathe {
+  0%,
+  100% {
+    transform: scale(0.94, 0.78);
+    opacity: 0.72;
+  }
+  50% {
+    transform: scale(1.06, 1.16);
+    opacity: 1;
+  }
+}
+
+@keyframes cta-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.015);
+  }
+}
+
+@keyframes digit-roll {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.labor-wash {
+  background: color-mix(in srgb, var(--app-active) 20%, transparent);
+  animation: labor-wash 4.8s ease-in-out infinite;
+}
+
+.labor-enter {
+  animation: labor-enter 300ms var(--ease-smooth-out) both;
+}
+
+.labor-enter-label {
+  animation: fade-in 300ms var(--ease-smooth-out) both;
+}
+
+.labor-enter-timer {
+  animation: timer-in 300ms var(--ease-smooth-out) both;
+}
+
+.labor-enter-cta {
+  animation: rise-in 300ms var(--ease-smooth-out) both;
+}
+
+.wave-breathe {
+  transform-origin: 50% 88%;
+  animation: wave-breathe 4.4s ease-in-out infinite;
+}
+
+.cta-breathe {
+  animation: cta-breathe 2.5s ease-in-out infinite;
+}
+
+.cta-breathe:has(:active) {
+  animation: none;
+}
+
+.digit-roll {
+  animation: digit-roll 150ms var(--ease-smooth-out) forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ring-breathe,
   .cue-breathe,
   .wave-expand,
+  .wave-breathe,
+  .labor-wash,
+  .labor-enter,
+  .labor-enter-label,
+  .labor-enter-timer,
+  .labor-enter-cta,
+  .cta-breathe,
+  .digit-roll,
   .rise-in,
   .rise-in-1,
   .rise-in-2,

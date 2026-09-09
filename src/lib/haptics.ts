@@ -14,11 +14,11 @@ export function vibrate(pattern: number | number[]): void {
 export function hapticStart(): void {
   if (isNativeApp()) {
     void import("@capacitor/haptics").then(({ Haptics, ImpactStyle }) =>
-      Haptics.impact({ style: ImpactStyle.Medium }),
+      Haptics.impact({ style: ImpactStyle.Light }),
     );
     return;
   }
-  vibrate(36);
+  vibrate(22);
 }
 
 export function hapticEnd(): void {

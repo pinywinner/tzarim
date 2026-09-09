@@ -2,8 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Droplets, Undo2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { BrandWave } from "@/components/brand-wave";
 import { ConfirmSheet } from "@/components/confirm-sheet";
 import { IntensityPicker } from "@/components/intensity-picker";
+import { RollingClock } from "@/components/rolling-clock";
 import { StatusBanner } from "@/components/status-banner";
 import { TopBar } from "@/components/top-bar";
 import { Button } from "@/components/ui/button";
@@ -185,20 +187,21 @@ function ContractionStage({
 }) {
   return (
     <>
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-5 pt-[max(1rem,env(safe-area-inset-top))]">
-        <p className="text-sm font-medium tracking-wide text-active">ציר פעיל</p>
-        <p
-          className="mt-5 font-display text-labor font-black leading-none tracking-tight text-fg tabular-nums"
-          aria-live="polite"
-        >
-          {formatClock(elapsed)}
-        </p>
+      <div className="labor-enter flex min-h-0 flex-1 flex-col items-center justify-center px-5 pt-[max(1rem,env(safe-area-inset-top))]">
+        <p className="labor-enter-label text-sm font-medium tracking-wide text-active">ציר פעיל</p>
+        <BrandWave breathing className="mt-8 w-36" />
+        <RollingClock
+          ms={elapsed}
+          className="labor-enter-timer mt-5 font-display text-labor font-black leading-none tracking-tight text-fg"
+        />
         <p className="cue-breathe mt-8 font-display text-2xl font-bold text-muted">נשמי.</p>
       </div>
-      <div className="shrink-0 px-5 pb-3 pt-3">
-        <Button variant="hugeStop" size="huge" onClick={onEnd}>
-          סיימתי
-        </Button>
+      <div className="labor-enter-cta shrink-0 px-5 pb-3 pt-3">
+        <div className="cta-breathe">
+          <Button variant="hugeStop" size="huge" onClick={onEnd}>
+            סיימתי
+          </Button>
+        </div>
         <Button variant="ghost" className="mt-2 w-full" onClick={onCancel}>
           לחצתי בטעות
         </Button>
@@ -240,6 +243,7 @@ function RestStage({
 function IdleStage() {
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center justify-center py-8 text-center">
+      <BrandWave className="mx-auto mb-6 w-28 text-active/80" />
       <p className="font-display text-2xl font-bold text-fg">כשהציר מתחיל</p>
       <p className="mt-2 text-sm text-muted">לחצי ״התחיל״. זהו.</p>
     </div>

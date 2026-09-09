@@ -54,7 +54,8 @@ function RootDocument() {
 
 function Splash() {
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-bg" aria-hidden="true">
+    <div className="flex min-h-dvh items-center justify-center bg-bg">
+      <p className="sr-only">מעקב צירים</p>
       <svg viewBox="0 0 168 72" className="w-44 text-active" fill="none" aria-hidden="true">
         <path
           d="M10 52c26 0 34 0 48-24C68 12 74 8 84 8s16 4 26 20c14 24 22 24 48 24"
