@@ -23,6 +23,7 @@
   --color-track: var(--app-track);
 
   --text-timer: clamp(3rem, 13vw, 4.5rem);
+  --text-labor: clamp(4.25rem, 20vw, 6.75rem);
   --radius-xs: 4px;
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -192,6 +193,10 @@ html.native body {
   animation: ring-breathe 2.8s var(--ease-smooth-out) infinite;
 }
 
+.cue-breathe {
+  animation: ring-breathe 2.8s var(--ease-smooth-out) infinite;
+}
+
 .wave-expand {
   animation: wave-expand 900ms var(--ease-smooth-out) forwards;
 }
@@ -215,6 +220,7 @@ html.native body {
 
 @media (prefers-reduced-motion: reduce) {
   .ring-breathe,
+  .cue-breathe,
   .wave-expand,
   .rise-in,
   .rise-in-1,

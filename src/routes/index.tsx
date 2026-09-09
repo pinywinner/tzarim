@@ -3,11 +3,8 @@ import { Droplets, Undo2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ConfirmSheet } from "@/components/confirm-sheet";
-import { ContractionList } from "@/components/contraction-list";
 import { IntensityPicker } from "@/components/intensity-picker";
-import { StatsRow } from "@/components/stats-row";
 import { StatusBanner } from "@/components/status-banner";
-import { TimerRing } from "@/components/timer-ring";
 import { TopBar } from "@/components/top-bar";
 import { Button } from "@/components/ui/button";
 import { useNow } from "@/hooks/use-now";
@@ -18,6 +15,7 @@ import {
   durationOf,
   evaluatePhase,
   formatClock,
+  formatDurationSpoken,
   intervalSoFar,
   patternWindowCopy,
   phaseMeterVisible,
@@ -25,9 +23,9 @@ import {
   sessionStats,
 } from "@/lib/contractions";
 import { hapticEnd, hapticStart } from "@/lib/haptics";
+import { interpretLabor } from "@/lib/interpret";
 import { useAppStore, useCurrentSession } from "@/lib/store";
 import { bindWakeLockVisibility, setWakeLock } from "@/lib/wake-lock";
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({ component: TimerPage });
 
@@ -52,36 +50,10 @@ function TimerPage() {
   const progress = phaseProgress(session, settings, now);
   const stats = sessionStats(session, now);
   const laborFocus = Boolean(active);
-
-  const elapsed = active ? durationOf(active, now) : (intervalSoFar(session, now) ?? 0);
-  const targetMs = active
-    ? Math.max(settings.durationSeconds, 90) * 1000
-    : settings.intervalMinutes * 60_000;
-  const ringProgress = active
-    ? Math.min(elapsed / 90_000, 1)
-    : session.contractions.length
-      ? Math.min(elapsed / targetMs, 1)
-      : 0;
-
-  const tone = session.waterBrokeAt
-    ? "danger"
-    : phase === "go"
-      ? "danger"
-      : active
-        ? "accent"
-        : phase === "active"
-          ? "warn"
-          : phase === "establishing"
-            ? "warn"
-            : phase === "early"
-              ? "calm"
-              : "idle";
-
-  const label = active
-    ? "משך הציר"
-    : session.contractions.length
-      ? "מרווח מהאחרון"
-      : "כשהציר מתחיל — לחצי";
+  const elapsed = active ? durationOf(active, now) : 0;
+  const intervalMs = intervalSoFar(session, now);
+  const reading = laborFocus ? null : interpretLabor(session, settings, now);
+  const askingIntensity = Boolean(pendingIntensityId) && !active;
 
   useEffect(() => {
     const shouldLock = settings.keepAwake && (Boolean(active) || session.contractions.length > 0);
@@ -105,8 +77,6 @@ function TimerPage() {
     if (settings.sound) playEndSound();
   };
 
-  const askingIntensity = Boolean(pendingIntensityId) && !active;
-
   const waterButton = (
     <Button
       variant={session.waterBrokeAt ? "danger" : "secondary"}
@@ -124,102 +94,67 @@ function TimerPage() {
     </Button>
   );
 
+  if (laborFocus) {
+    return (
+      <main className="flex min-h-0 flex-1 flex-col">
+        <ContractionStage elapsed={elapsed} onEnd={onEnd} onCancel={cancelContraction} />
+      </main>
+    );
+  }
+
   return (
     <main className="flex min-h-0 flex-1 flex-col">
-      {laborFocus ? null : <TopBar title="מעקב צירים" subtitle="מעקב בבית, עד שיוצאים" />}
-      <div
-        className={cn(
-          "flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5",
-          laborFocus ? "justify-center pb-2 pt-[max(1rem,env(safe-area-inset-top))]" : "pb-4",
-        )}
-      >
+      <TopBar title="מעקב צירים" subtitle="מעקב בבית, עד שיוצאים" />
+      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-4">
         <StatusBanner
           phase={phase}
           waterBroke={Boolean(session.waterBrokeAt)}
           waterBrokeAt={session.waterBrokeAt}
           progress={progress}
-          showMeter={phaseMeterVisible(session) && !laborFocus}
+          showMeter={phaseMeterVisible(session)}
           meterLabel={patternWindowCopy(session, settings, now)}
-          contractionRunning={Boolean(active)}
+          contractionRunning={false}
         />
-
-        {laborFocus || done.length === 0 ? (
-          <div
-            className={cn(
-              "flex flex-col items-center",
-              (laborFocus || done.length === 0) && "min-h-0 flex-1 justify-center",
-            )}
-          >
-            <TimerRing
-              progress={ringProgress}
-              label={label}
-              ms={elapsed}
-              active={Boolean(active)}
-              tone={tone}
-            />
-          </div>
-        ) : null}
-
-        {laborFocus ? null : (
-          <>
-            <StatsRow session={session} stats={stats} />
-
-            {stats.lastInterval != null ? (
-              <p className="text-center text-xs text-muted">
-                מרווח אחרון {formatClock(stats.lastInterval)}
-                {stats.lastDuration != null ? ` · משך אחרון ${formatClock(stats.lastDuration)}` : ""}
-              </p>
-            ) : null}
-
-            {done.length > 0 ? (
-              <ContractionList
-                session={session}
-                limit={4}
-                intervalCapMs={settings.intervalMinutes * 2 * 60_000}
-              />
-            ) : null}
-          </>
+        {done.length > 0 ? (
+          <RestStage
+            lastDuration={stats.lastDuration}
+            intervalMs={intervalMs}
+            reading={reading}
+          />
+        ) : (
+          <IdleStage />
         )}
       </div>
 
       <div className="shrink-0 border-t border-border bg-bg px-5 pb-3 pt-3">
-        {askingIntensity ? (
-          <IntensityPicker
-            onPick={(value) => {
-              if (pendingIntensityId) setIntensity(pendingIntensityId, value);
-            }}
-            onSkip={dismissIntensity}
-          />
-        ) : active ? (
-          <div className="flex flex-col gap-2">
-            <Button variant="hugeStop" size="huge" onClick={onEnd}>
-              נגמר
-            </Button>
-            <Button variant="ghost" onClick={cancelContraction}>
-              לחצתי בטעות
+        <div className="flex flex-col gap-3">
+          {askingIntensity ? (
+            <IntensityPicker
+              compact
+              onPick={(value) => {
+                if (pendingIntensityId) setIntensity(pendingIntensityId, value);
+              }}
+              onSkip={dismissIntensity}
+            />
+          ) : null}
+          <Button variant="huge" size="huge" onClick={onStart}>
+            התחיל
+          </Button>
+          <div className="grid grid-cols-2 gap-2">
+            {waterButton}
+            <Button
+              variant="secondary"
+              disabled={session.contractions.length === 0}
+              onClick={() => {
+                undoLast();
+                toast("הציר האחרון בוטל");
+              }}
+            >
+              <Undo2 className="size-4" />
+              בטלי אחרון
             </Button>
           </div>
-        ) : (
-          <div className="flex flex-col gap-2">
-            <Button variant="huge" size="huge" onClick={onStart}>
-              התחיל
-            </Button>
-            <div className="grid grid-cols-2 gap-2">
-              {waterButton}
-              <Button
-                variant="secondary"
-                disabled={session.contractions.length === 0}
-                onClick={() => {
-                  undoLast();
-                  toast("הציר האחרון בוטל");
-                }}
-              >
-                <Undo2 className="size-4" />
-                בטלי אחרון
-              </Button>
-            </div>
-          </div>
-        )}
+        </div>
       </div>
 
       {confirmWater ? (
@@ -236,5 +171,77 @@ function TimerPage() {
         />
       ) : null}
     </main>
+  );
+}
+
+function ContractionStage({
+  elapsed,
+  onEnd,
+  onCancel,
+}: {
+  elapsed: number;
+  onEnd: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <>
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-5 pt-[max(1rem,env(safe-area-inset-top))]">
+        <p className="text-sm font-medium tracking-wide text-accent">ציר פעיל</p>
+        <p
+          className="mt-5 font-display text-labor font-semibold leading-none tracking-tight text-fg tabular-nums"
+          aria-live="polite"
+        >
+          {formatClock(elapsed)}
+        </p>
+        <p className="cue-breathe mt-8 font-display text-2xl text-muted">נשמי.</p>
+      </div>
+      <div className="shrink-0 px-5 pb-3 pt-3">
+        <Button variant="hugeStop" size="huge" onClick={onEnd}>
+          סיימתי
+        </Button>
+        <Button variant="ghost" className="mt-2 w-full" onClick={onCancel}>
+          לחצתי בטעות
+        </Button>
+      </div>
+    </>
+  );
+}
+
+function RestStage({
+  lastDuration,
+  intervalMs,
+  reading,
+}: {
+  lastDuration: number | null;
+  intervalMs: number | null;
+  reading: string | null;
+}) {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-8 py-4 text-center">
+      <div>
+        <p className="text-sm font-medium text-muted">הציר האחרון</p>
+        <p className="mt-2 font-display text-4xl font-semibold tabular-nums leading-none text-fg">
+          {lastDuration != null ? formatDurationSpoken(lastDuration) : "—"}
+        </p>
+      </div>
+      <div>
+        <p className="text-sm font-medium text-muted">המרווח</p>
+        <p className="mt-2 font-display text-labor font-semibold tabular-nums leading-none tracking-tight text-fg">
+          {intervalMs != null ? formatClock(intervalMs) : "—"}
+        </p>
+      </div>
+      {reading ? (
+        <p className="max-w-sm text-sm leading-relaxed text-muted">{reading}</p>
+      ) : null}
+    </div>
+  );
+}
+
+function IdleStage() {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col items-center justify-center py-8 text-center">
+      <p className="font-display text-2xl font-semibold text-fg">כשהציר מתחיל</p>
+      <p className="mt-2 text-sm text-muted">לחצי ״התחיל״. זהו.</p>
+    </div>
   );
 }

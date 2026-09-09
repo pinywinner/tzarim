@@ -176,7 +176,11 @@ export function intervalTrend(
 }
 
 export function neededCount(settings: Settings): number {
-  return Math.max(6, Math.round(settings.patternMinutes / settings.intervalMinutes));
+  const perWindow = Math.round(settings.patternMinutes / settings.intervalMinutes);
+  // 5-1-1: ~12 in an hour. 7-0.75-0.5: 6 starts cannot fit in 30 min at 7-min
+  // spacing, so the floor drops to 5 — otherwise subsequent never reaches "go".
+  const floor = settings.patternMinutes <= 30 ? 5 : 6;
+  return Math.max(floor, perWindow);
 }
 
 export function evaluatePhase(
@@ -282,6 +286,14 @@ export function formatSecondsHe(ms: number): string {
   const seconds = totalSec % 60;
   if (seconds === 0) return `${minutes} דק׳`;
   return `${minutes}:${pad(seconds)} דק׳`;
+}
+
+export function formatDurationSpoken(ms: number): string {
+  const totalSec = Math.round(Math.max(0, ms) / 1000);
+  if (totalSec === 1) return "שנייה אחת";
+  if (totalSec < 60) return `${totalSec} שניות`;
+  if (totalSec === 60) return "דקה";
+  return formatClock(ms);
 }
 
 function pad(value: number): string {

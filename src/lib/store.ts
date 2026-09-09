@@ -27,7 +27,7 @@ export type AppState = {
 
 export type AppActions = {
   setHydrated: (value: boolean) => void;
-  completeOnboarding: () => void;
+  completeOnboarding: (birthType?: BirthType) => void;
   currentSession: () => Session;
   startContraction: () => void;
   endContraction: (opts?: { promptIntensity?: boolean }) => void;
@@ -80,12 +80,28 @@ export const useAppStore = create<AppState & AppActions>()(
     (set, get) => ({
       hydrated: false,
       ...initial,
+
       setHydrated: (value) => set({ hydrated: value }),
-      completeOnboarding: () => set({ onboardingDone: true }),
+      completeOnboarding: (birthType) => {
+        if (birthType === "first" || birthType === "subsequent") {
+          set({
+            onboardingDone: true,
+            settings: {
+              ...get().settings,
+              birthType,
+              ...PRESETS[birthType],
+            },
+          });
+          return;
+        }
+        set({ onboardingDone: true });
+      },
+
       currentSession: () => {
         const { sessions, currentSessionId } = get();
         return sessions.find((session) => session.id === currentSessionId) ?? sessions[0] ?? createSession();
       },
+
       startContraction: () => {
         const now = Date.now();
         const session = get().currentSession();
@@ -99,6 +115,7 @@ export const useAppStore = create<AppState & AppActions>()(
           })),
         });
       },
+
       endContraction: (opts) => {
         const now = Date.now();
         const session = get().currentSession();
@@ -116,6 +133,7 @@ export const useAppStore = create<AppState & AppActions>()(
           })),
         });
       },
+
       cancelContraction: () => {
         const session = get().currentSession();
         const active = activeContraction(session);
@@ -128,10 +146,12 @@ export const useAppStore = create<AppState & AppActions>()(
           })),
         });
       },
+
       resolveStale: (action) => {
         if (action === "end") get().endContraction({ promptIntensity: false });
         else get().cancelContraction();
       },
+
       setIntensity: (id, intensity) => {
         set({
           pendingIntensityId: null,
@@ -143,7 +163,9 @@ export const useAppStore = create<AppState & AppActions>()(
           })),
         });
       },
+
       dismissIntensity: () => set({ pendingIntensityId: null }),
+
       deleteContraction: (id) => {
         set({
           pendingIntensityId: get().pendingIntensityId === id ? null : get().pendingIntensityId,
@@ -153,6 +175,7 @@ export const useAppStore = create<AppState & AppActions>()(
           })),
         });
       },
+
       restoreContraction: (contraction) => {
         set({
           sessions: withCurrent(get().sessions, get().currentSessionId, (current) => ({
@@ -163,6 +186,7 @@ export const useAppStore = create<AppState & AppActions>()(
           })),
         });
       },
+
       undoLast: () => {
         const session = get().currentSession();
         if (session.contractions.length === 0) return;
@@ -170,6 +194,7 @@ export const useAppStore = create<AppState & AppActions>()(
         if (!last) return;
         get().deleteContraction(last.id);
       },
+
       setWaterBroke: (broke) => {
         const now = Date.now();
         set({
@@ -179,10 +204,13 @@ export const useAppStore = create<AppState & AppActions>()(
           })),
         });
       },
+
       endSession: () => {
         const now = Date.now();
         const current = get().currentSession();
-        if (current.contractions.length === 0 && !current.waterBrokeAt) return;
+        if (current.contractions.length === 0 && !current.waterBrokeAt) {
+          return;
+        }
         const next = createSession(now);
         set({
           pendingIntensityId: null,
@@ -204,6 +232,7 @@ export const useAppStore = create<AppState & AppActions>()(
           ],
         });
       },
+
       openSession: (id) => {
         const exists = get().sessions.some((session) => session.id === id);
         if (!exists) return;
@@ -218,9 +247,11 @@ export const useAppStore = create<AppState & AppActions>()(
             .map((session) => (session.id === id ? { ...session, endedAt: null } : session)),
         });
       },
+
       updateSettings: (patch) => {
         set({ settings: { ...get().settings, ...patch } });
       },
+
       setBirthType: (type) => {
         if (type === "custom") {
           set({ settings: { ...get().settings, birthType: "custom" } });
@@ -234,10 +265,12 @@ export const useAppStore = create<AppState & AppActions>()(
           },
         });
       },
+
       resetAll: () => {
         const next = newEmpty();
         set({ ...next, hydrated: true, onboardingDone: true });
       },
+
       checkStaleOnResume: () => {
         const session = get().currentSession();
         const active = activeContraction(session);

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const COPY: Record<LaborPhase, { title: string; hint: string; tone: string }> = {
   idle: {
-    title: "עוד אין ציר",
+    title: "עוד אין צירים",
     hint: "לחצי ״התחיל״ כשהציר עולה.",
     tone: "bg-elevated text-fg",
   },
@@ -66,7 +66,7 @@ export function StatusBanner({
     return (
       <div className="rise-in rounded-xl bg-accent/15 px-4 py-3 text-accent shadow-border">
         <p className="text-base font-semibold">הציר עכשיו</p>
-        <p className="mt-0.5 text-sm opacity-90">לחצי ״נגמר״ כשהציר יורד לגמרי.</p>
+        <p className="mt-0.5 text-sm opacity-90">לחצי ״סיימתי״ כשהציר יורד לגמרי.</p>
       </div>
     );
   }
