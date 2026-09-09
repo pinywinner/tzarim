@@ -28,9 +28,17 @@ npm run native:init
 
 ```bash
 npm run native:sync
-npx cap open android   # Android Studio → APK
+npx cap open android   # Android Studio
 npx cap open ios       # Xcode, רק מ-Mac
 ```
+
+APK (דורש JDK 21 + Android SDK):
+
+```bash
+npm run native:apk
+```
+
+הקובץ יוצא אל `android/app/build/outputs/apk/debug/app-debug.apk`. זה חבילת debug להתקנה ידנית, לא לחנות.
 
 `npm run build` נשאר בילוד ה-Web/PWA (Nitro). `npm run native:web` הוא הבילוד הסטטי ל-WebView בלבד.
 
