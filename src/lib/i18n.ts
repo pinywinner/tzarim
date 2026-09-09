@@ -125,6 +125,18 @@ export const he = {
   resetData: "מחקי את כל הנתונים במכשיר",
   dataStay: "הנתונים נשמרים רק במכשיר הזה. אין חשבון, אין ענן, אין שיתוף אוטומטי.",
   version: "גרסה {v}",
+  privacyLink: "מדיניות פרטיות",
+  privacyTitle: "מדיניות פרטיות",
+  privacyIntro: "מעקב צירים שומרת את הנתונים רק במכשיר שלך. אין חשבון, אין שרת, ואין פרסומות.",
+  privacyLocal:
+    "צירים, עוצמה, ירידת מים והגדרות נשמרים מקומית במכשיר. אפשר למחוק הכול מההגדרות בכל רגע.",
+  privacyShare:
+    "שיתוף עם מיילדת קורה רק אם את בוחרת לשתף. אנחנו לא מקבלים עותק.",
+  privacyPerms:
+    "רטט ומסך דולק פועלים רק אם הפעלת אותם. חיבור אינטרנט קיים במערכת לצורך שיתוף שהתחלת, לא לאיסוף נתונים.",
+  privacyNotMedical:
+    "האפליקציה אינה מכשיר רפואי ואינה מאבחנת, מטפלת, מרפאת או מונעת מצב רפואי. במצב חירום — מד״א 101.",
+  privacyUpdated: "עודכן בספטמבר 2026.",
   resetTitle: "למחוק הכול?",
   resetBody: "כל המעקבים והצירים במכשיר יימחקו. אין חזרה.",
   resetConfirm: "מחקי הכול",
@@ -171,7 +183,8 @@ export const he = {
   guideBreathBody:
     "בציר — נשימה איטית החוצה, כאילו מערפלים מראה. בין צירים — שחררי לסת וכתפיים. לא צריך שיטה. תנשמי.",
   guideLegalTitle: "לא ייעוץ רפואי",
-  guideLegalBody: "זה מעקב במכשיר שלך בלבד. לא תחליף למיילדת או לחדר לידה. במצב חירום — מד״א 101.",
+  guideLegalBody:
+    "זה מעקב במכשיר שלך בלבד. לא מכשיר רפואי, ולא תחליף למיילדת או לחדר לידה. האפליקציה לא מאבחנת, לא מטפלת ולא מונעת מצב רפואי. במצב חירום — מד״א 101.",
 
   durationOneSecond: "שנייה אחת",
   durationSeconds: "{n} שניות",
@@ -332,6 +345,18 @@ export const en: { [K in keyof typeof he]: string } = {
   resetData: "Delete all data on this device",
   dataStay: "Data stays on this device. No account, no cloud, no automatic sharing.",
   version: "Version {v}",
+  privacyLink: "Privacy policy",
+  privacyTitle: "Privacy policy",
+  privacyIntro: "Labor keeps your data on this device only. No account, no server, and no ads.",
+  privacyLocal:
+    "Contractions, intensity, waters breaking, and settings stay locally on the device. You can delete everything from Settings at any time.",
+  privacyShare:
+    "Sharing with a midwife happens only if you choose to share. We never receive a copy.",
+  privacyPerms:
+    "Vibration and keep-awake run only if you turn them on. Internet access exists so you can share when you start it — not to collect data.",
+  privacyNotMedical:
+    "This app is not a medical device and does not diagnose, treat, cure, or prevent any medical condition. In an emergency, call local emergency services.",
+  privacyUpdated: "Updated September 2026.",
   resetTitle: "Delete everything?",
   resetBody: "Every session and contraction on this device will be erased. This cannot be undone.",
   resetConfirm: "Delete everything",
@@ -380,7 +405,7 @@ export const en: { [K in keyof typeof he]: string } = {
     "During a contraction — a slow breath out, as if fogging a mirror. Between them — unclench jaw and shoulders. No method required. Just breathe.",
   guideLegalTitle: "Not medical advice",
   guideLegalBody:
-    "This is tracking on your device only. It does not replace a midwife or labor ward. In an emergency, call local emergency services.",
+    "This is tracking on your device only. It is not a medical device, and it does not replace a midwife or labor ward. It does not diagnose, treat, or prevent any medical condition. In an emergency, call local emergency services.",
 
   durationOneSecond: "1 second",
   durationSeconds: "{n} seconds",

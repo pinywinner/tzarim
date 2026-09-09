@@ -42,3 +42,4 @@ ios/App/App/public/
 *.dSYM.zip
 *.jks
 *.keystore
+secrets/

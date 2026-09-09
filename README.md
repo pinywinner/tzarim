@@ -1,138 +1,75 @@
-# צירים
+# מעקב צירים
 
-### מעקב צירים פשוט, רגוע וברור - עד שיוצאים לחדר לידה.
+מעקב צירים בבית — משך, מרווח וכלל 5-1-1, עד שיוצאים לחדר לידה. הכל נשמר במכשיר, בלי חשבון ובלי שרת.
 
-צירים עוזרת לעקוב בזמן אמת אחרי הצירים בבית: מתי התחיל, מתי נגמר, כמה זמן נמשך ומה המרווח בין הצירים.
+## הורדה לאנדרואיד
 
-בלי חשבון. בלי להסתבך.
+[**הורידי את ה-APK (v1.2.0)**](https://github.com/pinywinner/tzarim/releases/download/v1.2.0/tzarim-1.2.0.apk)
 
-המידע נשמר מקומית במכשיר שלך.
+בטלפון: פתחי את הקובץ → אפשרי התקנה ממקור לא מוכר אם אנדרואיד מבקש. זו חבילת debug להתקנה ידנית, לא לחנות.
 
----
+כל הגרסאות: [Releases](https://github.com/pinywinner/tzarim/releases)
 
-## ✨ מה האפליקציה עושה?
+## גרסאות
 
-- ⏱️ מדידה מדויקת של משך כל ציר
-- 🔄 חישוב המרווח בין הצירים
-- 📊 היסטוריה של הצירים לאורך הלידה
-- 💪 דירוג עוצמת הציר מ-1 עד 5
-- 💧 סימון ירידת מים
-- 🏠 אינדיקציה מתי להמשיך לעקוב ומתי לשקול יציאה
-- 📋 תמיכה בכלל 5-1-1 בלידה ראשונה
-- 📋 תמיכה בכלל 7-0.75-0.5 בלידה חוזרת
-- 📤 שיתוף הנתונים עם המיילדת
-- 📳 רטט בזמן פעולות
-- 🔆 שמירה על המסך דולק בזמן מעקב
-- 🌙 מצב לילה
-- 🇮🇱 ממשק מלא בעברית וב-RTL
+מספר הגרסה יושב ב־`version.json` ומסתנכרן ל-Android, ל-iOS ולהגדרות באפליקציה.
 
----
+```bash
+npm run version:show              # 1.0.0 (1)
+npm run version:bump -- patch     # 1.0.1
+npm run version:bump -- minor     # 1.1.0
+npm run version:bump -- major     # 2.0.0
+```
 
-## 📱 הורדה לאנדרואיד
+אחרי bump: קומיט, תג `vX.Y.Z`, ו־push של התג. GitHub Actions בונה APK ומפרסם Release.
 
-**[הורדת APK - v1.1.0](https://github.com/pinywinner/tzarim/releases/download/v1.1.0/tzarim-1.1.0.apk)**
+לחתימה קבועה (התקנות עוקבות בלי להסיר את הישנה) הוסיפי ב־GitHub Secrets:
+`TZARIM_KEYSTORE_BASE64`, `TZARIM_KEYSTORE_PASSWORD`, `TZARIM_KEY_ALIAS`, `TZARIM_KEY_PASSWORD`.
+בלי הסודות מתפרסם APK מסוג debug.
 
-הגרסה הנוכחית היא APK להתקנה ידנית באנדרואיד.
-
-> שימי לב: זו גרסת debug ואינה מופצת דרך Google Play.
-
-כל הגרסאות זמינות בעמוד ה-Releases.
-
----
-
-## 🌐 Web / PWA
-
-אפשר להשתמש באפליקציה ישירות מהדפדפן או להתקין אותה כ-PWA.
+## הרצה (Web / PWA)
 
 ```bash
 npm install
 npm run dev
 ```
 
----
+אותו קוד רץ בדפדפן וכהתקנת PWA. אין שינוי בנתיב הזה כשמוסיפים Native.
 
-## 🛠️ פיתוח
+## Android / iPhone (Capacitor)
 
-הפרויקט בנוי ב:
+האפליקציה לא נבנית מחדש ל-Native. Capacitor עוטף את אותו React, עם רטט, מסך דולק ושיתוף של המערכת.
 
-- React
-- TypeScript
-- Vite
-- Tailwind CSS
-- Zustand
-- Capacitor
-
-אותו קוד משמש את גרסת ה-Web, ה-PWA, Android ו-iOS.
-
-### Android
+תיקיית `android/` כבר בריפו (פרויקט Gradle מוכן, כולל אייקון וספלאש של מעקב צירים). אחרי clone:
 
 ```bash
 npm install
 npm run native:sync
-npx cap open android
+npx cap open android   # Android Studio
+npx cap open ios       # Xcode, רק מ-Mac
 ```
 
-### iOS
+`npm run native:sync` בונה SPA סטטי אל `dist/client` ומרענן את ה-WebView. אם `android/` או `ios/` חסרות אצלך מסיבה כלשהי:
 
 ```bash
-npm install
-npm run native:sync
-npx cap open ios
+npm run native:init
 ```
 
-נדרש macOS לבניית גרסת iOS.
-
-### בניית APK
+APK מקומי (דורש JDK 21 + Android SDK):
 
 ```bash
 npm run native:apk
 ```
 
-נדרש JDK 21 ו-Android SDK.
-
 הקובץ יוצא אל `android/app/build/outputs/apk/debug/app-debug.apk`.
 
----
+## מה בפנים
 
-## 🔢 גרסאות ופרסום
+- שתי לחיצות לכל ציר: **התחיל** / **סיימתי**
+- בין צירים: האם נשארים בבית, או שכבר יוצאים
+- עוצמה 1–5, ירידת מים, היסטוריה ושיתוף למיילדת
+- כלל 5-1-1 (לידה ראשונה) או 7-0.75-0.5 (לידה חוזרת)
+- מסך דולק, רטט, מצב לילה, עברית מימין לשמאל
+- Web, PWA, Android ו-iOS מאותו קוד
 
-מספר הגרסה יושב ב-`version.json` ומסתנכרן ל-Android, ל-iOS ולהגדרות באפליקציה.
-
-```bash
-npm run version:show
-npm run version:bump -- patch
-npm run version:bump -- minor
-npm run version:bump -- major
-```
-
-אחרי bump: קומיט, תג `vX.Y.Z`, ו-push של התג. GitHub Actions בונה APK ומפרסם Release.
-
-לחתימה קבועה להתקנות עוקבות, ניתן להוסיף ב-GitHub Secrets את מפתחות החתימה של Android. בלי הסודות מתפרסם APK מסוג debug.
-
----
-
-## 🔒 פרטיות
-
-צירים תוכננה להיות פשוטה ופרטית.
-
-אין צורך ליצור חשבון, והמידע נשמר מקומית במכשיר.
-
----
-
-## ⚠️ חשוב
-
-צירים היא כלי למעקב ותיעוד בלבד.
-
-היא אינה מהווה ייעוץ רפואי ואינה מחליפה הנחיות של צוות רפואי.
-
-בכל ספק או חשש רפואי יש לפנות לגורם רפואי מתאים.
-
----
-
-## 🎯 למה צירים?
-
-בזמן צירים לא צריך עוד אפליקציה שמבקשת ממך ללמוד איך להשתמש בה.
-
-צריך לפתוח, ללחוץ ולהמשיך לנשום.
-
-**צירים נבנתה בדיוק בשביל זה.**
+זה מעקב בלבד, לא ייעוץ רפואי.

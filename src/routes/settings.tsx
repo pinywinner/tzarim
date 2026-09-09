@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ConfirmSheet } from "@/components/confirm-sheet";
@@ -211,6 +211,9 @@ function SettingsPage() {
           {t("resetData")}
         </Button>
         <p className="text-center text-xs leading-relaxed text-muted">{t("dataStay")}</p>
+        <Link to="/privacy" className="text-center text-sm font-medium text-primary">
+          {t("privacyLink")}
+        </Link>
         <p className="text-center text-xs text-muted">{t("version", { v: APP_VERSION })}</p>
       </div>
 
