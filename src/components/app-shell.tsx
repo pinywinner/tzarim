@@ -22,12 +22,12 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
       {hideNav ? null : (
         <>
-          <div className="min-h-14 shrink-0 pb-[env(safe-area-inset-bottom)]" aria-hidden="true" />
+          <div className="h-[var(--tabbar-offset)] shrink-0" aria-hidden="true" />
           <nav
-            className="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-lg border-t border-border bg-surface pb-[env(safe-area-inset-bottom)] md:border-x md:border-border"
+            className="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-lg px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
             aria-label="ניווט ראשי"
           >
-            <ul className="grid grid-cols-4">
+            <ul className="grid grid-cols-4 rounded-full bg-elevated px-1.5 py-2 shadow-float">
               {NAV.map((item) => {
                 const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
                 const Icon = item.icon;
@@ -37,14 +37,18 @@ export function AppShell({ children }: { children: ReactNode }) {
                       to={item.to}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "relative flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs font-medium tracking-wide transition-[color,opacity] duration-150",
-                        active ? "text-accent" : "text-muted",
+                        "flex min-h-14 flex-col items-center justify-center gap-1 text-xs leading-none tracking-wide transition-[color] duration-150",
+                        active ? "font-semibold text-fg" : "font-medium text-muted",
                       )}
                     >
-                      {active ? (
-                        <span className="absolute top-1.5 size-1 rounded-full bg-accent" aria-hidden="true" />
-                      ) : null}
-                      <Icon className="size-5" strokeWidth={active ? 2.2 : 1.8} />
+                      <span
+                        className={cn(
+                          "flex size-9 items-center justify-center rounded-full text-accent transition-[background-color] duration-150",
+                          active && "bg-accent/20",
+                        )}
+                      >
+                        <Icon className="size-5" strokeWidth={active ? 2.15 : 1.8} />
+                      </span>
                       {item.label}
                     </Link>
                   </li>
