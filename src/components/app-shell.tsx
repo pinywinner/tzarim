@@ -1,8 +1,9 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { BookOpen, Clock3, List, Settings2 } from "lucide-react";
 import type { ReactNode } from "react";
-import { activeContraction } from "@/lib/contractions";
-import { useCurrentSession } from "@/lib/store";
+import { useNow } from "@/hooks/use-now";
+import { activeContraction, evaluatePhase } from "@/lib/contractions";
+import { useAppStore, useCurrentSession } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -15,10 +16,21 @@ const NAV = [
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const session = useCurrentSession();
-  const hideNav = pathname === "/" && Boolean(activeContraction(session));
+  const settings = useAppStore((state) => state.settings);
+  const active = activeContraction(session);
+  const hideNav = pathname === "/" && Boolean(active);
+  const ticking = Boolean(active) || session.contractions.length > 0;
+  const now = useNow(ticking);
+  const phase = evaluatePhase(session, settings, now);
+  const mood = active ? "labor" : phase === "go" ? "go" : "rest";
 
   return (
-    <div className="relative mx-auto flex h-dvh max-h-dvh w-full max-w-lg flex-col overflow-hidden bg-bg text-fg md:border-x md:border-border">
+    <div
+      className={cn(
+        "relative mx-auto flex h-dvh max-h-dvh w-full max-w-lg flex-col overflow-hidden text-fg transition-colors duration-300 md:border-x md:border-border",
+        mood === "labor" ? "bg-labor-bg" : mood === "go" ? "bg-go-bg" : "bg-bg",
+      )}
+    >
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</div>
       {hideNav ? null : (
         <>
@@ -29,25 +41,25 @@ export function AppShell({ children }: { children: ReactNode }) {
           >
             <ul className="grid grid-cols-4 rounded-full bg-elevated px-1.5 py-2 shadow-float">
               {NAV.map((item) => {
-                const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+                const current = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
                 const Icon = item.icon;
                 return (
                   <li key={item.to}>
                     <Link
                       to={item.to}
-                      aria-current={active ? "page" : undefined}
+                      aria-current={current ? "page" : undefined}
                       className={cn(
                         "flex min-h-14 flex-col items-center justify-center gap-1 text-xs leading-none tracking-wide transition-[color] duration-150",
-                        active ? "font-bold text-fg" : "font-medium text-muted",
+                        current ? "font-bold text-fg" : "font-medium text-muted",
                       )}
                     >
                       <span
                         className={cn(
                           "flex size-9 items-center justify-center rounded-full text-accent transition-[background-color] duration-150",
-                          active && "bg-accent/20",
+                          current && "bg-accent/20",
                         )}
                       >
-                        <Icon className="size-5" strokeWidth={active ? 2.15 : 1.8} />
+                        <Icon className="size-5" strokeWidth={current ? 2.15 : 1.8} />
                       </span>
                       {item.label}
                     </Link>

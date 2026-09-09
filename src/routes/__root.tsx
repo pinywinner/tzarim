@@ -21,7 +21,7 @@ export const Route = createRootRoute({
       { name: "application-name", content: APP_NAME },
       { name: "apple-mobile-web-app-title", content: APP_NAME },
       { name: "description", content: "מעקב צירים בבית — משך, מרווח וכלל 5-1-1, עד שיוצאים לחדר לידה." },
-      { name: "theme-color", content: "#F3EEE6" },
+      { name: "theme-color", content: "#F5F1EA" },
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },

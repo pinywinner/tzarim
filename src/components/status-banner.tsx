@@ -22,12 +22,12 @@ const COPY: Record<LaborPhase, { title: string; hint: string; tone: string }> = 
   active: {
     title: "הדפוס מתמלא",
     hint: "חזקים, ובקצב שקבעת. עוד קצת בבית.",
-    tone: "bg-accent/15 text-accent",
+    tone: "bg-active/15 text-active",
   },
   go: {
     title: "זמן לצאת",
     hint: "התקשרי למיילדת, או צאי לדרך.",
-    tone: "bg-danger text-danger-fg",
+    tone: "bg-warn/20 text-warn",
   },
 };
 
@@ -64,7 +64,7 @@ export function StatusBanner({
 
   if (contractionRunning) {
     return (
-      <div className="rise-in rounded-xl bg-accent/15 px-4 py-3 text-accent shadow-border">
+      <div className="rise-in rounded-xl bg-active/15 px-4 py-3 text-active shadow-border">
         <p className="text-base font-bold">הציר עכשיו</p>
         <p className="mt-0.5 text-sm opacity-90">לחצי ״סיימתי״ כשהציר יורד לגמרי.</p>
       </div>

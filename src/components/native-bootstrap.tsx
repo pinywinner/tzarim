@@ -18,7 +18,7 @@ export function NativeBootstrap() {
     void import("@capacitor/status-bar").then(async ({ StatusBar, Style }) => {
       try {
         await StatusBar.setStyle({ style: dark ? Style.Light : Style.Dark });
-        await StatusBar.setBackgroundColor({ color: dark ? "#14110F" : "#F3EEE6" });
+        await StatusBar.setBackgroundColor({ color: dark ? "#211F1D" : "#F5F1EA" });
       } catch {
         // Older WebViews / iOS ignore background color.
       }

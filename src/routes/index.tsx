@@ -126,7 +126,7 @@ function TimerPage() {
         )}
       </div>
 
-      <div className="shrink-0 border-t border-border bg-bg px-5 pb-3 pt-3">
+      <div className="shrink-0 border-t border-border bg-transparent px-5 pb-3 pt-3">
         <div className="flex flex-col gap-3">
           {askingIntensity ? (
             <IntensityPicker
@@ -186,7 +186,7 @@ function ContractionStage({
   return (
     <>
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-5 pt-[max(1rem,env(safe-area-inset-top))]">
-        <p className="text-sm font-medium tracking-wide text-accent">ציר פעיל</p>
+        <p className="text-sm font-medium tracking-wide text-active">ציר פעיל</p>
         <p
           className="mt-5 font-display text-labor font-black leading-none tracking-tight text-fg tabular-nums"
           aria-live="polite"

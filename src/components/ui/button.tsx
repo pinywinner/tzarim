@@ -13,8 +13,8 @@ const buttonVariants = cva(
         outline: "bg-transparent text-fg shadow-border",
         ghost: "bg-transparent text-muted hover:text-fg hover:bg-elevated",
         danger: "bg-danger text-danger-fg",
-        huge: "bg-accent text-accent-fg shadow-cta",
-        hugeStop: "bg-fg text-bg shadow-cta-stop",
+        huge: "bg-calm text-calm-fg shadow-cta",
+        hugeStop: "bg-brand-deep text-brand-deep-fg shadow-cta-stop",
       },
       size: {
         sm: "h-10 rounded-md px-3 text-sm",

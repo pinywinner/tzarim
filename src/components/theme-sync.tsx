@@ -35,7 +35,7 @@ export function ThemeSync() {
     root.classList.toggle("dark", theme === "dark");
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) {
-      meta.setAttribute("content", theme === "dark" ? "#14110F" : "#F3EEE6");
+      meta.setAttribute("content", theme === "dark" ? "#211F1D" : "#F5F1EA");
     }
   }, [theme, hydrated]);
 

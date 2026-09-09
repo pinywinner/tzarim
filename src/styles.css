@@ -71,12 +71,18 @@
   --color-border: var(--app-border);
   --color-accent: var(--app-accent);
   --color-accent-fg: var(--app-accent-fg);
+  --color-brand-deep: var(--app-brand-deep);
+  --color-brand-deep-fg: var(--app-brand-deep-fg);
   --color-calm: var(--app-calm);
   --color-calm-fg: var(--app-calm-fg);
+  --color-active: var(--app-active);
+  --color-active-fg: var(--app-active-fg);
   --color-warn: var(--app-warn);
   --color-warn-fg: var(--app-warn-fg);
   --color-danger: var(--app-danger);
   --color-danger-fg: var(--app-danger-fg);
+  --color-labor-bg: var(--app-labor);
+  --color-go-bg: var(--app-go);
   --color-track: var(--app-track);
 
   --text-timer: clamp(3rem, 13vw, 4.5rem);
@@ -95,39 +101,45 @@
 }
 
 :root {
-  --app-canvas: #e7dfd4;
-  --app-bg: #f3eee6;
-  --app-surface: #fbf7f1;
-  --app-elevated: #fffdfa;
-  --app-fg: #2c241e;
-  --app-muted: #5c534c;
-  --app-subtle: #7a6f66;
-  --app-border: #e4dcd2;
-  --app-accent: #b85c38;
-  --app-accent-fg: #fff8f4;
-  --app-calm: #4a6754;
-  --app-calm-fg: #f4faf5;
-  --app-warn: #b0763a;
-  --app-warn-fg: #fff8ef;
-  --app-danger: #9a3b32;
+  --app-canvas: #ebe6dc;
+  --app-bg: #f5f1ea;
+  --app-surface: #fffdfc;
+  --app-elevated: #fffdfc;
+  --app-fg: #292724;
+  --app-muted: #716b63;
+  --app-subtle: #8c867e;
+  --app-border: #ded7cc;
+  --app-accent: #b85c5c;
+  --app-accent-fg: #fff8f6;
+  --app-brand-deep: #8f4046;
+  --app-brand-deep-fg: #fff8f6;
+  --app-calm: #718c7a;
+  --app-calm-fg: #f4f8f5;
+  --app-active: #c95d58;
+  --app-active-fg: #fff8f6;
+  --app-warn: #c28a3d;
+  --app-warn-fg: #3a2a10;
+  --app-danger: #a94747;
   --app-danger-fg: #fff6f4;
-  --app-track: #e8dfd4;
+  --app-labor: #f7e9e6;
+  --app-go: #fbf2e3;
+  --app-track: #e6e0d6;
   --app-shadow:
-    0 0 0 1px rgb(44 36 30 / 0.06),
-    0 1px 2px -1px rgb(44 36 30 / 0.06),
-    0 8px 24px -12px rgb(44 36 30 / 0.12);
+    0 0 0 1px rgb(41 39 36 / 0.06),
+    0 1px 2px -1px rgb(41 39 36 / 0.06),
+    0 8px 24px -12px rgb(41 39 36 / 0.12);
   --app-shadow-cta:
     inset 0 1px 0 rgb(255 255 255 / 0.22),
-    0 0 0 1px rgb(44 36 30 / 0.08),
-    0 14px 28px -14px rgb(184 92 56 / 0.55);
+    0 0 0 1px rgb(41 39 36 / 0.08),
+    0 14px 28px -14px rgb(113 140 122 / 0.55);
   --app-shadow-cta-stop:
-    inset 0 1px 0 rgb(255 255 255 / 0.12),
-    0 0 0 1px rgb(44 36 30 / 0.16),
-    0 14px 28px -14px rgb(44 36 30 / 0.45);
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    0 0 0 1px rgb(41 39 36 / 0.14),
+    0 14px 28px -14px rgb(143 64 70 / 0.5);
   --app-shadow-float:
-    0 0 0 1px rgb(44 36 30 / 0.05),
-    0 8px 20px -6px rgb(44 36 30 / 0.14),
-    0 22px 40px -16px rgb(44 36 30 / 0.18);
+    0 0 0 1px rgb(41 39 36 / 0.05),
+    0 8px 20px -6px rgb(41 39 36 / 0.14),
+    0 22px 40px -16px rgb(41 39 36 / 0.18);
 
   --tabbar-offset: calc(4.85rem + max(0.75rem, env(safe-area-inset-bottom, 0px)));
 
@@ -139,27 +151,33 @@
 }
 
 html.dark {
-  --app-canvas: #0c0a09;
-  --app-bg: #14110f;
-  --app-surface: #1c1815;
-  --app-elevated: #241f1b;
-  --app-fg: #f4ebe3;
-  --app-muted: #c2b6ab;
-  --app-subtle: #8a7e74;
-  --app-border: #3a332e;
-  --app-accent: #d47852;
-  --app-accent-fg: #1a100c;
-  --app-calm: #8fbb9a;
-  --app-calm-fg: #102016;
-  --app-warn: #e0a15a;
-  --app-warn-fg: #24160a;
-  --app-danger: #e07068;
-  --app-danger-fg: #2a0f0c;
-  --app-track: #2e2925;
+  --app-canvas: #1a1816;
+  --app-bg: #211f1d;
+  --app-surface: #2b2825;
+  --app-elevated: #332f2c;
+  --app-fg: #f4efe8;
+  --app-muted: #b9b1a7;
+  --app-subtle: #8e877e;
+  --app-border: #3f3b36;
+  --app-accent: #d36b65;
+  --app-accent-fg: #1a1212;
+  --app-brand-deep: #c45c62;
+  --app-brand-deep-fg: #1a1212;
+  --app-calm: #829b89;
+  --app-calm-fg: #142018;
+  --app-active: #d36b65;
+  --app-active-fg: #1a1212;
+  --app-warn: #d39a4a;
+  --app-warn-fg: #2a1e0c;
+  --app-danger: #c45c5c;
+  --app-danger-fg: #1a1010;
+  --app-labor: #2c2423;
+  --app-go: #2a261c;
+  --app-track: #3a3632;
   --app-shadow: 0 0 0 1px rgb(255 255 255 / 0.08);
   --app-shadow-cta:
-    inset 0 1px 0 rgb(255 255 255 / 0.14),
-    0 14px 28px -14px rgb(212 120 82 / 0.4);
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    0 14px 28px -14px rgb(130 155 137 / 0.4);
   --app-shadow-cta-stop:
     inset 0 1px 0 rgb(255 255 255 / 0.08),
     0 14px 28px -14px rgb(0 0 0 / 0.55);
