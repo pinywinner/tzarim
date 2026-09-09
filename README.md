@@ -38,6 +38,8 @@ npm run native:apk
 
 הקובץ יוצא אל `android/app/build/outputs/apk/debug/app-debug.apk`. זה חבילת debug להתקנה ידנית, לא לחנות.
 
+אפשר גם להוריד APK מ־GitHub Actions: Actions → **Build Android APK** → הרצה האחרונה → Artifacts.
+
 `npm run build` נשאר בילוד ה-Web/PWA (Nitro). `npm run native:web` הוא הבילוד הסטטי ל-WebView בלבד.
 
 ## מה בפנים

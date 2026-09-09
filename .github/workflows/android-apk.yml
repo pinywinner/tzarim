@@ -15,14 +15,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: "21"
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      # Capacitor copies the web build into android/ and generates
+      # capacitor-cordova-android-plugins/ (gitignored). Gradle cannot
+      # assemble without that folder.
+      - name: Build web and sync Capacitor Android
+        run: |
+          npm run native:web
+          npx cap sync android
 
       - name: Build debug APK
         working-directory: android
@@ -31,7 +48,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: tzirim-debug-apk
+          name: meakev-tzarim-debug
           path: android/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 14
