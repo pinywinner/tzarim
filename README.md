@@ -2,6 +2,14 @@
 
 מעקב צירים בבית — משך, מרווח וכלל 5-1-1, עד שיוצאים לחדר לידה. הכל נשמר במכשיר, בלי חשבון ובלי שרת.
 
+## הורדה לאנדרואיד
+
+[**הורידי את ה-APK (v1.0.0)**](https://github.com/pinywinner/tzarim/releases/download/v1.0.0/tzarim-1.0.0.apk)
+
+בטלפון: פתחי את הקובץ → אפשרי התקנה ממקור לא מוכר אם אנדרואיד מבקש. זו חבילת debug להתקנה ידנית, לא לחנות.
+
+כל הגרסאות: [Releases](https://github.com/pinywinner/tzarim/releases)
+
 ## הרצה (Web / PWA)
 
 ```bash
@@ -30,17 +38,13 @@ npx cap open ios       # Xcode, רק מ-Mac
 npm run native:init
 ```
 
-APK (דורש JDK 21 + Android SDK):
+APK מקומי (דורש JDK 21 + Android SDK):
 
 ```bash
 npm run native:apk
 ```
 
-הקובץ יוצא אל `android/app/build/outputs/apk/debug/app-debug.apk`. זה חבילת debug להתקנה ידנית, לא לחנות.
-
-אפשר גם להוריד APK מ־GitHub Actions: Actions → **Build Android APK** → הרצה האחרונה → Artifacts.
-
-`npm run build` נשאר בילוד ה-Web/PWA (Nitro). `npm run native:web` הוא הבילוד הסטטי ל-WebView בלבד.
+הקובץ יוצא אל `android/app/build/outputs/apk/debug/app-debug.apk`.
 
 ## מה בפנים
 
