@@ -30,7 +30,7 @@
 
 ## 📱 הורדה לאנדרואיד
 
-**[הורדת APK - v1.0.0](https://github.com/pinywinner/tzarim/releases/download/v1.0.0/tzarim-1.0.0.apk)**
+**[הורדת APK - v1.1.0](https://github.com/pinywinner/tzarim/releases/download/v1.1.0/tzarim-1.1.0.apk)**
 
 הגרסה הנוכחית היא APK להתקנה ידנית באנדרואיד.
 
