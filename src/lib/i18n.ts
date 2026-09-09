@@ -165,6 +165,8 @@ export const he = {
   guideGo3: "פחות תנועות של העובר",
   guideGo4: "כאב ראש חזק, טשטוש ראייה, כאב בבטן עליונה",
   guideGo5: "חום, צמרמורת, או תחושה ש״משהו לא בסדר״",
+  guideEventsTitle: "אירועים חשובים במהלך הלידה",
+  guideEventsBody: "ירידת מים, דימום, פחות תנועות, או שאת לא מרגישה טוב — מיד לחדר לידה. אפשר לסמן ירידת מים כאן, בלי לחזור למסך הציר.",
   guideBreathTitle: "נשימה בציר",
   guideBreathBody:
     "בציר — נשימה איטית החוצה, כאילו מערפלים מראה. בין צירים — שחררי לסת וכתפיים. לא צריך שיטה. תנשמי.",
@@ -370,6 +372,9 @@ export const en: { [K in keyof typeof he]: string } = {
   guideGo3: "Fewer baby movements",
   guideGo4: "A strong headache, blurred vision, or upper abdominal pain",
   guideGo5: "Fever, chills, or a feeling that something is wrong",
+  guideEventsTitle: "Important events in labor",
+  guideEventsBody:
+    "Waters breaking, bleeding, fewer baby movements, or you don’t feel well — go to the hospital now. You can mark waters breaking here, without going back to the contraction screen.",
   guideBreathTitle: "Breathing through it",
   guideBreathBody:
     "During a contraction — a slow breath out, as if fogging a mirror. Between them — unclench jaw and shoulders. No method required. Just breathe.",

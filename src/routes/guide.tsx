@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { TopBar } from "@/components/top-bar";
+import { WaterMark } from "@/components/water-mark";
 import { useT } from "@/hooks/use-t";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +12,7 @@ function GuidePage() {
     { title: t("guideHowTitle"), body: t("guideHowBody") },
     { title: t("guideRuleTitle"), body: t("guideRuleBody") },
     { title: t("guideLaborTitle"), body: t("guideLaborBody") },
+    { title: t("guideEventsTitle"), body: t("guideEventsBody"), water: true },
     {
       title: t("guideGoTitle"),
       urgent: true,
@@ -37,6 +39,9 @@ function GuidePage() {
               <h2 className="font-display text-xl font-bold text-fg">{section.title}</h2>
               {"body" in section && section.body ? (
                 <p className="mt-2 text-sm leading-relaxed text-muted">{section.body}</p>
+              ) : null}
+              {"water" in section && section.water ? (
+                <WaterMark className="mt-4 w-full" />
               ) : null}
               {"items" in section && section.items ? (
                 <ul className="mt-3 space-y-2">

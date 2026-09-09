@@ -10,6 +10,7 @@ import { IntervalSparkline } from "@/components/interval-sparkline";
 import { StatsRow } from "@/components/stats-row";
 import { TopBar } from "@/components/top-bar";
 import { Button } from "@/components/ui/button";
+import { WaterMark } from "@/components/water-mark";
 import { useT } from "@/hooks/use-t";
 import { completedContractions, formatClock, sessionStats } from "@/lib/contractions";
 import { dateLocaleOf } from "@/lib/i18n";
@@ -69,6 +70,7 @@ function HistoryPage() {
                 {t("endSession")}
               </Button>
             </div>
+            <WaterMark className="w-full" />
 
             {stats.longest != null && stats.shortest != null ? (
               <p className="text-center text-xs text-muted">

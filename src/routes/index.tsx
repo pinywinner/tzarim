@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Droplets, Undo2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Undo2 } from "lucide-react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 import { BrandWave, EmptyWave } from "@/components/brand-wave";
-import { ConfirmSheet } from "@/components/confirm-sheet";
 import { IntensityPicker } from "@/components/intensity-picker";
 import { RollingClock } from "@/components/rolling-clock";
 import { StatusBanner } from "@/components/status-banner";
@@ -40,11 +39,9 @@ function TimerPage() {
   const endContraction = useAppStore((state) => state.endContraction);
   const cancelContraction = useAppStore((state) => state.cancelContraction);
   const undoLast = useAppStore((state) => state.undoLast);
-  const setWaterBroke = useAppStore((state) => state.setWaterBroke);
   const pendingIntensityId = useAppStore((state) => state.pendingIntensityId);
   const setIntensity = useAppStore((state) => state.setIntensity);
   const dismissIntensity = useAppStore((state) => state.dismissIntensity);
-  const [confirmWater, setConfirmWater] = useState(false);
 
   const active = activeContraction(session);
   const done = completedContractions(session);
@@ -80,23 +77,6 @@ function TimerPage() {
     if (settings.vibration) hapticEnd();
     if (settings.sound) playEndSound();
   };
-
-  const waterButton = (
-    <Button
-      variant={session.waterBrokeAt ? "danger" : "secondary"}
-      onClick={() => {
-        if (session.waterBrokeAt) {
-          setWaterBroke(false);
-          toast(t("waterCleared"));
-        } else {
-          setConfirmWater(true);
-        }
-      }}
-    >
-      <Droplets className="size-4" />
-      {session.waterBrokeAt ? t("waterNotBroke") : t("waterBroke")}
-    </Button>
-  );
 
   if (laborFocus) {
     return (
@@ -144,11 +124,10 @@ function TimerPage() {
           <Button variant="huge" size="huge" onClick={onStart}>
             {t("start")}
           </Button>
-          <div className="grid grid-cols-2 gap-2">
-            {waterButton}
+          {session.contractions.length > 0 ? (
             <Button
-              variant="secondary"
-              disabled={session.contractions.length === 0}
+              variant="ghost"
+              className="w-full text-base font-semibold text-fg"
               onClick={() => {
                 undoLast();
                 toast(t("undoToast"));
@@ -157,23 +136,9 @@ function TimerPage() {
               <Undo2 className="size-4" />
               {t("undoLast")}
             </Button>
-          </div>
+          ) : null}
         </div>
       </div>
-
-      {confirmWater ? (
-        <ConfirmSheet
-          title={t("waterTitle")}
-          body={t("waterBody")}
-          confirmLabel={t("waterConfirm")}
-          danger
-          onConfirm={() => {
-            setWaterBroke(true);
-            setConfirmWater(false);
-          }}
-          onCancel={() => setConfirmWater(false)}
-        />
-      ) : null}
     </main>
   );
 }
