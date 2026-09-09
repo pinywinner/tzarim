@@ -5,6 +5,7 @@ import { ConfirmSheet } from "@/components/confirm-sheet";
 import { TopBar } from "@/components/top-bar";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { APP_VERSION } from "@/lib/app-version";
 import { PRESETS, type BirthType } from "@/lib/contractions";
 import { useAppStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -202,6 +203,9 @@ function SettingsPage() {
         </Button>
         <p className="text-center text-xs leading-relaxed text-muted">
           הנתונים נשמרים רק במכשיר הזה. אין חשבון, אין ענן, אין שיתוף אוטומטי.
+        </p>
+        <p className="text-center text-xs text-muted">
+          גרסה <span dir="ltr">{APP_VERSION}</span>
         </p>
       </div>
 

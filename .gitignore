@@ -22,7 +22,7 @@ screenshots/
 .project_id
 public/__grok/
 
-# Capacitor: generate android/ios with npm run native:init. Ignore build output.
+# Capacitor generated shells live in-repo; build output does not.
 android/.gradle/
 android/.idea/
 android/build/
@@ -40,3 +40,5 @@ ios/App/App/public/
 *.aab
 *.ipa
 *.dSYM.zip
+*.jks
+*.keystore

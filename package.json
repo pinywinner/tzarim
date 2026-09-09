@@ -1,6 +1,7 @@
 {
   "name": "app-builder-workspace",
   "private": true,
+  "version": "1.0.0",
   "sideEffects": false,
   "type": "module",
   "overrides": {
@@ -24,7 +25,10 @@
     "native:init": "node scripts/native-web.mjs init",
     "native:android": "node scripts/native-web.mjs sync && npx cap open android",
     "native:ios": "node scripts/native-web.mjs sync && npx cap open ios",
-    "native:apk": "node scripts/native-web.mjs sync && cd android && ./gradlew assembleDebug"
+    "native:apk": "node scripts/native-web.mjs sync && cd android && ./gradlew assembleDebug",
+    "native:apk:release": "node scripts/native-web.mjs sync && cd android && ./gradlew assembleRelease",
+    "version:show": "node scripts/version.mjs show",
+    "version:bump": "node scripts/version.mjs bump"
   },
   "dependencies": {
     "@capacitor-community/keep-awake": "^8.0.1",
