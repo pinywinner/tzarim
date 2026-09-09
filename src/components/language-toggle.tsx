@@ -12,12 +12,6 @@ export function LanguageToggle({ className }: { className?: string }) {
     if (next === locale) return;
     hapticTap();
     const apply = () => flushSync(() => updateSettings({ locale: next }));
-    const reduce =
-      typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!reduce && typeof document.startViewTransition === "function") {
-      document.startViewTransition(apply);
-      return;
-    }
     apply();
   };
 

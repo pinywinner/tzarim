@@ -32,7 +32,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       data-app-shell
       dir="rtl"
       className={cn(
-        "relative mx-auto flex h-dvh max-h-dvh w-full max-w-lg flex-col overflow-hidden text-fg transition-colors duration-300 md:border-x md:border-border",
+        "relative mx-auto flex h-dvh max-h-dvh w-full max-w-lg flex-col overflow-hidden text-fg transition-[background-color] duration-300 md:border-x md:border-border",
         mood === "labor" ? "bg-labor-bg" : mood === "go" ? "bg-go-bg" : "bg-bg",
       )}
     >

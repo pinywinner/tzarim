@@ -9,8 +9,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
+import android.view.animation.PathInterpolator;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -71,6 +70,8 @@ public class MainActivity extends BridgeActivity {
         FrameLayout.LayoutParams waveParams = new FrameLayout.LayoutParams(dp(112), dp(48));
         waveParams.gravity = Gravity.CENTER;
         overlay.addView(wave, waveParams);
+        wave.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        cream.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         addContentView(
             overlay,
@@ -87,8 +88,8 @@ public class MainActivity extends BridgeActivity {
         ObjectAnimator pulseY = ObjectAnimator.ofFloat(wave, View.SCALE_Y, START_SCALE, 13.2f, START_SCALE);
         pulseX.setDuration(PULSE_MS);
         pulseY.setDuration(PULSE_MS);
-        pulseX.setInterpolator(new AccelerateDecelerateInterpolator());
-        pulseY.setInterpolator(new AccelerateDecelerateInterpolator());
+        pulseX.setInterpolator(new PathInterpolator(0.45f, 0f, 0.2f, 1f));
+        pulseY.setInterpolator(new PathInterpolator(0.45f, 0f, 0.2f, 1f));
 
         AnimatorSet pulse = new AnimatorSet();
         pulse.playTogether(pulseX, pulseY);
@@ -180,7 +181,7 @@ public class MainActivity extends BridgeActivity {
         ObjectAnimator sy = ObjectAnimator.ofFloat(wave, View.SCALE_Y, wave.getScaleY(), endScale);
         ObjectAnimator x = ObjectAnimator.ofFloat(wave, View.TRANSLATION_X, 0f, tx);
         ObjectAnimator y = ObjectAnimator.ofFloat(wave, View.TRANSLATION_Y, 0f, ty);
-        DecelerateInterpolator ease = new DecelerateInterpolator(1.8f);
+        PathInterpolator ease = new PathInterpolator(0.22f, 1f, 0.36f, 1f);
         for (ObjectAnimator animator : new ObjectAnimator[] {sx, sy, x, y}) {
             animator.setDuration(LAND_MS);
             animator.setInterpolator(ease);
@@ -210,7 +211,7 @@ public class MainActivity extends BridgeActivity {
         }
         ObjectAnimator fade = ObjectAnimator.ofFloat(cream, View.ALPHA, 1f, 0f);
         fade.setDuration(FADE_MS);
-        fade.setInterpolator(new DecelerateInterpolator());
+        fade.setInterpolator(new PathInterpolator(0.22f, 1f, 0.36f, 1f));
         fade.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {

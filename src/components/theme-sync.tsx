@@ -17,10 +17,12 @@ export function ThemeSync() {
 
   useEffect(() => {
     const onVisible = () => {
+      document.documentElement.classList.toggle("motion-paused", document.hidden);
       if (document.visibilityState === "visible") {
         useAppStore.getState().checkStaleOnResume();
       }
     };
+    onVisible();
     document.addEventListener("visibilitychange", onVisible);
     window.addEventListener("pageshow", onVisible);
     return () => {

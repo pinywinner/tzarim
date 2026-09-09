@@ -300,11 +300,11 @@ html.native body {
 
 @keyframes wave-expand {
   0% {
-    transform: scale(0.86);
+    transform: translateZ(0) scale(0.86);
     opacity: 0.35;
   }
   100% {
-    transform: scale(1.18);
+    transform: translateZ(0) scale(1.18);
     opacity: 0;
   }
 }
@@ -312,11 +312,11 @@ html.native body {
 @keyframes rise-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translate3d(0, 8px, 0);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -324,12 +324,9 @@ html.native body {
   width: min(232px, 62vw);
 }
 
-.ring-breathe {
-  animation: ring-breathe 2.8s var(--ease-smooth-out) infinite;
-}
-
+.ring-breathe,
 .cue-breathe {
-  animation: ring-breathe 2.8s var(--ease-smooth-out) infinite;
+  animation: ring-breathe 2.8s ease-in-out infinite;
 }
 
 .wave-expand {
@@ -349,6 +346,7 @@ html.native body {
 .rise-in-3 {
   animation-delay: 120ms;
 }
+
 @keyframes labor-wash {
   0%,
   100% {
@@ -362,20 +360,20 @@ html.native body {
 @keyframes labor-enter {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translate3d(0, 8px, 0);
   }
   to {
     opacity: 1;
-    transform: none;
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @keyframes timer-in {
   from {
-    transform: scale(0.96);
+    transform: translateZ(0) scale(0.96);
   }
   to {
-    transform: none;
+    transform: translateZ(0) scale(1);
   }
 }
 
@@ -391,11 +389,11 @@ html.native body {
 @keyframes wave-breathe {
   0%,
   100% {
-    transform: scale(0.9, 0.78);
-    opacity: 0.78;
+    transform: translateZ(0) scale(0.94, 0.88);
+    opacity: 0.84;
   }
   50% {
-    transform: scale(1.1, 1.24);
+    transform: translateZ(0) scale(1.06, 1.14);
     opacity: 1;
   }
 }
@@ -403,28 +401,28 @@ html.native body {
 @keyframes cta-breathe {
   0%,
   100% {
-    opacity: 0.35;
-    transform: scale(1);
-    box-shadow: var(--app-shadow-cta-stop);
+    opacity: 0.28;
+    transform: translateZ(0) scale(1);
   }
   50% {
-    opacity: 0.85;
-    transform: scale(1.03);
-    box-shadow: 0 10px 24px -10px rgb(143 64 70 / 0.38);
+    opacity: 0.72;
+    transform: translateZ(0) scale(1.02);
   }
 }
 
 @keyframes digit-roll {
   from {
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateY(-50%);
+    transform: translate3d(0, -50%, 0);
   }
 }
 
 .labor-wash {
   background: color-mix(in srgb, var(--app-active) 20%, transparent);
+  contain: strict;
+  transform: translateZ(0);
   animation: labor-wash 4.8s ease-in-out infinite;
 }
 
@@ -449,6 +447,7 @@ html.native body {
 
 .wave-breathe {
   transform-origin: 50% 88%;
+  backface-visibility: hidden;
   animation: wave-breathe 4.8s ease-in-out infinite;
 }
 
@@ -457,6 +456,8 @@ html.native body {
 }
 
 .cta-breathe {
+  transform: translateZ(0);
+  box-shadow: var(--app-shadow-cta-stop);
   animation: cta-breathe 2.5s ease-in-out infinite;
 }
 
@@ -465,13 +466,8 @@ html.native body {
 }
 
 html.brand-intro-playing [data-app-frame],
-html.brand-intro-playing [data-app-shell],
-html.brand-intro-playing [data-app-shell] * {
-  overflow: visible !important;
-  overflow-x: visible !important;
-  overflow-y: visible !important;
-  clip-path: none !important;
-  contain: none !important;
+html.brand-intro-playing [data-app-shell] {
+  overflow: visible;
 }
 
 html.native-splash-playing [data-home-wave],
@@ -489,31 +485,29 @@ html.brand-intro-playing [data-intro-chrome] {
   position: relative;
   z-index: 30;
   transform-origin: center center;
+  backface-visibility: hidden;
   will-change: transform;
   animation: brand-intro-hero 1400ms linear both;
 }
 
 @keyframes brand-intro-hero {
   0% {
-    transform: translate(var(--intro-dx, 0px), var(--intro-dy, 0px)) scale(var(--intro-from, 12));
+    transform: translate3d(var(--intro-dx, 0px), var(--intro-dy, 0px), 0) scale(var(--intro-from, 12));
   }
   12% {
-    transform: translate(var(--intro-dx, 0px), var(--intro-dy, 0px))
+    transform: translate3d(var(--intro-dx, 0px), var(--intro-dy, 0px), 0)
       scale(calc(var(--intro-from, 12) * 1.04), calc(var(--intro-from, 12) * 1.16));
   }
-  22% {
-    transform: translate(var(--intro-dx, 0px), var(--intro-dy, 0px)) scale(var(--intro-from, 12));
-  }
+  22%,
   34% {
-    transform: translate(var(--intro-dx, 0px), var(--intro-dy, 0px)) scale(var(--intro-from, 12));
-    animation-timing-function: cubic-bezier(0.45, 0.02, 0.2, 1);
+    transform: translate3d(var(--intro-dx, 0px), var(--intro-dy, 0px), 0) scale(var(--intro-from, 12));
   }
   78% {
-    transform: translate(0, 0) scale(1.04);
+    transform: translate3d(0, 0, 0) scale(1.04);
   }
   88%,
   100% {
-    transform: none;
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
@@ -525,6 +519,14 @@ html.brand-intro-playing [data-intro-chrome] {
   100% {
     opacity: 1;
   }
+}
+
+html.motion-paused .ring-breathe,
+html.motion-paused .cue-breathe,
+html.motion-paused .wave-breathe,
+html.motion-paused .labor-wash,
+html.motion-paused .cta-breathe {
+  animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -552,5 +554,6 @@ html.brand-intro-playing [data-intro-chrome] {
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 160ms;
+  animation-duration: 120ms;
+  animation-timing-function: ease-out;
 }
