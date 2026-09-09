@@ -15,21 +15,19 @@ npm run dev
 
 האפליקציה לא נבנית מחדש ל-Native. Capacitor עוטף את אותו React, עם רטט, מסך דולק ושיתוף של המערכת.
 
-פעם ראשונה:
+תיקיית `android/` כבר בריפו (פרויקט Gradle מוכן, כולל אייקון וספלאש של מעקב צירים). אחרי clone:
 
 ```bash
 npm install
-npm run native:init
-```
-
-זה בונה גרסת SPA סטטית אל `dist/client`, ויוצר את תיקיות `android/` ו-`ios/` אם הן חסרות.
-
-כל עדכון אחרי זה:
-
-```bash
 npm run native:sync
 npx cap open android   # Android Studio
 npx cap open ios       # Xcode, רק מ-Mac
+```
+
+`npm run native:sync` בונה SPA סטטי אל `dist/client` ומרענן את ה-WebView. אם `android/` או `ios/` חסרות אצלך מסיבה כלשהי:
+
+```bash
+npm run native:init
 ```
 
 APK (דורש JDK 21 + Android SDK):
