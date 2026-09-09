@@ -126,7 +126,7 @@ function TimerPage() {
 
   return (
     <main className="flex min-h-0 flex-1 flex-col">
-      {laborFocus ? null : <TopBar title="צירים" subtitle="מעקב בבית, עד שיוצאים" />}
+      {laborFocus ? null : <TopBar title="מעקב צירים" subtitle="מעקב בבית, עד שיוצאים" />}
       <div
         className={cn(
           "flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5",
