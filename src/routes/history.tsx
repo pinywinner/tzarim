@@ -4,6 +4,7 @@ import { he } from "date-fns/locale";
 import { Share2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { EmptyWave } from "@/components/brand-wave";
 import { ConfirmSheet } from "@/components/confirm-sheet";
 import { ContractionList } from "@/components/contraction-list";
 import { IntervalSparkline } from "@/components/interval-sparkline";
@@ -27,62 +28,74 @@ function HistoryPage() {
   const restoreContraction = useAppStore((state) => state.restoreContraction);
   const [confirmEnd, setConfirmEnd] = useState(false);
   const stats = sessionStats(session);
+  const done = completedContractions(session);
+  const empty = done.length === 0 && !session.waterBrokeAt;
   const past = [...sessions]
     .filter((item) => item.id !== currentSessionId && (item.contractions.length > 0 || item.waterBrokeAt))
     .sort((a, b) => (b.endedAt ?? b.startedAt) - (a.endedAt ?? a.startedAt));
 
   return (
     <main className="flex min-h-0 flex-1 flex-col">
-      <TopBar title="היסטוריה" subtitle="המעקב הפתוח, והקודמים" />
+      <TopBar title="היסטוריה" subtitle={empty ? "כל ציר יישמר כאן" : "המעקב הפתוח, והקודמים"} />
       <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-5 pb-6">
-        <StatsRow session={session} stats={stats} />
-        <IntervalSparkline session={session} />
-
-        <div className="grid grid-cols-2 gap-2">
-          <Button
-            variant="secondary"
-            onClick={async () => {
-              const result = await shareSession(session, settings);
-              if (result === "copied") toast("הסיכום הועתק");
-              if (result === "failed") toast("אי אפשר לשתף עכשיו");
-            }}
-            disabled={completedContractions(session).length === 0}
-          >
-            <Share2 className="size-4" />
-            שתפי למיילדת
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => setConfirmEnd(true)}
-            disabled={session.contractions.length === 0 && !session.waterBrokeAt}
-          >
-            סיימי מעקב
-          </Button>
-        </div>
-
-        {stats.longest != null && stats.shortest != null ? (
-          <p className="text-center text-xs text-muted">
-            הכי ארוך {formatClock(stats.longest)} · הכי קצר {formatClock(stats.shortest)}
-          </p>
-        ) : null}
-
-        <section>
-          <h2 className="mb-2 text-sm font-bold text-fg">כל הצירים</h2>
-          <ContractionList
-            session={session}
-            onDelete={(id) => {
-              const item = session.contractions.find((contraction) => contraction.id === id);
-              deleteContraction(id);
-              if (!item) return;
-              toast("הציר נמחק", {
-                action: {
-                  label: "בטלי",
-                  onClick: () => restoreContraction(item),
-                },
-              });
-            }}
+        {empty ? (
+          <EmptyWave
+            className="flex-1"
+            title="עוד אין צירים"
+            body="לחצי התחיל במסך עכשיו. הרשימה תיבנה לבד."
           />
-        </section>
+        ) : (
+          <>
+            <StatsRow session={session} stats={stats} />
+            <IntervalSparkline session={session} />
+
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="secondary"
+                onClick={async () => {
+                  const result = await shareSession(session, settings);
+                  if (result === "copied") toast("הסיכום הועתק");
+                  if (result === "failed") toast("אי אפשר לשתף עכשיו");
+                }}
+                disabled={done.length === 0}
+              >
+                <Share2 className="size-4" />
+                שתפי למיילדת
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setConfirmEnd(true)}
+                disabled={session.contractions.length === 0 && !session.waterBrokeAt}
+              >
+                סיימי מעקב
+              </Button>
+            </div>
+
+            {stats.longest != null && stats.shortest != null ? (
+              <p className="text-center text-xs text-muted">
+                הכי ארוך {formatClock(stats.longest)} · הכי קצר {formatClock(stats.shortest)}
+              </p>
+            ) : null}
+
+            <section>
+              <h2 className="mb-2 text-sm font-bold text-fg">כל הצירים</h2>
+              <ContractionList
+                session={session}
+                onDelete={(id) => {
+                  const item = session.contractions.find((contraction) => contraction.id === id);
+                  deleteContraction(id);
+                  if (!item) return;
+                  toast("הציר נמחק", {
+                    action: {
+                      label: "בטלי",
+                      onClick: () => restoreContraction(item),
+                    },
+                  });
+                }}
+              />
+            </section>
+          </>
+        )}
 
         {past.length > 0 ? (
           <section>
@@ -95,7 +108,7 @@ function HistoryPage() {
                     <button
                       type="button"
                       onClick={() => openSession(item.id)}
-                      className="flex w-full items-center justify-between gap-3 px-4 py-3 text-right"
+                      className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-right transition-[background-color] duration-150 active:bg-labor-bg"
                     >
                       <div>
                         <p className="text-sm font-medium text-fg">

@@ -1,3 +1,4 @@
+import { EmptyWave } from "@/components/brand-wave";
 import { format } from "date-fns";
 import { he } from "date-fns/locale";
 import {
@@ -59,10 +60,7 @@ export function ContractionList({
 
   if (visible.length === 0) {
     return (
-      <div className="rounded-xl bg-elevated px-4 py-8 text-center shadow-border">
-        <p className="text-sm font-medium text-fg">עוד אין צירים</p>
-        <p className="mt-1 text-sm text-muted">כל ציר יישמר ברשימה.</p>
-      </div>
+      <EmptyWave title="עוד אין צירים" body="כל ציר יישמר כאן, לפי סדר." className="rounded-xl bg-elevated py-12 shadow-border" />
     );
   }
 
@@ -77,9 +75,9 @@ export function ContractionList({
         return (
           <li
             key={contraction.id}
-            className="flex items-center gap-3 border-b border-border px-4 py-3 last:border-b-0"
+            className="flex items-center gap-3 border-b border-border px-4 py-4 last:border-b-0"
           >
-            <div className="min-w-12 text-sm font-medium tabular-nums text-muted">
+            <div className="min-w-14 font-display text-base font-bold tabular-nums text-fg">
               {format(contraction.startedAt, "HH:mm", { locale: he })}
             </div>
             <div className="min-w-0 flex-1 space-y-1.5">

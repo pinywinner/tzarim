@@ -24,3 +24,21 @@ export function BrandWave({
     </svg>
   );
 }
+
+export function EmptyWave({
+  title,
+  body,
+  className,
+}: {
+  title: string;
+  body?: string;
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex flex-col items-center justify-center px-6 py-10 text-center", className)}>
+      <BrandWave className="w-28" />
+      <p className="mt-6 font-display text-2xl font-bold text-fg">{title}</p>
+      {body ? <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted">{body}</p> : null}
+    </div>
+  );
+}

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Droplets, Undo2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { BrandWave } from "@/components/brand-wave";
+import { BrandWave, EmptyWave } from "@/components/brand-wave";
 import { ConfirmSheet } from "@/components/confirm-sheet";
 import { IntensityPicker } from "@/components/intensity-picker";
 import { RollingClock } from "@/components/rolling-clock";
@@ -222,6 +222,7 @@ function RestStage({
 }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-8 py-4 text-center">
+      <BrandWave className="w-24" />
       <div>
         <p className="text-sm font-medium text-muted">הציר האחרון</p>
         <p className="mt-2 font-display text-4xl font-black tabular-nums leading-none text-fg">
@@ -243,9 +244,10 @@ function RestStage({
 
 function IdleStage() {
   return (
-    <div className="flex min-h-0 flex-1 flex-col items-center justify-center py-8 text-center">
-      <p className="font-display text-2xl font-bold text-fg">כשהציר מתחיל</p>
-      <p className="mt-2 text-sm text-muted">לחצי ״התחיל״. זהו.</p>
-    </div>
+    <EmptyWave
+      className="flex-1 py-8"
+      title="כשהציר מתחיל"
+      body={"לחצי ״התחיל״. זהו."}
+    />
   );
 }

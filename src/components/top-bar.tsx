@@ -1,6 +1,7 @@
 import { Moon, Sun } from "lucide-react";
 import { BrandWave } from "@/components/brand-wave";
 import { Button } from "@/components/ui/button";
+import { hapticTap } from "@/lib/haptics";
 import { useAppStore } from "@/lib/store";
 
 export function TopBar({
@@ -26,7 +27,10 @@ export function TopBar({
         variant="secondary"
         size="icon"
         aria-label={theme === "dark" ? "מצב יום" : "מצב לילה"}
-        onClick={() => updateSettings({ theme: theme === "dark" ? "light" : "dark" })}
+        onClick={() => {
+          hapticTap();
+          updateSettings({ theme: theme === "dark" ? "light" : "dark" });
+        }}
       >
         {theme === "dark" ? <Sun className="size-5" /> : <Moon className="size-5" />}
       </Button>

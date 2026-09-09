@@ -1,4 +1,5 @@
 import type { Intensity } from "@/lib/contractions";
+import { hapticTap } from "@/lib/haptics";
 import { cn } from "@/lib/utils";
 
 const LEVELS: Intensity[] = [1, 2, 3, 4, 5];
@@ -34,7 +35,10 @@ export function IntensityPicker({
             <button
               key={level}
               type="button"
-              onClick={() => onPick(level)}
+              onClick={() => {
+                hapticTap();
+                onPick(level);
+              }}
               className="flex h-12 items-center justify-center rounded-lg bg-elevated font-display text-lg font-bold text-fg shadow-border transition-[scale,background-color] duration-150 ease-out active:scale-[0.96]"
               aria-label={`עוצמה ${level}`}
             >
@@ -54,7 +58,10 @@ export function IntensityPicker({
           <button
             key={level}
             type="button"
-            onClick={() => onPick(level)}
+            onClick={() => {
+              hapticTap();
+              onPick(level);
+            }}
             className={cn(
               "flex flex-1 items-center justify-center rounded-lg font-display text-xl font-bold shadow-border transition-[scale,background-color] duration-150 ease-out active:scale-[0.96]",
               LEVEL_CLASS[level],

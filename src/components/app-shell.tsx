@@ -5,6 +5,7 @@ import { BrandWave } from "@/components/brand-wave";
 import { useNow } from "@/hooks/use-now";
 import { activeContraction, evaluatePhase } from "@/lib/contractions";
 import { useAppStore, useCurrentSession } from "@/lib/store";
+import { hapticTap } from "@/lib/haptics";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -51,6 +52,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                     <Link
                       to={item.to}
                       aria-current={current ? "page" : undefined}
+                      onClick={() => hapticTap()}
                       className={cn(
                         "flex min-h-14 flex-col items-center justify-center gap-1 text-xs leading-none tracking-wide transition-[color] duration-150",
                         current ? "font-bold text-fg" : "font-medium text-muted",
