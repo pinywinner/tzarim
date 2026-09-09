@@ -1,5 +1,6 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { Toaster } from "sonner";
+import { NativeBootstrap } from "@/components/native-bootstrap";
 import { AppShell } from "@/components/app-shell";
 import { Onboarding } from "@/components/onboarding";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
@@ -46,6 +47,7 @@ function RootDocument() {
         <PreviewHostBridge />
         <AuthProvider>
           <ThemeSync />
+          <NativeBootstrap />
           <AppFrame />
         </AuthProvider>
         <Scripts />
