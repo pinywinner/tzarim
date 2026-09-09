@@ -1,5 +1,7 @@
+import { useCallback, useState } from "react";
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { Toaster } from "sonner";
+import { BrandIntro } from "@/components/brand-intro";
 import { LanguageSync } from "@/components/language-sync";
 import { NativeBootstrap } from "@/components/native-bootstrap";
 import { AppShell } from "@/components/app-shell";
@@ -55,48 +57,40 @@ function RootDocument() {
   );
 }
 
-function Splash() {
-  return (
-    <div className="flex min-h-dvh items-center justify-center bg-bg">
-      <p className="sr-only">{APP_NAME}</p>
-      <svg viewBox="0 0 168 72" className="w-44 text-active" fill="none" aria-hidden="true">
-        <path
-          d="M10 52c26 0 34 0 48-24C68 12 74 8 84 8s16 4 26 20c14 24 22 24 48 24"
-          stroke="currentColor"
-          strokeWidth="14"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </div>
-  );
-}
-
 function AppFrame() {
   const hydrated = useAppStore((state) => state.hydrated);
   const onboardingDone = useAppStore((state) => state.onboardingDone);
   const stalePromptId = useAppStore((state) => state.stalePromptId);
+  const [intro, setIntro] = useState(true);
+  const finishIntro = useCallback(() => setIntro(false), []);
 
-  if (!hydrated) return <Splash />;
+  if (!hydrated && !intro) return <div className="h-dvh bg-bg" />;
 
-  const blocking = !onboardingDone || Boolean(stalePromptId);
+  const blocking = !onboardingDone || Boolean(stalePromptId) || intro;
 
   return (
     <>
-      <div className="h-dvh overflow-hidden" dir="rtl" {...(blocking ? { inert: true } : {})}>
-        <AppShell>
-          <Outlet />
-        </AppShell>
-      </div>
-      {!onboardingDone ? <Onboarding /> : null}
-      <StaleDialog />
-      <Toaster
-        position="top-center"
-        dir="rtl"
-        toastOptions={{
-          className: "font-sans !bg-elevated !text-fg !border-border",
-        }}
-      />
+      {hydrated ? (
+        <>
+          <div className="h-dvh overflow-hidden" dir="rtl" {...(blocking ? { inert: true } : {})}>
+            <AppShell>
+              <Outlet />
+            </AppShell>
+          </div>
+          {!onboardingDone ? <Onboarding /> : null}
+          <StaleDialog />
+          <Toaster
+            position="top-center"
+            dir="rtl"
+            toastOptions={{
+              className: "font-sans !bg-elevated !text-fg !border-border",
+            }}
+          />
+        </>
+      ) : (
+        <div className="h-dvh bg-bg" />
+      )}
+      {intro ? <BrandIntro ready={hydrated} onDone={finishIntro} /> : null}
     </>
   );
 }

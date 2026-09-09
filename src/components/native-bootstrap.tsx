@@ -9,7 +9,10 @@ export function NativeBootstrap() {
   useEffect(() => {
     if (!isNativeApp()) return;
     document.documentElement.classList.add("native");
-    void import("@capacitor/splash-screen").then(({ SplashScreen }) => SplashScreen.hide());
+    const fallback = window.setTimeout(() => {
+      void import("@capacitor/splash-screen").then(({ SplashScreen }) => SplashScreen.hide());
+    }, 2500);
+    return () => window.clearTimeout(fallback);
   }, []);
 
   useEffect(() => {

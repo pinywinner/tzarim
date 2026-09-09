@@ -15,7 +15,7 @@ const config: CapacitorConfig = {
       launchAutoHide: false,
       backgroundColor: "#F5F1EA",
       showSpinner: false,
-      androidScaleType: "CENTER_INSIDE",
+      androidScaleType: "CENTER_CROP",
     },
     StatusBar: {
       style: "DARK",

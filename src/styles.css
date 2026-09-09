@@ -464,6 +464,67 @@ html.native body {
   animation: digit-roll 150ms var(--ease-smooth-out) forwards;
 }
 
+.brand-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f5f1ea;
+  color: #c95d58;
+  animation: brand-intro-veil 1380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  pointer-events: none;
+}
+
+.brand-intro-wave {
+  width: min(118vw, 520px);
+  max-width: none;
+  transform: scale(3.55, 3.95);
+  transform-origin: 50% 55%;
+  will-change: transform;
+}
+
+.brand-intro-wave-run {
+  animation: brand-intro-wave 1380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes brand-intro-wave {
+  0% {
+    transform: translate(0, 0) scale(3.55, 3.95);
+  }
+  34% {
+    transform: translate(0, 0) scale(1.48, 1.22);
+  }
+  66% {
+    transform: translate(
+        calc(var(--intro-dx, 0px) * 0.72),
+        calc(var(--intro-dy, 0px) * 0.72)
+      )
+      scale(calc(var(--intro-end, 0.38) * 1.12), calc(var(--intro-end, 0.38) * 1.06));
+  }
+  84%,
+  100% {
+    transform: translate(var(--intro-dx, 0px), var(--intro-dy, 0px)) scale(var(--intro-end, 0.38));
+  }
+}
+
+html.brand-intro-active [data-home-wave],
+html.brand-intro-active [data-onboarding-wave] {
+  visibility: hidden;
+}
+
+@keyframes brand-intro-veil {
+  0%,
+  84% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ring-breathe,
   .cue-breathe,
@@ -480,7 +541,9 @@ html.native body {
   .rise-in-1,
   .rise-in-2,
   .rise-in-3,
-  .rise-in-4 {
+  .rise-in-4,
+  .brand-intro,
+  .brand-intro-wave {
     animation: none;
   }
 }

@@ -26,7 +26,7 @@ export function Onboarding() {
     >
       <div className="w-full max-w-md">
         <LanguageToggle className="mb-6" />
-        <BrandWave className="mb-4 w-20 text-active" />
+        <BrandWave mark="onboarding" className="mb-4 w-20 text-active" />
         <p className="font-display text-3xl font-bold tracking-tight text-fg">{t("appName")}</p>
         <p className="mt-1 text-sm text-muted">{t("appTagline")}</p>
 

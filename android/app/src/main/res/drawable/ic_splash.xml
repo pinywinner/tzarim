@@ -4,15 +4,7 @@
     android:height="240dp"
     android:viewportWidth="240"
     android:viewportHeight="240">
-    <group
-        android:translateX="36"
-        android:translateY="84">
-        <path
-            android:pathData="M10,52C36,52 44,52 58,28C68,12 74,8 84,8C94,8 100,12 110,28C124,52 132,52 158,52"
-            android:strokeWidth="14"
-            android:strokeColor="#C95D58"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round"
-            android:fillColor="#00000000" />
-    </group>
+    <path
+        android:pathData="M0,0h240v240h-240z"
+        android:fillColor="#F5F1EA" />
 </vector>

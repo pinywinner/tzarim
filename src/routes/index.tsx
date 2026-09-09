@@ -159,7 +159,7 @@ function ContractionStage({
         <div className="flex min-h-0 flex-1 flex-col items-center justify-center pb-8">
           <div className="flex flex-col items-center">
             <p className="labor-enter-label text-lg font-semibold tracking-wide text-active">{t("laborActive")}</p>
-            <BrandWave breathing className="mt-5 w-48" />
+            <BrandWave mark="home" breathing className="mt-5 w-48" />
             <RollingClock ms={elapsed} className="labor-enter-timer labor-timer mt-4 font-display text-fg" />
             <p className="cue-breathe mt-5 font-display text-2xl font-bold text-fg">{t("breathe")}</p>
           </div>
@@ -192,7 +192,7 @@ function RestStage({
   const { t, locale } = useT();
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-8 py-4 text-center">
-      <BrandWave className="w-24" />
+      <BrandWave mark="home" className="w-24" />
       <div>
         <p className="text-sm font-medium text-muted">{t("theInterval")}</p>
         <p dir="ltr" className="mt-2 font-display text-labor font-black tabular-nums leading-none tracking-tight text-fg">
