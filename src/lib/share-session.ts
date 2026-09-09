@@ -10,6 +10,7 @@ import {
   type Session,
   type Settings,
 } from "@/lib/contractions";
+import { isNativeApp } from "@/lib/native";
 
 const PHASE_LABEL = {
   idle: "עוד לא התחיל",
@@ -55,9 +56,21 @@ export function sessionSummary(session: Session, settings: Settings): string {
 
 export async function shareSession(session: Session, settings: Settings): Promise<"shared" | "copied" | "failed"> {
   const text = sessionSummary(session, settings);
+  const title = "סיכום צירים למיילדת";
+
+  if (isNativeApp()) {
+    try {
+      const { Share } = await import("@capacitor/share");
+      await Share.share({ title, text, dialogTitle: title });
+      return "shared";
+    } catch (error) {
+      if (error instanceof Error && /cancel|abort/i.test(error.message)) return "failed";
+    }
+  }
+
   try {
     if (typeof navigator !== "undefined" && navigator.share) {
-      await navigator.share({ title: "סיכום צירים למיילדת", text });
+      await navigator.share({ title, text });
       return "shared";
     }
   } catch (error) {
