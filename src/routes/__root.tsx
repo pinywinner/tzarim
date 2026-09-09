@@ -55,7 +55,7 @@ function RootDocument() {
 function Splash() {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-bg">
-      <p className="font-display text-3xl font-semibold tracking-tight text-fg">מעקב צירים</p>
+      <p className="font-display text-3xl font-bold tracking-tight text-fg">מעקב צירים</p>
       <p className="mt-2 text-sm text-muted">מעקב בבית, עד שיוצאים</p>
     </div>
   );

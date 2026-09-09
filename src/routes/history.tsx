@@ -67,7 +67,7 @@ function HistoryPage() {
         ) : null}
 
         <section>
-          <h2 className="mb-2 text-sm font-semibold text-fg">כל הצירים</h2>
+          <h2 className="mb-2 text-sm font-bold text-fg">כל הצירים</h2>
           <ContractionList
             session={session}
             onDelete={(id) => {
@@ -86,7 +86,7 @@ function HistoryPage() {
 
         {past.length > 0 ? (
           <section>
-            <h2 className="mb-2 text-sm font-semibold text-fg">מעקבים קודמים</h2>
+            <h2 className="mb-2 text-sm font-bold text-fg">מעקבים קודמים</h2>
             <ul className="overflow-hidden rounded-xl bg-elevated shadow-border">
               {past.map((item) => {
                 const itemStats = sessionStats(item);

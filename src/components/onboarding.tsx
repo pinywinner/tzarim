@@ -25,7 +25,7 @@ export function Onboarding() {
       aria-labelledby="onboarding-title"
     >
       <div className="w-full max-w-md">
-        <p className="font-display text-3xl font-semibold tracking-tight text-fg">מעקב צירים</p>
+        <p className="font-display text-3xl font-bold tracking-tight text-fg">מעקב צירים</p>
         <p className="mt-1 text-sm text-muted">מעקב בבית, עד שיוצאים</p>
 
         {step === 0 ? <WhoStep picked={picked} onPick={setPicked} /> : null}
@@ -70,7 +70,7 @@ function WhoStep({
 }) {
   return (
     <>
-      <p id="onboarding-title" className="mt-8 font-display text-2xl font-semibold text-fg">
+      <p id="onboarding-title" className="mt-8 font-display text-2xl font-bold text-fg">
         מי את?
       </p>
       <p className="mt-3 text-sm leading-relaxed text-muted">
@@ -89,7 +89,7 @@ function WhoStep({
                 selected ? "bg-accent/10" : "bg-elevated",
               )}
             >
-              <span className="block text-base font-semibold text-fg">{option.title}</span>
+              <span className="block text-base font-bold text-fg">{option.title}</span>
               <span className="mt-1 block text-xs text-muted">{option.hint}</span>
             </button>
           );
@@ -105,7 +105,7 @@ function MeasureStep() {
       <div className="mt-8 flex size-12 items-center justify-center rounded-lg bg-accent/15 text-accent">
         <Clock3 className="size-6" strokeWidth={1.8} />
       </div>
-      <p id="onboarding-title" className="mt-5 font-display text-2xl font-semibold text-fg">
+      <p id="onboarding-title" className="mt-5 font-display text-2xl font-bold text-fg">
         את מודדת. אנחנו מחשבים.
       </p>
       <p className="mt-3 text-sm leading-relaxed text-muted">
@@ -121,7 +121,7 @@ function DisclaimerStep() {
       <div className="mt-8 flex size-12 items-center justify-center rounded-lg bg-accent/15 text-accent">
         <Shield className="size-6" strokeWidth={1.8} />
       </div>
-      <p id="onboarding-title" className="mt-5 font-display text-2xl font-semibold text-fg">
+      <p id="onboarding-title" className="mt-5 font-display text-2xl font-bold text-fg">
         מעקב, לא ייעוץ רפואי
       </p>
       <p className="mt-3 text-sm leading-relaxed text-muted">

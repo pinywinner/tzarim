@@ -53,7 +53,7 @@ export function StatusBanner({
   if (waterBroke) {
     return (
       <div className="rise-in rounded-xl bg-danger px-4 py-3 text-danger-fg shadow-border">
-        <p className="text-base font-semibold">המים ירדו</p>
+        <p className="text-base font-bold">המים ירדו</p>
         <p className="mt-0.5 text-sm opacity-90">
           פני לחדר לידה, גם אם הצירים עוד רחוקים
           {waterBrokeAt ? ` · ${format(waterBrokeAt, "HH:mm", { locale: he })}` : ""}.
@@ -65,7 +65,7 @@ export function StatusBanner({
   if (contractionRunning) {
     return (
       <div className="rise-in rounded-xl bg-accent/15 px-4 py-3 text-accent shadow-border">
-        <p className="text-base font-semibold">הציר עכשיו</p>
+        <p className="text-base font-bold">הציר עכשיו</p>
         <p className="mt-0.5 text-sm opacity-90">לחצי ״סיימתי״ כשהציר יורד לגמרי.</p>
       </div>
     );
@@ -75,7 +75,7 @@ export function StatusBanner({
   return (
     <div className={cn("rise-in rounded-xl px-4 py-3 shadow-border", copy.tone)}>
       <div className="flex items-baseline justify-between gap-3">
-        <p className="text-base font-semibold">{copy.title}</p>
+        <p className="text-base font-bold">{copy.title}</p>
         {showMeter && meterLabel ? (
           <p className="text-xs font-medium tabular-nums opacity-80">{meterLabel}</p>
         ) : null}

@@ -188,12 +188,12 @@ function ContractionStage({
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-5 pt-[max(1rem,env(safe-area-inset-top))]">
         <p className="text-sm font-medium tracking-wide text-accent">ציר פעיל</p>
         <p
-          className="mt-5 font-display text-labor font-semibold leading-none tracking-tight text-fg tabular-nums"
+          className="mt-5 font-display text-labor font-black leading-none tracking-tight text-fg tabular-nums"
           aria-live="polite"
         >
           {formatClock(elapsed)}
         </p>
-        <p className="cue-breathe mt-8 font-display text-2xl text-muted">נשמי.</p>
+        <p className="cue-breathe mt-8 font-display text-2xl font-bold text-muted">נשמי.</p>
       </div>
       <div className="shrink-0 px-5 pb-3 pt-3">
         <Button variant="hugeStop" size="huge" onClick={onEnd}>
@@ -220,13 +220,13 @@ function RestStage({
     <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-8 py-4 text-center">
       <div>
         <p className="text-sm font-medium text-muted">הציר האחרון</p>
-        <p className="mt-2 font-display text-4xl font-semibold tabular-nums leading-none text-fg">
+        <p className="mt-2 font-display text-4xl font-black tabular-nums leading-none text-fg">
           {lastDuration != null ? formatDurationSpoken(lastDuration) : "—"}
         </p>
       </div>
       <div>
         <p className="text-sm font-medium text-muted">המרווח</p>
-        <p className="mt-2 font-display text-labor font-semibold tabular-nums leading-none tracking-tight text-fg">
+        <p className="mt-2 font-display text-labor font-black tabular-nums leading-none tracking-tight text-fg">
           {intervalMs != null ? formatClock(intervalMs) : "—"}
         </p>
       </div>
@@ -240,7 +240,7 @@ function RestStage({
 function IdleStage() {
   return (
     <div className="flex min-h-0 flex-1 flex-col items-center justify-center py-8 text-center">
-      <p className="font-display text-2xl font-semibold text-fg">כשהציר מתחיל</p>
+      <p className="font-display text-2xl font-bold text-fg">כשהציר מתחיל</p>
       <p className="mt-2 text-sm text-muted">לחצי ״התחיל״. זהו.</p>
     </div>
   );

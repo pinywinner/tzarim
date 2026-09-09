@@ -46,7 +46,7 @@ function Stepper({
         >
           −
         </button>
-        <p className="min-w-16 text-center text-sm font-semibold tabular-nums text-fg">
+        <p className="min-w-16 text-center text-sm font-bold tabular-nums text-fg">
           {value} {unit}
         </p>
         <button
@@ -109,7 +109,7 @@ function SettingsPage() {
                 )}
               >
                 <span>
-                  <span className="block text-sm font-semibold text-fg">{option.title}</span>
+                  <span className="block text-sm font-bold text-fg">{option.title}</span>
                   <span className="block text-xs text-muted">{option.hint}</span>
                 </span>
                 <span className={cn("size-3 rounded-full", selected ? "bg-accent" : "bg-track")} />

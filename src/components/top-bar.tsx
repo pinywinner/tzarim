@@ -15,7 +15,7 @@ export function TopBar({
   return (
     <header className="flex items-center justify-between gap-3 px-5 pb-3 pt-[max(1rem,env(safe-area-inset-top))]">
       <div className="min-w-0">
-        <p className="font-display text-3xl font-semibold leading-none tracking-tight text-fg">{title}</p>
+        <p className="font-display text-3xl font-bold leading-none tracking-tight text-fg">{title}</p>
         {subtitle ? <p className="mt-1.5 text-sm text-muted">{subtitle}</p> : null}
       </div>
       <Button

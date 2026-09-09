@@ -20,7 +20,7 @@ function Stat({
       )}
     >
       <p className="text-xs font-medium text-muted">{label}</p>
-      <p className="font-display text-xl font-semibold tabular-nums leading-none text-fg">{value}</p>
+      <p className="font-display text-xl font-bold tabular-nums leading-none text-fg">{value}</p>
       {hint ? <p className="text-xs text-muted">{hint}</p> : null}
     </div>
   );

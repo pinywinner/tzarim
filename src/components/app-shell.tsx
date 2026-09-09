@@ -38,7 +38,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                       aria-current={active ? "page" : undefined}
                       className={cn(
                         "flex min-h-14 flex-col items-center justify-center gap-1 text-xs leading-none tracking-wide transition-[color] duration-150",
-                        active ? "font-semibold text-fg" : "font-medium text-muted",
+                        active ? "font-bold text-fg" : "font-medium text-muted",
                       )}
                     >
                       <span

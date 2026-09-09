@@ -35,7 +35,7 @@ export function IntensityPicker({
               key={level}
               type="button"
               onClick={() => onPick(level)}
-              className="flex h-12 items-center justify-center rounded-lg bg-elevated font-display text-lg font-semibold text-fg shadow-border transition-[scale,background-color] duration-150 ease-out active:scale-[0.96]"
+              className="flex h-12 items-center justify-center rounded-lg bg-elevated font-display text-lg font-bold text-fg shadow-border transition-[scale,background-color] duration-150 ease-out active:scale-[0.96]"
               aria-label={`עוצמה ${level}`}
             >
               {level}
@@ -56,7 +56,7 @@ export function IntensityPicker({
             type="button"
             onClick={() => onPick(level)}
             className={cn(
-              "flex flex-1 items-center justify-center rounded-lg font-display text-xl font-semibold shadow-border transition-[scale,background-color] duration-150 ease-out active:scale-[0.96]",
+              "flex flex-1 items-center justify-center rounded-lg font-display text-xl font-bold shadow-border transition-[scale,background-color] duration-150 ease-out active:scale-[0.96]",
               LEVEL_CLASS[level],
             )}
             aria-label={`עוצמה ${level}`}

@@ -53,7 +53,7 @@ function GuidePage() {
                 urgent && "border-s-4 border-s-danger",
               )}
             >
-              <h2 className="font-display text-xl font-semibold text-fg">{section.title}</h2>
+              <h2 className="font-display text-xl font-bold text-fg">{section.title}</h2>
               {"body" in section && section.body ? (
                 <p className="mt-2 text-sm leading-relaxed text-muted">{section.body}</p>
               ) : null}

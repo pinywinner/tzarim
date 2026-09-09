@@ -51,7 +51,7 @@ export function ConfirmDialog({
         className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-border"
         onClick={(event) => event.stopPropagation()}
       >
-        <p id="confirm-dialog-title" className="font-display text-2xl font-semibold text-fg">
+        <p id="confirm-dialog-title" className="font-display text-2xl font-bold text-fg">
           {title}
         </p>
         <p className="mt-2 text-sm leading-relaxed text-muted">{body}</p>

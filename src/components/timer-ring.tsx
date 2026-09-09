@@ -56,7 +56,7 @@ export function TimerRing({ progress, label, ms, active, tone }: TimerRingProps)
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
         <p
-          className="font-display text-timer font-semibold leading-none tracking-tight text-fg tabular-nums"
+          className="font-display text-timer font-black leading-none tracking-tight text-fg tabular-nums"
           aria-live="polite"
         >
           {formatClock(ms)}

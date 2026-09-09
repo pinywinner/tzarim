@@ -20,7 +20,7 @@ export function StaleDialog() {
       aria-labelledby="stale-title"
     >
       <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-border">
-        <p id="stale-title" className="font-display text-2xl font-semibold text-fg">
+        <p id="stale-title" className="font-display text-2xl font-bold text-fg">
           הציר נשאר פתוח
         </p>
         <p className="mt-2 text-sm leading-relaxed text-muted">
