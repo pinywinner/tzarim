@@ -15,6 +15,6 @@ describe("i18n", () => {
   it("uses English copy for the home start action", () => {
     assert.equal(t("en", "start"), "Start");
     assert.equal(t("en", "stop"), "Done");
-    assert.equal(t("en", "appName"), "Tzarim");
+    assert.equal(t("en", "appName"), "Labor");
   });
 });

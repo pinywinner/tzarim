@@ -207,10 +207,10 @@ export const he = {
 } as const;
 
 export const en: { [K in keyof typeof he]: string } = {
-  appName: "Tzarim",
-  appTagline: "During a contraction — what to do now",
+  appName: "Labor",
+  appTagline: "During labor — what to do now",
   appDescription:
-    "When contractions start and thinking is hard — what to do now. Duration, interval, and when to leave for the hospital.",
+    "When labor starts and thinking is hard — what to do now. Duration, interval, and when to leave for the hospital.",
 
   navNow: "Now",
   navHistory: "History",
@@ -236,7 +236,7 @@ export const en: { [K in keyof typeof he]: string } = {
   waterConfirm: "Yes, waters broke",
   notNow: "Not now",
 
-  laborActive: "Contraction",
+  laborActive: "Labor",
   breathe: "Breathe.",
   lastContraction: "Last contraction",
   theInterval: "Interval",
@@ -306,10 +306,10 @@ export const en: { [K in keyof typeof he]: string } = {
 
   settingsTitle: "Settings",
   settingsSub: "Target, screen, and data",
-  birthFirst: "First birth",
+  birthFirst: "First labor",
   birthFirstHint: "Every 5 min · 1 min · 1 hour",
   birthSubsequentHint: "Every 7 min · 45 sec · 30 min",
-  birthSubsequent: "Later birth",
+  birthSubsequent: "Later labor",
   birthCustom: "Custom",
   birthCustomHint: "You set the target",
   decreaseAria: "Decrease {label}",
@@ -389,8 +389,8 @@ export const en: { [K in keyof typeof he]: string } = {
   interpretLonger: "Intervals are stretching. Keep timing.",
   interpretAvg: "The average interval is {clock}.",
 
-  shareTitle: "Tzarim summary for the midwife",
-  shareHeadline: "Midwife summary — home contraction tracking",
+  shareTitle: "Labor summary for the midwife",
+  shareHeadline: "Midwife summary — home labor tracking",
   shareStart: "Started: {when}",
   shareEnd: "Ended: {when}",
   shareOpen: "Session open",

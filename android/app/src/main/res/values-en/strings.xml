@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Tzarim</string>
-    <string name="title_activity_main">Tzarim</string>
+    <string name="app_name">Labor</string>
+    <string name="title_activity_main">Labor</string>
     <string name="package_name">il.tzarim.app</string>
     <string name="custom_url_scheme">il.tzarim.app</string>
 </resources>
