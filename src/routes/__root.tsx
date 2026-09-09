@@ -10,7 +10,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { useAppStore } from "@/lib/store";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "צירים";
+const APP_NAME = "מעקב צירים";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -18,6 +18,8 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: APP_NAME },
+      { name: "application-name", content: APP_NAME },
+      { name: "apple-mobile-web-app-title", content: APP_NAME },
       { name: "description", content: "מעקב צירים בבית — משך, מרווח וכלל 5-1-1, עד שיוצאים לחדר לידה." },
       { name: "theme-color", content: "#F3EEE6" },
     ],
@@ -59,7 +61,7 @@ function RootDocument() {
 function Splash() {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-bg">
-      <p className="font-display text-3xl font-semibold tracking-tight text-fg">צירים</p>
+      <p className="font-display text-3xl font-semibold tracking-tight text-fg">מעקב צירים</p>
       <p className="mt-2 text-sm text-muted">מעקב בבית, עד שיוצאים</p>
     </div>
   );
