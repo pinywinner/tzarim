@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Labor</string>
+    <string name="start">Start</string>
+    <string name="stop">Done</string>
+    <string name="accidental">Undo</string>
+    <string name="labor_active">Contraction</string>
+    <string name="breathe">Breathe.</string>
+    <string name="last_contraction">Last</string>
+    <string name="the_interval">Interval</string>
+    <string name="idle_hint">When it starts</string>
+    <string name="none">—</string>
+</resources>

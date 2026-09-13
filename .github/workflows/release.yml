@@ -73,9 +73,9 @@ jobs:
           TZARIM_KEY_PASSWORD: ${{ secrets.TZARIM_KEY_PASSWORD }}
         run: |
           if [ "${{ steps.sign.outputs.mode }}" = "release" ]; then
-            ./gradlew assembleRelease bundleRelease --no-daemon
+            ./gradlew assembleRelease bundleRelease :wear:assembleRelease --no-daemon
           else
-            ./gradlew assembleDebug --no-daemon
+            ./gradlew assembleDebug :wear:assembleDebug --no-daemon
           fi
 
       - name: Name artifacts
@@ -85,8 +85,10 @@ jobs:
           if [ "${{ steps.sign.outputs.mode }}" = "release" ]; then
             cp android/app/build/outputs/apk/release/app-release.apk "dist-apk/tzarim-${VERSION}.apk"
             cp android/app/build/outputs/bundle/release/app-release.aab "dist-apk/tzarim-${VERSION}.aab"
+            cp android/wear/build/outputs/apk/release/wear-release.apk "dist-apk/tzarim-wear-${VERSION}.apk"
           else
             cp android/app/build/outputs/apk/debug/app-debug.apk "dist-apk/tzarim-${VERSION}.apk"
+            cp android/wear/build/outputs/apk/debug/wear-debug.apk "dist-apk/tzarim-wear-${VERSION}.apk"
           fi
 
       - name: Publish GitHub Release
@@ -97,5 +99,7 @@ jobs:
             **מעקב צירים ${{ steps.version.outputs.version }}** (build ${{ steps.version.outputs.code }})
 
             APK להתקנה ידנית. לפליי צריך את קובץ ה-AAB החתום (`tzarim-${{ steps.version.outputs.version }}.aab`) כשיש upload key ב-Secrets.
+
+            שעון Wear OS: `tzarim-wear-${{ steps.version.outputs.version }}.apk`
           files: dist-apk/tzarim-${{ steps.version.outputs.version }}.*
           fail_on_unmatched_files: true

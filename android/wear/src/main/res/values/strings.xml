@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">צירים</string>
+    <string name="start">התחיל</string>
+    <string name="stop">סיימתי</string>
+    <string name="accidental">בטעות</string>
+    <string name="labor_active">ציר פעיל</string>
+    <string name="breathe">נשמי.</string>
+    <string name="last_contraction">הציר האחרון</string>
+    <string name="the_interval">המרווח</string>
+    <string name="idle_hint">כשהציר מתחיל</string>
+    <string name="none">—</string>
+</resources>

@@ -1,0 +1,63 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
+
+def versionFile = file("../../version.json")
+def appVersion = new groovy.json.JsonSlurper().parse(versionFile)
+def keystorePath = System.getenv("TZARIM_KEYSTORE")
+def hasReleaseKey = keystorePath != null && !keystorePath.isEmpty() && file(keystorePath).exists()
+
+android {
+    namespace = "il.tzarim.watch"
+    compileSdk = rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "il.tzarim.watch"
+        minSdk 30
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode appVersion.versionCode
+        versionName appVersion.version
+    }
+    signingConfigs {
+        if (hasReleaseKey) {
+            release {
+                storeFile file(keystorePath)
+                storePassword System.getenv("TZARIM_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("TZARIM_KEY_ALIAS")
+                keyPassword System.getenv("TZARIM_KEY_PASSWORD")
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+            if (hasReleaseKey) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = '1.5.15'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+dependencies {
+    implementation platform('androidx.compose:compose-bom:2024.10.01')
+    implementation 'androidx.activity:activity-compose:1.9.3'
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.wear.compose:compose-material:1.4.1'
+    implementation 'androidx.wear.compose:compose-foundation:1.4.1'
+    implementation 'androidx.wear:wear:1.3.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.8.7'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7'
+}

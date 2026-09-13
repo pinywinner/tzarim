@@ -4,8 +4,8 @@
 
 ## הורדה לאנדרואיד
 
-[**הורידי את ה-APK (v1.3.3)**](https://github.com/pinywinner/tzarim/releases/download/v1.3.3/tzarim-1.3.3.apk)
- · [AAB לפליי](https://github.com/pinywinner/tzarim/releases/download/v1.3.3/tzarim-1.3.3.aab)
+[**הורידי את ה-APK (v1.4.0)**](https://github.com/pinywinner/tzarim/releases/download/v1.4.0/tzarim-1.4.0.apk)
+ · [AAB לפליי](https://github.com/pinywinner/tzarim/releases/download/v1.4.0/tzarim-1.4.0.aab)
 
 בטלפון: פתחי את ה-APK → אפשרי התקנה ממקור לא מוכר אם אנדרואיד מבקש. לפליי מעלים את ה-AAB, לא את ה-APK.
 
@@ -64,6 +64,14 @@ npm run native:apk
 
 הקובץ יוצא אל `android/app/build/outputs/apk/debug/app-debug.apk`.
 
+## שעון Wear OS
+
+אפליקציה נפרדת לשעון: התחיל / סיימתי, טיימר, מרווח. עובדת לבד, בלי הטלפון.
+
+[**הורידי APK לשעון**](https://github.com/pinywinner/tzarim/releases/download/v1.4.0/tzarim-wear-1.4.0.apk) — הקישור מתעדכן עם כל גרסה.
+
+התקנה: מחברים את השעון ב־ADB, או מעלים לפליי כ־Wear OS app (`il.tzarim.watch`).
+
 ## מה בפנים
 
 - שתי לחיצות לכל ציר: **התחיל** / **סיימתי**
@@ -71,6 +79,6 @@ npm run native:apk
 - עוצמה 1–5, ירידת מים, היסטוריה ושיתוף למיילדת
 - כלל 5-1-1 (לידה ראשונה) או 7-0.75-0.5 (לידה חוזרת)
 - מסך דולק, רטט, מצב לילה, עברית מימין לשמאל
-- Web, PWA, Android ו-iOS מאותו קוד
+- Web, PWA, Android, iOS ושעון Wear OS
 
 זה מעקב בלבד, לא ייעוץ רפואי.

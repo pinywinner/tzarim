@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="watch_bg">#211F1D</color>
+    <color name="watch_labor">#2A1F1E</color>
+    <color name="watch_fg">#F4EFE8</color>
+    <color name="watch_muted">#B9B1A7</color>
+    <color name="watch_active">#D36B65</color>
+    <color name="watch_rest">#829B89</color>
+    <color name="watch_stop">#8F4046</color>
+</resources>

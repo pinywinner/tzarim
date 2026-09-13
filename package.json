@@ -1,7 +1,7 @@
 {
   "name": "app-builder-workspace",
   "private": true,
-  "version": "1.3.3",
+  "version": "1.4.0",
   "sideEffects": false,
   "type": "module",
   "overrides": {
@@ -27,6 +27,7 @@
     "native:ios": "node scripts/native-web.mjs sync && npx cap open ios",
     "native:apk": "node scripts/native-web.mjs sync && cd android && ./gradlew assembleDebug",
     "native:apk:release": "node scripts/native-web.mjs sync && cd android && ./gradlew assembleRelease",
+    "native:wear": "cd android && ./gradlew :wear:assembleDebug",
     "version:show": "node scripts/version.mjs show",
     "version:bump": "node scripts/version.mjs bump"
   },
