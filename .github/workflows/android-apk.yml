@@ -2,8 +2,6 @@ name: Build Android APK
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
 
 jobs:
   build-apk:
@@ -33,9 +31,6 @@ jobs:
       - name: Install JS dependencies
         run: npm ci
 
-      # Capacitor copies the web build into android/ and generates
-      # capacitor-cordova-android-plugins/ (gitignored). Gradle cannot
-      # assemble without that folder.
       - name: Build web and sync Capacitor Android
         run: |
           npm run native:web

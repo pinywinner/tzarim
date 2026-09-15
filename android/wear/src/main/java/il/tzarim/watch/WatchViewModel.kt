@@ -7,48 +7,102 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import il.tzarim.watch.data.WatchRepositoryImpl
+import il.tzarim.watch.data.WearDataLayerSync
+import il.tzarim.watch.domain.Contraction
+import il.tzarim.watch.domain.Session
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class WatchViewModel(application: Application) : AndroidViewModel(application) {
-    private val store = WatchStore(application)
-    private val _items = MutableStateFlow(store.load())
-    val items: StateFlow<List<Contraction>> = _items
+    private val repository = WatchRepositoryImpl(application)
+    private val sync = WearDataLayerSync(application)
+
+    val session: StateFlow<Session> = repository.session
+    val items: StateFlow<List<Contraction>> =
+        session
+            .map { it.contractions }
+            .stateIn(viewModelScope, SharingStarted.Eagerly, session.value.contractions)
+
+    private val _intensityTarget = MutableStateFlow<String?>(null)
+    val intensityTarget: StateFlow<String?> = _intensityTarget
+
+    private val _undoTarget = MutableStateFlow<String?>(null)
+    val undoTarget: StateFlow<String?> = _undoTarget
+
+    init {
+        viewModelScope.launch {
+            QuickStartBridge.events.collect { start() }
+        }
+    }
 
     fun start() {
-        if (activeContraction(_items.value) != null) return
-        val next = _items.value + Contraction(store.newId(), System.currentTimeMillis())
-        persist(next)
-        haptic(double = false)
+        if (repository.startContraction() != null) {
+            _intensityTarget.value = null
+            haptic(false)
+            flushSync()
+        }
     }
 
     fun stop() {
-        val now = System.currentTimeMillis()
-        val next = _items.value.map { item ->
-            if (item.endedAt == null) item.copy(endedAt = now) else item
+        repository.stopContraction()?.let {
+            _intensityTarget.value = it.id
+            haptic(true)
+            flushSync()
         }
-        persist(next)
-        haptic(double = true)
     }
 
     fun cancelActive() {
-        val next = _items.value.dropLastWhile { it.endedAt == null }
-        persist(next)
+        repository.cancelActiveContraction()
+        _intensityTarget.value = null
+        flushSync()
     }
 
-    private fun persist(next: List<Contraction>) {
-        _items.value = next
-        store.save(next)
+    fun setIntensity(value: Int) {
+        _intensityTarget.value?.let {
+            repository.updateIntensity(it, value)
+            _intensityTarget.value = null
+            flushSync()
+        }
+    }
+
+    fun dismissIntensity() {
+        _intensityTarget.value = null
+    }
+
+    fun offerUndo() {
+        items.value.lastOrNull { it.endedAt != null }?.let {
+            _undoTarget.value = it.id
+        }
+    }
+
+    fun undoLast() {
+        _undoTarget.value?.let {
+            repository.undoCompletedContraction(it)
+            _undoTarget.value = null
+            flushSync()
+        }
+    }
+
+    fun dismissUndo() {
+        _undoTarget.value = null
+    }
+
+    private fun flushSync() {
+        viewModelScope.launch { runCatching { sync.flushPending() } }
     }
 
     private fun haptic(double: Boolean) {
         val vibrator = vibrator()
-        val short = VibrationEffect.createOneShot(24, VibrationEffect.DEFAULT_AMPLITUDE)
         if (double) {
-            val pattern = VibrationEffect.createWaveform(longArrayOf(0, 24, 70, 24), -1)
-            vibrator.vibrate(pattern)
+            vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(0, 24, 70, 24), -1))
         } else {
-            vibrator.vibrate(short)
+            vibrator.vibrate(VibrationEffect.createOneShot(24, VibrationEffect.DEFAULT_AMPLITUDE))
         }
     }
 

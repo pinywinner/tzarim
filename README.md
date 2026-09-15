@@ -4,8 +4,8 @@
 
 ## הורדה לאנדרואיד
 
-[**הורידי את ה-APK (v1.4.0)**](https://github.com/pinywinner/tzarim/releases/download/v1.4.0/tzarim-1.4.0.apk)
- · [AAB לפליי](https://github.com/pinywinner/tzarim/releases/download/v1.4.0/tzarim-1.4.0.aab)
+[**הורידי את ה-APK (v1.4.1)**](https://github.com/pinywinner/tzarim/releases/download/v1.4.1/tzarim-1.4.1.apk)
+ · [AAB לפליי](https://github.com/pinywinner/tzarim/releases/download/v1.4.1/tzarim-1.4.1.aab)
 
 בטלפון: פתחי את ה-APK → אפשרי התקנה ממקור לא מוכר אם אנדרואיד מבקש. לפליי מעלים את ה-AAB, לא את ה-APK.
 
@@ -68,7 +68,7 @@ npm run native:apk
 
 אפליקציה נפרדת לשעון: התחיל / סיימתי, טיימר, מרווח. עובדת לבד, בלי הטלפון.
 
-[**הורידי APK לשעון**](https://github.com/pinywinner/tzarim/releases/download/v1.4.0/tzarim-wear-1.4.0.apk) — הקישור מתעדכן עם כל גרסה.
+[**הורידי APK לשעון**](https://github.com/pinywinner/tzarim/releases/download/v1.4.1/tzarim-wear-1.4.1.apk) — הקישור מתעדכן עם כל גרסה.
 
 התקנה: מחברים את השעון ב־ADB, או מעלים לפליי כ־Wear OS app (`il.tzarim.watch`).
 

@@ -7,8 +7,9 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,20 +21,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -45,93 +44,86 @@ import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import kotlinx.coroutines.delay
 
-private val Cream = Color(0xFFF4EFE8)
-private val Muted = Color(0xFFB9B1A7)
-private val RestBg = Color(0xFF211F1D)
-private val LaborBg = Color(0xFF2A1F1E)
-private val Active = Color(0xFFD36B65)
-private val Rest = Color(0xFF829B89)
-private val Stop = Color(0xFF8F4046)
+private val Bg = Color(0xFFF5F1EA)
+private val Fg = Color(0xFF292724)
+private val Muted = Color(0xFF5F5A53)
+private val Active = Color(0xFFC95D58)
+private val ActiveBg = Color(0xFFF7E9E6)
+private val Calm = Color(0xFF5F7A68)
+private val Danger = Color(0xFFA94747)
 
 @Composable
 fun WatchApp(model: WatchViewModel = viewModel()) {
     val items by model.items.collectAsState()
-    val active = activeContraction(items)
-    val last = lastCompleted(items)
-    val now by produceState(initialValue = System.currentTimeMillis(), key1 = active?.id) {
+    val target by model.intensityTarget.collectAsState()
+    val undo by model.undoTarget.collectAsState()
+    val active = items.lastOrNull { it.endedAt == null }
+    val completed = items.filter { it.endedAt != null }.sortedByDescending { it.startedAt }
+    val last = completed.firstOrNull()
+    val now by produceState(System.currentTimeMillis(), active?.id) {
         while (true) {
             value = System.currentTimeMillis()
             delay(if (active != null) 200 else 1000)
         }
     }
-
-    val view = LocalView.current
-    DisposableEffect(active != null) {
-        view.keepScreenOn = active != null
-        onDispose { view.keepScreenOn = false }
-    }
-
     val bg by animateColorAsState(
-        targetValue = if (active != null) LaborBg else RestBg,
-        animationSpec = tween(280),
-        label = "bg",
+        if (active != null) ActiveBg else Bg,
+        tween(250),
+        label = "background",
     )
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(bg),
-        contentAlignment = Alignment.Center,
-    ) {
+    Box(Modifier.fillMaxSize().background(bg), contentAlignment = Alignment.Center) {
         TimeText()
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 14.dp, vertical = 22.dp),
+            Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 22.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(6.dp))
             if (active != null) {
-                ActiveBlock(elapsed = durationOf(active, now))
+                ActiveBlock(now - active.startedAt)
             } else {
                 RestBlock(
-                    lastDuration = last?.let { durationOf(it) },
-                    interval = intervalSoFar(items, now),
+                    last?.let { (it.endedAt ?: now) - it.startedAt },
+                    if (completed.size >= 2) completed[0].startedAt - completed[1].startedAt else null,
                 )
             }
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Button(
-                    onClick = { if (active != null) model.stop() else model.start() },
-                    modifier = Modifier
-                        .fillMaxWidth(0.78f)
-                        .height(46.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = if (active != null) Stop else Rest,
-                        contentColor = Cream,
-                    ),
-                    shape = RoundedCornerShape(18.dp),
-                ) {
-                    Text(
-                        text = stringResource(if (active != null) R.string.stop else R.string.start),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
-                if (active != null) {
-                    Button(
-                        onClick = { model.cancelActive() },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent,
-                            contentColor = Muted,
-                        ),
-                        modifier = Modifier.height(32.dp),
-                    ) {
-                        Text(stringResource(R.string.accidental), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+            when {
+                target != null -> IntensityPicker(model::setIntensity, model::dismissIntensity)
+                undo != null -> UndoPicker(model::undoLast, model::dismissUndo)
+                else ->
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Button(
+                            onClick = { if (active != null) model.stop() else model.start() },
+                            modifier = Modifier.fillMaxWidth(0.84f).height(48.dp),
+                            colors =
+                                ButtonDefaults.primaryButtonColors(
+                                    backgroundColor = if (active != null) Danger else Calm,
+                                    contentColor = Color.White,
+                                ),
+                        ) {
+                            Text(
+                                if (active != null) "סיימתי" else "התחיל",
+                                fontSize = 17.sp,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        }
+                        if (active != null) {
+                            Text(
+                                "בטעות",
+                                fontSize = 12.sp,
+                                color = Muted,
+                                modifier = Modifier.padding(top = 6.dp).clickable(onClick = model::cancelActive),
+                            )
+                        } else {
+                            Text(
+                                "בטל אחרון",
+                                fontSize = 12.sp,
+                                color = Muted,
+                                modifier = Modifier.padding(top = 6.dp).clickable(onClick = model::offerUndo),
+                            )
+                        }
                     }
-                } else {
-                    Spacer(Modifier.height(32.dp))
-                }
             }
         }
     }
@@ -139,59 +131,41 @@ fun WatchApp(model: WatchViewModel = viewModel()) {
 
 @Composable
 private fun ActiveBlock(elapsed: Long) {
-    val breathe by rememberInfiniteTransition(label = "wave").animateFloat(
-        initialValue = 0.94f,
-        targetValue = 1.08f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2400, easing = EaseInOut),
-            repeatMode = RepeatMode.Reverse,
-        ),
-        label = "breathe",
+    val transition = rememberInfiniteTransition(label = "wave")
+    val pulse by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(2400, easing = EaseInOut), RepeatMode.Reverse),
+        label = "pulse",
     )
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = stringResource(R.string.labor_active),
-            color = Active,
-            fontSize = 13.sp,
-            fontWeight = FontWeight.SemiBold,
+        Text("ציר פעיל", color = Active, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+        BrandWave(
+            Modifier.graphicsLayer {
+                scaleX = 0.94f + 0.12f * pulse
+                scaleY = 0.88f + 0.26f * pulse
+            },
+            0.84f + 0.16f * pulse,
         )
-        Wave(Modifier.scale(breathe))
-        Text(
-            text = formatClock(elapsed),
-            color = Cream,
-            fontSize = 34.sp,
-            fontWeight = FontWeight.Black,
-            modifier = Modifier.padding(top = 2.dp),
-        )
-        Text(
-            text = stringResource(R.string.breathe),
-            color = Cream,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-        )
+        Text(clock(elapsed), fontSize = 42.sp, fontWeight = FontWeight.Black, color = Fg)
+        Text("נשמי.", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Fg)
     }
 }
 
 @Composable
-private fun RestBlock(lastDuration: Long?, interval: Long?) {
+private fun RestBlock(duration: Long?, interval: Long?) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Wave()
+        BrandWave()
         Text(
-            text = stringResource(R.string.idle_hint),
+            "כשהציר מתחיל",
             color = Muted,
             fontSize = 12.sp,
             modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
         )
-        Row(horizontalArrangement = Arrangement.Center) {
-            Stat(
-                label = stringResource(R.string.last_contraction),
-                value = lastDuration?.let(::formatClock) ?: stringResource(R.string.none),
-            )
-            Spacer(Modifier.width(16.dp))
-            Stat(
-                label = stringResource(R.string.the_interval),
-                value = interval?.let(::formatClock) ?: stringResource(R.string.none),
-            )
+        Row {
+            Stat("הציר האחרון", duration?.let(::clock) ?: "—")
+            Spacer(Modifier.width(12.dp))
+            Stat("המרווח", interval?.let(::clock) ?: "—")
         }
     }
 }
@@ -199,17 +173,118 @@ private fun RestBlock(lastDuration: Long?, interval: Long?) {
 @Composable
 private fun Stat(label: String, value: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(label, color = Muted, fontSize = 11.sp)
-        Text(value, color = Cream, fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+        Text(label, color = Muted, fontSize = 10.sp)
+        Text(value, color = Fg, fontSize = 17.sp, fontWeight = FontWeight.Bold)
     }
 }
 
 @Composable
-private fun Wave(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(R.drawable.ic_wave),
-        contentDescription = null,
-        colorFilter = ColorFilter.tint(Active),
-        modifier = modifier.size(width = 92.dp, height = 40.dp),
-    )
+private fun IntensityPicker(onSelect: (Int) -> Unit, onSkip: () -> Unit) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("עוצמה", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Fg)
+        Row {
+            (1..5).forEach { n ->
+                Text(
+                    n.toString(),
+                    fontSize = 13.sp,
+                    color = Active,
+                    fontWeight = FontWeight.Bold,
+                    modifier =
+                        Modifier
+                            .size(30.dp)
+                            .clickable { onSelect(n) }
+                            .padding(6.dp),
+                    textAlign = TextAlign.Center,
+                )
+            }
+        }
+        Text(
+            "דילוג",
+            fontSize = 10.sp,
+            color = Muted,
+            modifier = Modifier.padding(top = 4.dp).clickable(onClick = onSkip),
+        )
+    }
+}
+
+@Composable
+private fun UndoPicker(onUndo: () -> Unit, onKeep: () -> Unit) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            "לבטל את הציר האחרון?",
+            fontSize = 12.sp,
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center,
+            color = Fg,
+        )
+        Row {
+            Button(
+                onClick = onUndo,
+                modifier = Modifier.height(36.dp),
+                colors = ButtonDefaults.primaryButtonColors(backgroundColor = Danger, contentColor = Color.White),
+            ) {
+                Text("בטל", fontSize = 12.sp)
+            }
+            Spacer(Modifier.width(6.dp))
+            Button(
+                onClick = onKeep,
+                modifier = Modifier.height(36.dp),
+                colors = ButtonDefaults.primaryButtonColors(backgroundColor = Calm, contentColor = Color.White),
+            ) {
+                Text("השאר", fontSize = 12.sp)
+            }
+        }
+    }
+}
+
+@Composable
+private fun BrandWave(modifier: Modifier = Modifier, alpha: Float = 1f) {
+    Canvas(modifier.size(84.dp, 36.dp)) {
+        val path =
+            Path().apply {
+                moveTo(10.dp.toPx(), size.height * 0.72f)
+                cubicTo(
+                    size.width * 0.155f,
+                    size.height * 0.72f,
+                    size.width * 0.262f,
+                    size.height * 0.72f,
+                    size.width * 0.345f,
+                    size.height * 0.39f,
+                )
+                cubicTo(
+                    size.width * 0.405f,
+                    size.height * 0.17f,
+                    size.width * 0.44f,
+                    size.height * 0.11f,
+                    size.width * 0.5f,
+                    size.height * 0.11f,
+                )
+                cubicTo(
+                    size.width * 0.56f,
+                    size.height * 0.11f,
+                    size.width * 0.595f,
+                    size.height * 0.17f,
+                    size.width * 0.655f,
+                    size.height * 0.39f,
+                )
+                cubicTo(
+                    size.width * 0.738f,
+                    size.height * 0.72f,
+                    size.width * 0.845f,
+                    size.height * 0.72f,
+                    size.width - 10.dp.toPx(),
+                    size.height * 0.72f,
+                )
+            }
+        drawPath(
+            path,
+            Active.copy(alpha = alpha),
+            style = Stroke(7.dp.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round),
+        )
+    }
+}
+
+private fun clock(ms: Long): String {
+    val seconds = ms.coerceAtLeast(0) / 1000
+    return "%02d:%02d".format(seconds / 60, seconds % 60)
 }
