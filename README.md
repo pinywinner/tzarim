@@ -1,86 +1,51 @@
 # מעקב צירים
 
-מעקב צירים בבית — משך, מרווח וכלל 5-1-1, עד שיוצאים לחדר לידה. הכל נשמר במכשיר, בלי חשבון ובלי שרת.
+בזמן ציר, כשקשה לחשוב — מה לעשות עכשיו.
+משך, מרווח, ומתי יוצאים לחדר לידה.
 
-## הורדה לאנדרואיד
+הכל נשמר במכשיר. בלי חשבון, בלי ענן, בלי פרסומות.
 
-[**הורידי את ה-APK (v1.4.1)**](https://github.com/pinywinner/tzarim/releases/download/v1.4.1/tzarim-1.4.1.apk)
+## הורדה
 
-בטלפון: פתחי את ה-APK → אפשרי התקנה ממקור לא מוכר אם אנדרואיד מבקש.
+- [טלפון · Android](https://github.com/pinywinner/tzarim/releases/download/v1.4.1/tzarim-1.4.1.apk)
+- [שעון · Wear OS](https://github.com/pinywinner/tzarim/releases/download/v1.4.1/tzarim-wear-1.4.1.apk)
+
+בטלפון: פתחי את הקובץ ואשרי התקנה ממקור לא מוכר אם אנדרואיד מבקש.
+בשעון: דרך ADB, או העלאה ל־Play כ־Wear app.
 
 כל הגרסאות: [Releases](https://github.com/pinywinner/tzarim/releases)
 
-## גרסאות
+## מה בפנים
 
-מספר הגרסה יושב ב־`version.json` ומסתנכרן ל-Android, ל-iOS ולהגדרות באפליקציה.
+- שתי לחיצות לכל ציר: **התחיל** / **סיימתי**
+- טיימר גדול, ומסך שנושם עם הציר
+- בין צירים: האם נשארים בבית, או שכבר יוצאים
+- כלל 5-1-1 ללידה ראשונה, או 7-0.75-0.5 ללידה חוזרת
+- עוצמה, היסטוריה, ושיתוף סיכום למיילדת
+- עברית ואנגלית, מצב לילה
+- שעון Wear OS שעובד לבד, בלי הטלפון
 
-```bash
-npm run version:show              # 1.0.0 (1)
-npm run version:bump -- patch     # 1.0.1
-npm run version:bump -- minor     # 1.1.0
-npm run version:bump -- major     # 2.0.0
-```
+זה מעקב בלבד, לא ייעוץ רפואי. במצב חירום — מד״א 101.
 
-אחרי bump: קומיט, תג `vX.Y.Z`, ו־push של התג. GitHub Actions בונה APK ומפרסם Release.
+[מדיניות פרטיות](https://pinywinner.github.io/tzarim/privacy.html)
 
-לחתימה קבועה (התקנות עוקבות בלי להסיר את הישנה) הוסיפי ב־GitHub Secrets:
-`TZARIM_KEYSTORE_BASE64`, `TZARIM_KEYSTORE_PASSWORD`, `TZARIM_KEY_ALIAS`, `TZARIM_KEY_PASSWORD`.
-בלי הסודות מתפרסם APK מסוג debug.
+## שעון
 
-## הרצה (Web / PWA)
+אותו רעיון, על פרק כף היד: התחיל, סיימתי, טיימר, מרווח.
+מה כבר שם ומה עוד לבנות: [docs/WEAR.md](docs/WEAR.md)
+
+## חנות Play
+
+הטקסטים, הקטגוריה והדיסקליימר: [docs/PLAY.md](docs/PLAY.md)
+
+## למפתחים
+
+אותו קוד רץ כ־Web, PWA, Android ו־iOS (Capacitor). השעון הוא מודול Wear נפרד.
 
 ```bash
 npm install
 npm run dev
 ```
 
-אותו קוד רץ בדפדפן וכהתקנת PWA. אין שינוי בנתיב הזה כשמוסיפים Native.
-
-## Android / iPhone (Capacitor)
-
-האפליקציה לא נבנית מחדש ל-Native. Capacitor עוטף את אותו React, עם רטט, מסך דולק ושיתוף של המערכת.
-
-תיקיית `android/` כבר בריפו (פרויקט Gradle מוכן, כולל אייקון וספלאש של מעקב צירים). אחרי clone:
-
-```bash
-npm install
-npm run native:sync
-npx cap open android   # Android Studio
-npx cap open ios       # Xcode, רק מ-Mac
-```
-
-`npm run native:sync` בונה SPA סטטי אל `dist/client` ומרענן את ה-WebView. אם `android/` או `ios/` חסרות אצלך מסיבה כלשהי:
-
-```bash
-npm run native:init
-```
-
-APK מקומי (דורש JDK 21 + Android SDK):
-
-```bash
-npm run native:apk
-```
-
-הקובץ יוצא אל `android/app/build/outputs/apk/debug/app-debug.apk`.
-
-## שעון Wear OS
-
-אפליקציה נפרדת לשעון: התחיל / סיימתי, טיימר, מרווח. עובדת לבד, בלי הטלפון.
-
-[**הורידי APK לשעון**](https://github.com/pinywinner/tzarim/releases/download/v1.4.1/tzarim-wear-1.4.1.apk) — הקישור מתעדכן עם כל גרסה.
-
-התקנה: מחברים את השעון ב־ADB, או מעלים לפליי כ־Wear OS app (`il.tzarim.watch`).
-
-מה כבר עובד ומה עוד לבנות: [docs/WEAR.md](docs/WEAR.md).
-המשך פיתוח השעון בבראנץ' [`wear`](https://github.com/pinywinner/tzarim/tree/wear), לא ב־`main`.
-
-## מה בפנים
-
-- שתי לחיצות לכל ציר: **התחיל** / **סיימתי**
-- בין צירים: האם נשארים בבית, או שכבר יוצאים
-- עוצמה 1–5, ירידת מים, היסטוריה ושיתוף למיילדת
-- כלל 5-1-1 (לידה ראשונה) או 7-0.75-0.5 (לידה חוזרת)
-- מסך דולק, רטט, מצב לילה, עברית מימין לשמאל
-- Web, PWA, Android, iOS ושעון Wear OS
-
-זה מעקב בלבד, לא ייעוץ רפואי.
+גרסה אחת ב־`version.json`. תג `vX.Y.Z` מפרסם APK לטלפון ולשעון.
+המשך עבודה על השעון בבראנץ' [`wear`](https://github.com/pinywinner/tzarim/tree/wear).

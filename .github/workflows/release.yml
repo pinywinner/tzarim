@@ -96,10 +96,13 @@ jobs:
         with:
           name: מעקב צירים ${{ steps.version.outputs.version }}
           body: |
-            **מעקב צירים ${{ steps.version.outputs.version }}** (build ${{ steps.version.outputs.code }})
+            **מעקב צירים ${{ steps.version.outputs.version }}**
 
-            APK להתקנה ידנית. לפליי צריך את קובץ ה-AAB החתום (`tzarim-${{ steps.version.outputs.version }}.aab`) כשיש upload key ב-Secrets.
+            - טלפון: `tzarim-${{ steps.version.outputs.version }}.apk`
+            - שעון: `tzarim-wear-${{ steps.version.outputs.version }}.apk`
 
-            שעון Wear OS: `tzarim-wear-${{ steps.version.outputs.version }}.apk`
+            בטלפון: פתחי את הקובץ ואשרי התקנה ממקור לא מוכר אם אנדרואיד מבקש.
+
+            זה מעקב בלבד, לא ייעוץ רפואי.
           files: dist-apk/*
           fail_on_unmatched_files: true

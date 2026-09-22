@@ -1,37 +1,58 @@
-# הוצאה לגוגל פליי
+# Google Play
 
-האפליקציה מוכנה טכנית לחנות. את חשבון המפתח והקונסול אי אפשר לפתוח במקומך.
+מזהה: `il.tzarim.app`  
+קטגוריה: Parenting (לא Medical)  
+שפה ראשית: עברית. אנגלית נוספת.
 
-## מה כבר מוכן
+[מדיניות פרטיות](https://pinywinner.github.io/tzarim/privacy.html)
 
-- מזהה: `il.tzarim.app`
-- מדיניות פרטיות: [privacy.html](https://pinywinner.github.io/tzarim/privacy.html)
-- קישור פרטיות בתוך האפליקציה (הגדרות)
-- טקסט חנות: `docs/play-listing.md`
-- AAB חתום ב-Release של GitHub, אם ה-keystore נשמר ב-Secrets
+## שם (30)
 
-## מה שאתה עושה בקונסול
+- עברית: מעקב צירים
+- English: Labor
 
-1. [Google Play Console](https://play.google.com/console) — חשבון מפתח, תשלום חד-פעמי $25, ואימות זהות.
-2. Create app → אפליקציה, חינמית, קטגוריה **Parenting**.
-3. מדיניות פרטיות: כתובת ה-URL למעלה.
-4. Data safety: לא נאסף כלום, לא משותף כלום.
-5. App content: בלי פרסומות. הצהרת בריאות: **לא מכשיר רפואי**.
-6. העלאת AAB ל-Closed testing (לא APK).
-7. אם החשבון אישי ונפתח אחרי נובמבר 2023: **12 בודקים ל-14 ימים רצופים**, ואז בקשה לייצור.
-8. צילומי מסך לטלפון (לפחות 2) + Feature graphic 1024×500 מתיקיית `docs/play/`.
+## תיאור קצר (80)
 
-## חתימה
+- עברית: בזמן ציר — מה לעשות עכשיו. משך, מרווח, ומתי יוצאים. בלי חשבון ובלי ענן.
+- English: During labor — what to do now. Duration, interval, and when to go. Offline.
 
-ה-upload key חייב להישמר אצלך לנצח. בלי הקובץ הזה אי אפשר לעדכן את האפליקציה בחנות.
+## תיאור מלא · עברית
 
-Secrets בגיטהאב:
+מעקב צירים עוזרת בזמן אמת, כשקשה לחשוב: מתי הציר התחיל, מתי נגמר, כמה נמשך, ומה המרווח.
 
-- `TZARIM_KEYSTORE_BASE64`
-- `TZARIM_KEYSTORE_PASSWORD`
-- `TZARIM_KEY_ALIAS`
-- `TZARIM_KEY_PASSWORD`
+בלי חשבון. בלי ענן. הנתונים נשמרים רק במכשיר.
 
-## אזהרה חשובה
+• כפתור אחד להתחלה ולסיום
+• טיימר גדול ומסך שנושם עם הציר
+• היסטוריה, עוצמה, ושיתוף למיילדת
+• כלל 5-1-1 ללידה ראשונה ו-7-0.75-0.5 ללידה חוזרת
+• עברית ואנגלית
+• מצב לילה
 
-זו לא אפליקציה רפואית. אם פליי יסווג אותה כ-Medical ולא Parenting, ייתכן שיידרש חשבון ארגון. לכן הקטגוריה חייבת להיות Parenting, והדיסקליימר חייב להופיע בתיאור.
+האפליקציה אינה מכשיר רפואי ואינה מאבחנת, מטפלת, מרפאת או מונעת מצב רפואי. זה מעקב במכשיר שלך בלבד, לא תחליף למיילדת או לחדר לידה. במצב חירום — מד״א 101.
+
+## Full description · English
+
+Labor helps in the moment, when thinking is hard: when a contraction started, when it ended, how long it lasted, and the interval.
+
+No account. No cloud. Data stays on this device.
+
+• One button to start and finish
+• A large timer and a screen that breathes with the contraction
+• History, intensity, and a summary to share with a midwife
+• 5-1-1 for a first labor and 7-0.75-0.5 for a later labor
+• Hebrew and English
+• Dark mode
+
+This app is not a medical device and does not diagnose, treat, cure, or prevent any medical condition. It is tracking on your device only, and does not replace a midwife or labor ward. In an emergency, call local emergency services.
+
+## בקונסול
+
+1. אפליקציה חינמית, קטגוריה Parenting.
+2. מדיניות פרטיות: הכתובת למעלה.
+3. Data safety: לא נאסף כלום, לא משותף כלום.
+4. App content: בלי פרסומות. לא מכשיר רפואי.
+5. מעלים AAB ל־Closed testing, לא APK.
+6. צילומים + Feature graphic מתוך `docs/play/`.
+
+חשבון אישי שנפתח אחרי נובמבר 2023: 12 בודקים ל־14 ימים, ואז ייצור.
