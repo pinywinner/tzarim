@@ -11,7 +11,6 @@ import androidx.lifecycle.viewModelScope
 import il.tzarim.watch.data.WatchRepositoryImpl
 import il.tzarim.watch.data.WearDataLayerSync
 import il.tzarim.watch.domain.Contraction
-import il.tzarim.watch.domain.Session
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,23 +22,16 @@ class WatchViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = WatchRepositoryImpl(application)
     private val sync = WearDataLayerSync(application)
 
-    val session: StateFlow<Session> = repository.session
     val items: StateFlow<List<Contraction>> =
-        session
+        repository.session
             .map { it.contractions }
-            .stateIn(viewModelScope, SharingStarted.Eagerly, session.value.contractions)
+            .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     private val _intensityTarget = MutableStateFlow<String?>(null)
     val intensityTarget: StateFlow<String?> = _intensityTarget
 
     private val _undoTarget = MutableStateFlow<String?>(null)
     val undoTarget: StateFlow<String?> = _undoTarget
-
-    init {
-        viewModelScope.launch {
-            QuickStartBridge.events.collect { start() }
-        }
-    }
 
     fun start() {
         if (repository.startContraction() != null) {

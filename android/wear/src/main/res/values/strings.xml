@@ -10,4 +10,10 @@
     <string name="the_interval">המרווח</string>
     <string name="idle_hint">כשהציר מתחיל</string>
     <string name="none">—</string>
+    <string name="undo_last">בטל אחרון</string>
+    <string name="intensity">עוצמה</string>
+    <string name="skip">דילוג</string>
+    <string name="undo_confirm">לבטל את הציר האחרון?</string>
+    <string name="undo">בטל</string>
+    <string name="keep">השאר</string>
 </resources>

@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -103,21 +104,21 @@ fun WatchApp(model: WatchViewModel = viewModel()) {
                                 ),
                         ) {
                             Text(
-                                if (active != null) "סיימתי" else "התחיל",
+                                if (active != null) stringResource(R.string.stop) else stringResource(R.string.start),
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.Bold,
                             )
                         }
                         if (active != null) {
                             Text(
-                                "בטעות",
+                                stringResource(R.string.accidental),
                                 fontSize = 12.sp,
                                 color = Muted,
                                 modifier = Modifier.padding(top = 6.dp).clickable(onClick = model::cancelActive),
                             )
                         } else {
                             Text(
-                                "בטל אחרון",
+                                stringResource(R.string.undo_last),
                                 fontSize = 12.sp,
                                 color = Muted,
                                 modifier = Modifier.padding(top = 6.dp).clickable(onClick = model::offerUndo),
@@ -139,7 +140,7 @@ private fun ActiveBlock(elapsed: Long) {
         label = "pulse",
     )
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("ציר פעיל", color = Active, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+        Text(stringResource(R.string.labor_active), color = Active, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
         BrandWave(
             Modifier.graphicsLayer {
                 scaleX = 0.94f + 0.12f * pulse
@@ -148,7 +149,7 @@ private fun ActiveBlock(elapsed: Long) {
             0.84f + 0.16f * pulse,
         )
         Text(clock(elapsed), fontSize = 42.sp, fontWeight = FontWeight.Black, color = Fg)
-        Text("נשמי.", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Fg)
+        Text(stringResource(R.string.breathe), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Fg)
     }
 }
 
@@ -157,15 +158,15 @@ private fun RestBlock(duration: Long?, interval: Long?) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         BrandWave()
         Text(
-            "כשהציר מתחיל",
+            stringResource(R.string.idle_hint),
             color = Muted,
             fontSize = 12.sp,
             modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
         )
         Row {
-            Stat("הציר האחרון", duration?.let(::clock) ?: "—")
+            Stat(stringResource(R.string.last_contraction), duration?.let(::clock) ?: stringResource(R.string.none))
             Spacer(Modifier.width(12.dp))
-            Stat("המרווח", interval?.let(::clock) ?: "—")
+            Stat(stringResource(R.string.the_interval), interval?.let(::clock) ?: stringResource(R.string.none))
         }
     }
 }
@@ -181,7 +182,7 @@ private fun Stat(label: String, value: String) {
 @Composable
 private fun IntensityPicker(onSelect: (Int) -> Unit, onSkip: () -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("עוצמה", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Fg)
+        Text(stringResource(R.string.intensity), fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = Fg)
         Row {
             (1..5).forEach { n ->
                 Text(
@@ -199,7 +200,7 @@ private fun IntensityPicker(onSelect: (Int) -> Unit, onSkip: () -> Unit) {
             }
         }
         Text(
-            "דילוג",
+            stringResource(R.string.skip),
             fontSize = 10.sp,
             color = Muted,
             modifier = Modifier.padding(top = 4.dp).clickable(onClick = onSkip),
@@ -211,7 +212,7 @@ private fun IntensityPicker(onSelect: (Int) -> Unit, onSkip: () -> Unit) {
 private fun UndoPicker(onUndo: () -> Unit, onKeep: () -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            "לבטל את הציר האחרון?",
+            stringResource(R.string.undo_confirm),
             fontSize = 12.sp,
             fontWeight = FontWeight.SemiBold,
             textAlign = TextAlign.Center,
@@ -223,7 +224,7 @@ private fun UndoPicker(onUndo: () -> Unit, onKeep: () -> Unit) {
                 modifier = Modifier.height(36.dp),
                 colors = ButtonDefaults.primaryButtonColors(backgroundColor = Danger, contentColor = Color.White),
             ) {
-                Text("בטל", fontSize = 12.sp)
+                Text(stringResource(R.string.undo), fontSize = 12.sp)
             }
             Spacer(Modifier.width(6.dp))
             Button(
@@ -231,7 +232,7 @@ private fun UndoPicker(onUndo: () -> Unit, onKeep: () -> Unit) {
                 modifier = Modifier.height(36.dp),
                 colors = ButtonDefaults.primaryButtonColors(backgroundColor = Calm, contentColor = Color.White),
             ) {
-                Text("השאר", fontSize = 12.sp)
+                Text(stringResource(R.string.keep), fontSize = 12.sp)
             }
         }
     }

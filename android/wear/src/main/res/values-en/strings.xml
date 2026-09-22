@@ -10,4 +10,10 @@
     <string name="the_interval">Interval</string>
     <string name="idle_hint">When it starts</string>
     <string name="none">—</string>
+    <string name="undo_last">Undo last</string>
+    <string name="intensity">Intensity</string>
+    <string name="skip">Skip</string>
+    <string name="undo_confirm">Undo the last contraction?</string>
+    <string name="undo">Undo</string>
+    <string name="keep">Keep</string>
 </resources>
